@@ -1,1 +1,2 @@
-export * as harmony from "https://deno.land/x/harmony@v2.0.0-rc2/mod.ts"
+export * as path from "https://deno.land/std@0.98.0/path/mod.ts";
+export * as harmony from "https://raw.githubusercontent.com/EliasStar/harmony/main/mod.ts"
