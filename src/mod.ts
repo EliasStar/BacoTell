@@ -1,7 +1,7 @@
 import token, { rootDir } from "./perms.ts"
 
 import { harmony, path } from "./deps.ts"
-import { Command } from "./command.ts";
+import { areIdentical, Command } from "./command.ts";
 
 const client = new harmony.Client()
 
@@ -9,7 +9,7 @@ client.once("ready", async () => {
     console.log(`logged in as ${client.user?.tag}`)
 
     console.log("loading local commands")
-    const localCmds = []
+    const localCommands = []
 
     for await (const dir of Deno.readDir(path.join(rootDir, "./commands/"))) {
         if (!dir.isFile) continue
@@ -19,7 +19,7 @@ client.once("ready", async () => {
             const cmd = (await import(`./commands/${dir.name}`)).default as Command
 
             if (cmd.enabled) {
-                localCmds.push(cmd)
+                localCommands.push(cmd)
                 console.log(`loaded ${dir.name}`)
             } else {
                 console.log(`${dir.name} is disabled`)
@@ -30,17 +30,33 @@ client.once("ready", async () => {
     }
 
     console.log("loading remote commands")
-    const remoteCmds = (await client.slash.commands.guild("620996650269278240")).array()
+    const remoteCommands = (await client.slash.commands.guild("620996650269278240")).array()
 
     console.log("syncing commands")
+    for (const localCmd of localCommands) {
+        const index = remoteCommands.findIndex(c => c.name === localCmd.cmd.name)
 
-    for (const cmd of remoteCmds) {
-        await cmd.delete()
+        if (index == -1) {
+            console.log(`registering ${localCmd.cmd.name}`)
+            const cmd = await client.slash.commands.create(localCmd.cmd, "620996650269278240")
+
+            console.log(`registering ${cmd.name} handler`)
+            cmd.handle(localCmd.execute)
+        } else {
+            const cmd = remoteCommands.splice(index, 1)[0]
+            if (!areIdentical(cmd, localCmd.cmd)) {
+                console.log(`updating ${localCmd.cmd.name}`)
+                await cmd.edit(localCmd.cmd)
+            }
+
+            console.log(`registering ${cmd.name} handler`)
+            cmd.handle(localCmd.execute)
+        }
     }
 
-    for (const cmd of localCmds) {
-        const c = await client.slash.commands.create(cmd.cmd, "620996650269278240")
-        c.handle(cmd.execute)
+    for (const cmd of remoteCommands) {
+        console.log(`deregistering ${cmd.name}`)
+        await cmd.delete()
     }
 })
 

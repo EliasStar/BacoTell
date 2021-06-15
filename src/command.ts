@@ -7,3 +7,8 @@ export interface Command {
 }
 
 export class Interaction extends harmony.SlashCommandInteraction { }
+
+export function areIdentical(cmd1: harmony.SlashCommandPartial, cmd2: harmony.SlashCommandPartial): boolean {
+    // TODO
+    return false
+}
