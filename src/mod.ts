@@ -36,7 +36,7 @@ client.once("ready", async () => {
     for (const localCmd of localCommands) {
         const index = remoteCommands.findIndex(c => c.name === localCmd.cmd.name)
 
-        if (index == -1) {
+        if (index === -1) {
             console.log(`registering ${localCmd.cmd.name}`)
             const cmd = await client.slash.commands.create(localCmd.cmd, "620996650269278240")
 
