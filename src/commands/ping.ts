@@ -5,13 +5,10 @@ const ping: Command = {
 
     cmd: {
         name: "ping",
-        description: "Test Command"
+        description: "Get ping between BOT client and Discord Gateway."
     },
 
-    execute(interaction: Interaction) {
-        interaction.reply("pong/")
-        interaction.send("30ms")
-    }
+    execute: (interaction: Interaction) => interaction.reply("Pong")
 }
 
 export default ping

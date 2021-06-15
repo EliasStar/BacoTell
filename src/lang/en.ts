@@ -1,4 +1,4 @@
-import { Locale } from "../translator.ts"
+import { Locale } from "../lang.ts"
 
 const en: Locale = {
     status: "/help"
