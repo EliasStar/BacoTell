@@ -1,6 +1,14 @@
 export type LocaleIdentifier = "en" | "de" | "es"
 export type Locale = {
-    status: string
+    cmds: {
+        ping: {
+            desc: string
+        }
+        peng: {
+            desc: string
+            reply: string
+        }
+    }
 }
 
 export class Translator {

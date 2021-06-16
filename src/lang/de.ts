@@ -1,7 +1,15 @@
-import { Locale } from "../lang.ts"
+import type { Locale } from "../lang.ts"
 
 const de: Locale = {
-    status: "/help"
+    cmds: {
+        ping: {
+            desc: "Ping zwischen BOT-Client und Discord Gateway."
+        },
+        peng: {
+            desc: "Ping-Befehl mit Tippfehler",
+            reply: "Noch einer beißt ins Gras."
+        }
+    }
 }
 
 export default de

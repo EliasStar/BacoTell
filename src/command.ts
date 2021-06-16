@@ -1,15 +1,69 @@
-import { harmony } from "./deps.ts"
-//import { Locale } from "./lang.ts";
+import client from "./mod.ts";
+import { harmony, path } from "./deps.ts"
+import { rootDir } from "./perms.ts";
 
-export class Interaction extends harmony.SlashCommandInteraction { }
+import type { Locale } from "./lang.ts";
+
+export type CommandLocale = Locale
+export type CommandInteraction = harmony.SlashCommandInteraction
 export interface Command {
-    enabled: boolean
-    cmd: harmony.SlashCommandPartial
-    execute: harmony.SlashCommandHandlerCallback
-    //setLang(local: Locale): void
+    command(loc: Locale): harmony.SlashCommandPartial
+    handler(loc: Locale): harmony.SlashCommandHandlerCallback
 }
 
-export function areIdentical(cmd1: harmony.SlashCommandPartial, cmd2: harmony.SlashCommandPartial): boolean {
+export async function loadCommands(blacklistedCmds: string[]): Promise<Command[]> {
+    const localCommands = []
+
+    for await (const file of Deno.readDir(path.join(rootDir, "./commands/"))) {
+        if (!file.isFile) continue
+
+        console.log(`found ${file.name}`)
+        if (blacklistedCmds.includes(file.name.slice(0, -3))) {
+            console.log(`${file.name} is disabled`)
+            continue;
+        }
+
+        try {
+            const cmd = (await import(`./commands/${file.name}`)).default as Command
+            localCommands.push(cmd)
+            console.log(`loaded ${file.name}`)
+        } catch (error) {
+            console.error(`loading ${file.name} error: ${error}`)
+        }
+    }
+
+    return localCommands
+}
+
+export async function syncCommands(localCommands: Command[], remoteCommands: harmony.SlashCommand[], locale: Locale, guild: string) {
+    for (const localCmd of localCommands) {
+        const index = remoteCommands.findIndex(c => c.name === localCmd.command(locale).name)
+
+        if (index === -1) {
+            console.log(`registering ${localCmd.command(locale).name}`)
+            const cmd = await client.slash.commands.create(localCmd.command(locale), guild)
+
+            console.log(`registering ${cmd.name} handler`)
+            cmd.handle(localCmd.handler(locale))
+        } else {
+            const cmd = remoteCommands.splice(index, 1)[0]
+            if (!compareCommands(cmd, localCmd.command(locale))) {
+                console.log(`updating ${localCmd.command(locale).name}`)
+                await cmd.edit(localCmd.command(locale))
+            }
+
+            console.log(`registering ${cmd.name} handler`)
+            cmd.handle(localCmd.handler(locale))
+        }
+    }
+
+    for (const cmd of remoteCommands) {
+        console.log(`deregistering ${cmd.name}`)
+        await cmd.delete()
+    }
+}
+
+function compareCommands(cmd1: harmony.SlashCommandPartial, cmd2: harmony.SlashCommandPartial): boolean {
     let identical = cmd1.name === cmd2.name && cmd1.description === cmd2.description
 
     if (cmd1.defaultPermission != null && cmd2.defaultPermission != null) {

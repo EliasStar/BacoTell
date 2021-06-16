@@ -1,15 +1,14 @@
-import { Command, Interaction } from "../command.ts"
+import type { Command, CommandLocale, CommandInteraction } from "../command.ts"
 
 const peng: Command = {
-    enabled: true,
-
-    cmd: {
+    command: (loc: CommandLocale) => ({
         name: "peng",
-        description: ""
-    },
+        description: loc.cmds.peng.desc
+    }),
 
-    execute(interaction: Interaction) {
-    }
+    handler: (loc: CommandLocale) => ((inter: CommandInteraction) => {
+        inter.reply(loc.cmds.peng.reply)
+    })
 }
 
 export default peng

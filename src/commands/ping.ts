@@ -1,14 +1,14 @@
-import { Command, Interaction } from "../command.ts"
+import type { Command, CommandLocale, CommandInteraction } from "../command.ts"
 
 const ping: Command = {
-    enabled: true,
-
-    cmd: {
+    command: (loc: CommandLocale) => ({
         name: "ping",
-        description: "Get ping between BOT client and Discord Gateway."
-    },
+        description: loc.cmds.ping.desc
+    }),
 
-    execute: (interaction: Interaction) => interaction.reply("Pong")
+    handler: () => ((inter: CommandInteraction) => {
+        inter.reply("Pong")
+    })
 }
 
 export default ping
