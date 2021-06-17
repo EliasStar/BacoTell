@@ -1,8 +1,12 @@
 import { dirname, fromFileUrl } from "path"
 
-const envPerms = await Deno.permissions.request({ name: "env" })
-if (envPerms.state === "denied") {
-    console.error("no env access")
+export const rootDir = dirname(fromFileUrl(import.meta.url))
+export const blacklistFile = "./cmd_blacklist.json"
+
+const readRootPerms = await Deno.permissions.request({ name: "read", path: rootDir })
+const readBlacklistPerms = await Deno.permissions.request({ name: "read", path: blacklistFile })
+if (readRootPerms.state === "denied" || readBlacklistPerms.state === "denied") {
+    console.error("no read access")
     Deno.exit()
 }
 
@@ -12,10 +16,9 @@ if (netPerms.state === "denied") {
     Deno.exit()
 }
 
-export const rootDir = dirname(fromFileUrl(import.meta.url))
-const readPerms = await Deno.permissions.request({ name: "read", path: rootDir })
-if (readPerms.state === "denied") {
-    console.error("no read access")
+const envPerms = await Deno.permissions.request({ name: "env" })
+if (envPerms.state === "denied") {
+    console.error("no env access")
     Deno.exit()
 }
 

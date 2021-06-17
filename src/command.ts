@@ -1,8 +1,7 @@
-import client from "/mod.ts"
-import { rootDir } from "/perms.ts"
+import { blacklistFile, rootDir } from "/perms.ts"
 import { getLocaleFromGuild, Locale } from "/locale.ts"
 import { join } from "path"
-import { SlashCommand, SlashCommandChoice, SlashCommandHandlerCallback, SlashCommandOption, SlashCommandPartial } from "harmony"
+import { Guild, SlashCommandChoice, SlashCommandHandlerCallback, SlashCommandOption, SlashCommandPartial } from "harmony"
 
 export type { Locale } from "/locale.ts"
 export type { SlashCommandInteraction as Interaction } from "harmony"
@@ -11,56 +10,60 @@ export interface Command {
     handler(loc: Locale): SlashCommandHandlerCallback
 }
 
-export async function loadCommands(blacklistedCmds: string[]): Promise<Command[]> {
-    const localCommands = []
+export async function loadCommands(): Promise<Command[]> {
+    const blacklist = JSON.parse(await Deno.readTextFile(blacklistFile))
+    const blacklistedCmds = Array.isArray(blacklist) ? blacklist as string[] : []
 
+    const localCommands: Command[] = []
     for await (const file of Deno.readDir(join(rootDir, "./commands/"))) {
         if (!file.isFile) continue
 
-        console.log(`found ${file.name}`)
-        if (blacklistedCmds.includes(file.name.slice(0, -3))) {
-            console.log(`${file.name} is disabled`)
+        const filename = file.name.slice(0, -3)
+
+        console.log(`found "${filename}"`)
+        if (blacklistedCmds.includes(filename)) {
+            console.log(`"${filename}" is disabled`)
             continue
         }
 
         try {
-            const cmd = (await import(`./commands/${file.name}`)).default as Command
+            const cmd = (await import(`/commands/${file.name}`)).default as Command
             localCommands.push(cmd)
-            console.log(`loaded ${file.name}`)
+            console.log(`loaded "${filename}"`)
         } catch (error) {
-            console.error(`loading ${file.name} error: ${error}`)
+            console.error(`loading error: ${error}`)
         }
     }
 
     return localCommands
 }
 
-export async function syncCommands(guild: string, localCommands: Command[], remoteCommands: SlashCommand[]) {
-    const locale = await getLocaleFromGuild(guild)
+export async function updateCommands(localCommands: Command[], guild: Guild) {
+    const remoteCommands = await guild.commands.all()
+    const locale = await getLocaleFromGuild(guild.id)
 
     for (const localCmd of localCommands) {
-        const index = remoteCommands.findIndex(c => c.name === localCmd.command(locale).name)
+        const cmdPartial = localCmd.command(locale);
+        const cmdHandler = localCmd.handler(locale)
 
-        if (index === -1) {
-            console.log(`registering ${localCmd.command(locale).name}`)
-            const cmd = await client.slash.commands.create(localCmd.command(locale), guild)
-
-            console.log(`registering ${cmd.name} handler`)
-            cmd.handle(localCmd.handler(locale))
+        let remoteCmd = remoteCommands.find(c => c.name === cmdPartial.name)
+        if (remoteCmd == null) {
+            console.log(`registering "${cmdPartial.name}"`)
+            remoteCmd = await guild.commands.create(cmdPartial)
         } else {
-            const cmd = remoteCommands.splice(index, 1)[0]
-            if (!compareCommands(cmd, localCmd.command(locale))) {
-                console.log(`updating ${localCmd.command(locale).name}`)
-                await cmd.edit(localCmd.command(locale))
+            remoteCommands.delete(remoteCmd.id)
+            if (!compareCommands(remoteCmd, cmdPartial)) {
+                console.log(`updating "${cmdPartial.name}"`)
+                await remoteCmd.edit(cmdPartial)
             }
-
-            console.log(`registering ${cmd.name} handler`)
-            cmd.handle(localCmd.handler(locale))
         }
+
+        console.log(`registering "${remoteCmd.name}" handler`)
+        remoteCmd.handle(cmdHandler)
     }
 
-    for (const cmd of remoteCommands) {
-        console.log(`deregistering ${cmd.name}`)
+    for (const [_, cmd] of remoteCommands) {
+        console.log(`deregistering "${cmd.name}"`)
         await cmd.delete()
     }
 }

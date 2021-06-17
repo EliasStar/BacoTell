@@ -9,13 +9,13 @@ export async function loadLocale(identifier: LocaleIdentifier): Promise<Locale> 
     try {
         return (await import(`/lang/${identifier}.ts`)).default as Locale
     } catch (error) {
-        console.error(`loading locale "${identifier}" error: ${error}`)
+        console.error(`error while loading locale "${identifier}": ${error}`)
         return defaultLang
     }
 }
 
-export async function getLocaleFromGuild(guild: string): Promise<Locale> {
-    const locale = localeDB.get(guild)
+export async function getLocaleFromGuild(guildId: string): Promise<Locale> {
+    const locale = localeDB.get(guildId)
     return locale != null ? await loadLocale(locale) : defaultLang
 }
 
