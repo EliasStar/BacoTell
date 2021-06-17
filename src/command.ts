@@ -1,26 +1,26 @@
-import client from "./mod.ts";
-import { harmony, path } from "./deps.ts"
-import { rootDir } from "./perms.ts";
+import client from "/mod.ts"
+import { rootDir } from "/perms.ts"
+import { getLocaleFromGuild, Locale } from "/locale.ts"
+import { join } from "path"
+import { SlashCommand, SlashCommandChoice, SlashCommandHandlerCallback, SlashCommandOption, SlashCommandPartial } from "harmony"
 
-import type { Locale } from "./lang.ts";
-
-export type CommandLocale = Locale
-export type CommandInteraction = harmony.SlashCommandInteraction
+export type { Locale } from "/locale.ts"
+export type { SlashCommandInteraction as Interaction } from "harmony"
 export interface Command {
-    command(loc: Locale): harmony.SlashCommandPartial
-    handler(loc: Locale): harmony.SlashCommandHandlerCallback
+    command(loc: Locale): SlashCommandPartial
+    handler(loc: Locale): SlashCommandHandlerCallback
 }
 
 export async function loadCommands(blacklistedCmds: string[]): Promise<Command[]> {
     const localCommands = []
 
-    for await (const file of Deno.readDir(path.join(rootDir, "./commands/"))) {
+    for await (const file of Deno.readDir(join(rootDir, "./commands/"))) {
         if (!file.isFile) continue
 
         console.log(`found ${file.name}`)
         if (blacklistedCmds.includes(file.name.slice(0, -3))) {
             console.log(`${file.name} is disabled`)
-            continue;
+            continue
         }
 
         try {
@@ -35,7 +35,9 @@ export async function loadCommands(blacklistedCmds: string[]): Promise<Command[]
     return localCommands
 }
 
-export async function syncCommands(localCommands: Command[], remoteCommands: harmony.SlashCommand[], locale: Locale, guild: string) {
+export async function syncCommands(guild: string, localCommands: Command[], remoteCommands: SlashCommand[]) {
+    const locale = await getLocaleFromGuild(guild)
+
     for (const localCmd of localCommands) {
         const index = remoteCommands.findIndex(c => c.name === localCmd.command(locale).name)
 
@@ -63,7 +65,7 @@ export async function syncCommands(localCommands: Command[], remoteCommands: har
     }
 }
 
-function compareCommands(cmd1: harmony.SlashCommandPartial, cmd2: harmony.SlashCommandPartial): boolean {
+function compareCommands(cmd1: SlashCommandPartial, cmd2: SlashCommandPartial): boolean {
     let identical = cmd1.name === cmd2.name && cmd1.description === cmd2.description
 
     if (cmd1.defaultPermission != null && cmd2.defaultPermission != null) {
@@ -79,7 +81,7 @@ function compareCommands(cmd1: harmony.SlashCommandPartial, cmd2: harmony.SlashC
     return identical
 }
 
-function compareOptions(opt1?: harmony.SlashCommandOption[], opt2?: harmony.SlashCommandOption[]): boolean {
+function compareOptions(opt1?: SlashCommandOption[], opt2?: SlashCommandOption[]): boolean {
     if (opt1 != null && opt2 != null) {
         if (opt1.length !== opt2.length) return false
 
@@ -108,7 +110,7 @@ function compareOptions(opt1?: harmony.SlashCommandOption[], opt2?: harmony.Slas
     return true
 }
 
-function compareChoices(cho1?: harmony.SlashCommandChoice[], cho2?: harmony.SlashCommandChoice[]): boolean {
+function compareChoices(cho1?: SlashCommandChoice[], cho2?: SlashCommandChoice[]): boolean {
     if (cho1 != null && cho2 != null) {
         if (cho1.length !== cho2.length) return false
 

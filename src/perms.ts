@@ -1,4 +1,4 @@
-import { path } from "./deps.ts"
+import { dirname, fromFileUrl } from "path"
 
 const envPerms = await Deno.permissions.request({ name: "env" })
 if (envPerms.state === "denied") {
@@ -12,7 +12,7 @@ if (netPerms.state === "denied") {
     Deno.exit()
 }
 
-export const rootDir = path.dirname(path.fromFileUrl(import.meta.url))
+export const rootDir = dirname(fromFileUrl(import.meta.url))
 const readPerms = await Deno.permissions.request({ name: "read", path: rootDir })
 if (readPerms.state === "denied") {
     console.error("no read access")

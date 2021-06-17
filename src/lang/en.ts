@@ -1,15 +1,25 @@
-import type { Locale } from "../lang.ts"
-
-const en: Locale = {
+export default {
+    lang: {
+        en: "English",
+        de: "German",
+        es: "Spanish"
+    },
     cmds: {
         ping: {
-            desc: "Get the ping between BOT client and Discord Gateway."
+            desc: "Gets the ping between BOT client and Discord Gateway."
         },
-        peng: {
-            desc: "Ping command with typo",
-            reply: "Another one bites the dust."
+        shoot: {
+            cmd: "bang",
+            desc: "The sound of a gunshot",
+            reply: "Another one bites the dust!"
+        },
+        lang: {
+            cmd: "language",
+            desc: "Gets or changes the language the BOT uses.",
+            option: {
+                name: "locale",
+                desc: "The language to change to"
+            }
         }
     }
 }
-
-export default en

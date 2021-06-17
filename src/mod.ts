@@ -1,10 +1,8 @@
-import token from "./perms.ts"
+import token from "/perms.ts"
+import { loadCommands, syncCommands } from "/command.ts"
+import { Client, GatewayIntents } from "harmony"
 
-import en from "./lang/en.ts"
-import { harmony } from "./deps.ts"
-import { loadCommands, syncCommands } from "./command.ts";
-
-const client = new harmony.Client()
+const client = new Client()
 
 client.once("ready", async () => {
     console.log(`logged in as ${client.user?.tag}`)
@@ -16,9 +14,9 @@ client.once("ready", async () => {
     const remoteCommands = (await client.slash.commands.guild("620996650269278240")).array()
 
     console.log("syncing commands")
-    await syncCommands(localCommands, remoteCommands, en, "620996650269278240")
+    await syncCommands("620996650269278240", localCommands, remoteCommands)
 })
 
-client.connect(token, [harmony.GatewayIntents.GUILDS])
+client.connect(token, [GatewayIntents.GUILDS])
 
 export default client

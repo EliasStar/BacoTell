@@ -1,13 +1,27 @@
-import type { Locale } from "../lang.ts"
+import { Locale } from "/locale.ts"
 
 const es: Locale = {
+    lang: {
+        en: "Inglés",
+        de: "Alemán",
+        es: "Español"
+    },
     cmds: {
         ping: {
-            desc: "Obtenga el ping entre el cliente BOT y Discord Gateway."
+            desc: "Obtén el ping entre el cliente BOT y Discord Gateway."
         },
-        peng: {
-            desc: "Comando ping con error tipográfico",
-            reply: "Otro muerde el polvo."
+        shoot: {
+            cmd: "bang",
+            desc: "El sonido de un disparo",
+            reply: "¡Otro muerde el polvo!"
+        },
+        lang: {
+            cmd: "idioma",
+            desc: "Obtiene o cambia el idioma del BOT.",
+            option: {
+                name: "lengua",
+                desc: "El idioma a usar"
+            }
         }
     }
 }

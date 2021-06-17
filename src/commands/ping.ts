@@ -1,12 +1,12 @@
-import type { Command, CommandLocale, CommandInteraction } from "../command.ts"
+import { Command, Locale, Interaction } from "/command.ts"
 
 const ping: Command = {
-    command: (loc: CommandLocale) => ({
+    command: (loc: Locale) => ({
         name: "ping",
         description: loc.cmds.ping.desc
     }),
 
-    handler: () => ((inter: CommandInteraction) => {
+    handler: () => ((inter: Interaction) => {
         inter.reply("Pong")
     })
 }
