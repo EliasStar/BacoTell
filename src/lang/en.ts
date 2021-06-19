@@ -16,6 +16,10 @@ export default {
         lang: {
             cmd: "language",
             desc: "Gets or changes the language the BOT uses.",
+            replies: {
+                get: "I'm currently speaking",
+                set: "I'll now answer in English."
+            },
             option: {
                 name: "locale",
                 desc: "The language to change to"

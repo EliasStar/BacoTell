@@ -1,7 +1,7 @@
 import { blacklistFile, rootDir } from "/perms.ts"
-import { getLocaleFromGuild, Locale } from "/locale.ts"
+import { getLocaleFromGuild, loadLocale, Locale } from "/locale.ts"
 import { join } from "path"
-import { Guild, SlashCommandChoice, SlashCommandHandlerCallback, SlashCommandOption, SlashCommandPartial } from "harmony"
+import { Guild, SlashCommandChoice, SlashCommandHandlerCallback, SlashCommandInteraction, SlashCommandOption, SlashCommandOptionType, SlashCommandPartial } from "harmony"
 
 export type { Locale } from "/locale.ts"
 export type { SlashCommandInteraction as Interaction } from "harmony"
@@ -10,11 +10,15 @@ export interface Command {
     handler(loc: Locale): SlashCommandHandlerCallback
 }
 
-export async function loadCommands(): Promise<Command[]> {
+const loadedCommands: Command[] = []
+
+export async function loadCommands() {
+    console.log("loading command blacklist")
     const blacklist = JSON.parse(await Deno.readTextFile(blacklistFile))
     const blacklistedCmds = Array.isArray(blacklist) ? blacklist as string[] : []
 
-    const localCommands: Command[] = []
+    console.log("loading commands")
+    loadedCommands.splice(0) // Remove all commands
     for await (const file of Deno.readDir(join(rootDir, "./commands/"))) {
         if (!file.isFile) continue
 
@@ -28,30 +32,32 @@ export async function loadCommands(): Promise<Command[]> {
 
         try {
             const cmd = (await import(`/commands/${file.name}`)).default as Command
-            localCommands.push(cmd)
+            loadedCommands.push(cmd)
             console.log(`loaded "${filename}"`)
         } catch (error) {
             console.error(`loading error: ${error}`)
         }
     }
-
-    return localCommands
 }
 
-export async function updateCommands(localCommands: Command[], guild: Guild) {
-    const remoteCommands = await guild.commands.all()
-    const locale = await getLocaleFromGuild(guild.id)
+export async function deployCommands(guild: Guild) {
+    const deployedCommands = await guild.commands.all()
+    const locale = await loadLocale(getLocaleFromGuild(guild.id))
 
-    for (const localCmd of localCommands) {
-        const cmdPartial = localCmd.command(locale);
-        const cmdHandler = localCmd.handler(locale)
+    console.log(`deploying commands to "${guild.name}" (${guild.id})`)
+    for (const localCmd of loadedCommands) {
+        const cmdPartial = localCmd.command(locale)
+        const cmdHandler: SlashCommandHandlerCallback = inter => {
+            console.log(`command "${inter.name}" used on "${guild.name}" (${guild.id})`)
+            return localCmd.handler(locale)(inter)
+        }
 
-        let remoteCmd = remoteCommands.find(c => c.name === cmdPartial.name)
+        let remoteCmd = deployedCommands.find(c => c.name === cmdPartial.name)
         if (remoteCmd == null) {
             console.log(`registering "${cmdPartial.name}"`)
             remoteCmd = await guild.commands.create(cmdPartial)
         } else {
-            remoteCommands.delete(remoteCmd.id)
+            deployedCommands.delete(remoteCmd.id)
             if (!compareCommands(remoteCmd, cmdPartial)) {
                 console.log(`updating "${cmdPartial.name}"`)
                 await remoteCmd.edit(cmdPartial)
@@ -62,7 +68,7 @@ export async function updateCommands(localCommands: Command[], guild: Guild) {
         remoteCmd.handle(cmdHandler)
     }
 
-    for (const [_, cmd] of remoteCommands) {
+    for (const [_, cmd] of deployedCommands) {
         console.log(`deregistering "${cmd.name}"`)
         await cmd.delete()
     }
@@ -89,7 +95,11 @@ function compareOptions(opt1?: SlashCommandOption[], opt2?: SlashCommandOption[]
         if (opt1.length !== opt2.length) return false
 
         for (let i = 0; i < opt1.length; i++) {
-            let identical = opt1[i].name === opt2[i].name && opt1[i].description === opt2[i].description && opt1[i].type === opt2[i].type
+            let identical = opt1[i].name === opt2[i].name && opt1[i].description === opt2[i].description
+
+            const type1 = typeof opt1[i].type === "string" ? SlashCommandOptionType[opt1[i].type] : opt1[i].type
+            const type2 = typeof opt2[i].type === "string" ? SlashCommandOptionType[opt2[i].type] : opt2[i].type
+            identical &&= type1 === type2
 
             if (opt1[i].required != null && opt2[i].required != null) {
                 identical &&= opt1[i].required === opt2[i].required

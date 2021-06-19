@@ -18,6 +18,10 @@ const de: Locale = {
         lang: {
             cmd: "sprache",
             desc: "Ruft die Sprache des BOT ab oder ändert sie.",
+            replies: {
+                get: "Ich spreche derzeit",
+                set: "Von jetzt an spreche ich Deutsch."
+            },
             option: {
                 name: "sprache",
                 desc: "Die zu verwendende Sprache"

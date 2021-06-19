@@ -1,4 +1,5 @@
-import { Command, Locale, Interaction } from "/command.ts"
+import { getLocaleFromGuild, setLocaleForGuild, loadLocale, LocaleIdentifier } from "/locale.ts";
+import { Command, deployCommands, Interaction, Locale } from "/command.ts"
 
 const lang: Command = {
     command: (loc: Locale) => ({
@@ -12,26 +13,40 @@ const lang: Command = {
                 choices: [
                     {
                         name: loc.lang.en,
-                        value: "en"
+                        value: "en",
                     },
                     {
                         name: loc.lang.de,
-                        value: "de"
+                        value: "de",
                     },
                     {
                         name: loc.lang.es,
-                        value: "es"
-                    }
+                        value: "es",
+                    },
                 ],
-
-
-            }
-        ]
+            },
+        ],
     }),
 
-    handler: (_loc: Locale) => ((_inter: Interaction) => {
+    handler: (loc: Locale) => (async (inter: Interaction) => {
+        if (inter.guild == null) return
+        await inter.defer()
 
-    })
+        const guild = inter.guild
+
+        if (inter.options.length === 0) {
+            const locale = getLocaleFromGuild(guild.id)
+            inter.reply(`${loc.cmds.lang.replies.get} ${loc.lang[locale]}.`)
+        } else {
+            const newLocale = inter.options[0].value as LocaleIdentifier
+
+            setLocaleForGuild(guild.id, newLocale)
+            const newLoc = await loadLocale(newLocale)
+
+            await deployCommands(guild)
+            inter.reply(newLoc.cmds.lang.replies.set)
+        }
+    }),
 }
 
 export default lang

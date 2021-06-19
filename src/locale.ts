@@ -1,6 +1,6 @@
-import defaultLang from "/lang/en.ts"
+import en from "/lang/en.ts"
 
-export type Locale = typeof defaultLang
+export type Locale = typeof en
 export type LocaleIdentifier = "en" | "de" | "es"
 
 const localeDB = new Map<string, LocaleIdentifier>() // TODO: Add DB
@@ -10,15 +10,15 @@ export async function loadLocale(identifier: LocaleIdentifier): Promise<Locale> 
         return (await import(`/lang/${identifier}.ts`)).default as Locale
     } catch (error) {
         console.error(`error while loading locale "${identifier}": ${error}`)
-        return defaultLang
+        return en
     }
 }
 
-export async function getLocaleFromGuild(guildId: string): Promise<Locale> {
+export function getLocaleFromGuild(guildId: string): LocaleIdentifier {
     const locale = localeDB.get(guildId)
-    return locale != null ? await loadLocale(locale) : defaultLang
+    return locale != null ? locale : "en"
 }
 
-export function setLocaleForGuild(guild: string, locale: LocaleIdentifier) {
-    localeDB.set(guild, locale)
+export function setLocaleForGuild(guildId: string, locale: LocaleIdentifier) {
+    localeDB.set(guildId, locale)
 }

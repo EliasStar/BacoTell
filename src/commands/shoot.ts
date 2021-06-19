@@ -1,6 +1,6 @@
 import { Command, Locale, Interaction } from "/command.ts"
 
-const peng: Command = {
+const shoot: Command = {
     command: (loc: Locale) => ({
         name: loc.cmds.shoot.cmd,
         description: loc.cmds.shoot.desc
@@ -11,4 +11,4 @@ const peng: Command = {
     })
 }
 
-export default peng
+export default shoot
