@@ -64,6 +64,7 @@ export async function deployCommands(guild: Guild) {
             }
         }
 
+        // FIXME: Either not registering on updated command or previous handler has higher priority
         console.log(`registering "${remoteCmd.name}" handler`)
         remoteCmd.handle(cmdHandler)
     }

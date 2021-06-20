@@ -8,7 +8,11 @@ const es: Locale = {
     },
     cmds: {
         ping: {
-            desc: "Obtén el ping entre el cliente BOT y Discord Gateway."
+            desc: "Obtén el ping entre el cliente BOT y Discord Gateway.",
+            reply: {
+                results: "Resultados",
+                latency: "Latencia"
+            }
         },
         shoot: {
             cmd: "bang",
@@ -18,7 +22,7 @@ const es: Locale = {
         lang: {
             cmd: "idioma",
             desc: "Obtiene o cambia el idioma del BOT.",
-            replies: {
+            reply: {
                 get: "Actualmente estoy hablando",
                 set: "A partir de ahora responderé en español."
             },
@@ -26,6 +30,10 @@ const es: Locale = {
                 name: "lengua",
                 desc: "El idioma a usar"
             }
+        },
+        issue: {
+            cmd: "issue",
+            desc: "Report a bug or request a feature.",
         }
     }
 }

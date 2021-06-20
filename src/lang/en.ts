@@ -6,7 +6,11 @@ export default {
     },
     cmds: {
         ping: {
-            desc: "Gets the ping between BOT client and Discord Gateway."
+            desc: "Gets the ping between BOT client and Discord Gateway.",
+            reply: {
+                results: "Results",
+                latency: "Latency"
+            }
         },
         shoot: {
             cmd: "bang",
@@ -16,7 +20,7 @@ export default {
         lang: {
             cmd: "language",
             desc: "Gets or changes the language the BOT uses.",
-            replies: {
+            reply: {
                 get: "I'm currently speaking",
                 set: "I'll now answer in English."
             },
@@ -24,6 +28,10 @@ export default {
                 name: "locale",
                 desc: "The language to change to"
             }
+        },
+        issue: {
+            cmd: "issue",
+            desc: "Report a bug or request a feature.",
         }
     }
 }

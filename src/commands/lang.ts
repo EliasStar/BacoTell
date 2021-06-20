@@ -36,7 +36,7 @@ const lang: Command = {
 
         if (inter.options.length === 0) {
             const locale = getLocaleFromGuild(guild.id)
-            inter.reply(`${loc.cmds.lang.replies.get} ${loc.lang[locale]}.`)
+            await inter.reply(`${loc.cmds.lang.reply.get} ${loc.lang[locale]}.`)
         } else {
             const newLocale = inter.options[0].value as LocaleIdentifier
 
@@ -44,7 +44,7 @@ const lang: Command = {
             const newLoc = await loadLocale(newLocale)
 
             await deployCommands(guild)
-            inter.reply(newLoc.cmds.lang.replies.set)
+            await inter.reply(newLoc.cmds.lang.reply.set)
         }
     }),
 }

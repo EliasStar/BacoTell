@@ -6,8 +6,8 @@ const shoot: Command = {
         description: loc.cmds.shoot.desc
     }),
 
-    handler: (loc: Locale) => ((inter: Interaction) => {
-        inter.reply(loc.cmds.shoot.reply)
+    handler: (loc: Locale) => (async (inter: Interaction) => {
+        await inter.reply(loc.cmds.shoot.reply)
     })
 }
 
