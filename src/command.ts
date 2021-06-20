@@ -4,7 +4,7 @@ import { join } from "path"
 import { Guild, SlashCommandChoice, SlashCommandHandlerCallback, SlashCommandInteraction, SlashCommandOption, SlashCommandOptionType, SlashCommandPartial } from "harmony"
 
 export type { Locale } from "/locale.ts"
-export type { SlashCommandInteraction as Interaction } from "harmony"
+export type { Embed, SlashCommandInteraction as Interaction, MessageComponentData as Component } from "harmony"
 export interface Command {
     command(loc: Locale): SlashCommandPartial
     handler(loc: Locale): SlashCommandHandlerCallback

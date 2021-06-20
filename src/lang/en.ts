@@ -29,9 +29,14 @@ export default {
                 desc: "The language to change to"
             }
         },
-        issue: {
-            cmd: "issue",
-            desc: "Report a bug or request a feature.",
+        issues: {
+            desc: "Create Issues for Baco Tell on GitHub.",
+            button: {
+                bug: "Report a bug",
+                feature: "Request a feature",
+                question: "Ask a question",
+                other: "Create other issue"
+            }
         }
     }
 }

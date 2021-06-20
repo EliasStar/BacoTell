@@ -31,9 +31,14 @@ const es: Locale = {
                 desc: "El idioma a usar"
             }
         },
-        issue: {
-            cmd: "issue",
-            desc: "Report a bug or request a feature.",
+        issues: {
+            desc: "Crear Issues para Baco Tell en GitHub.",
+            button: {
+                bug: "Informar de un error",
+                feature: "Solicitar una función",
+                question: "Haz una pregunta",
+                other: "Crear otro Issue"
+            }
         }
     }
 }
