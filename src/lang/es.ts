@@ -39,6 +39,15 @@ const es: Locale = {
                 question: "Haz una pregunta",
                 other: "Crear otro Issue"
             }
+        },
+        clear: {
+            cmd: "borras",
+            desc: "Elimina varios mensajes en el channel.",
+            reply: "¡Hecho!",
+            option: {
+                name: "cantidad",
+                desc: "Cuántos mensajes eliminar"
+            }
         }
     }
 }

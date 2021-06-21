@@ -1,5 +1,4 @@
-import { Command, Locale, Interaction } from "/command.ts"
-import { Embed } from "harmony"
+import { Command, Locale, Interaction, Embed } from "/command.ts"
 
 const ping: Command = {
     command: (loc: Locale) => ({
@@ -27,7 +26,10 @@ const ping: Command = {
             embed.setColor(0xff0000)
         }
 
-        await inter.reply("Pong!", { embeds: [embed] })
+        await inter.reply({
+            content: "Pong!",
+            embeds: [embed]
+        })
     })
 }
 

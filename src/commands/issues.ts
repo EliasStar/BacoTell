@@ -1,5 +1,4 @@
-import { Command, Locale, Interaction } from "/command.ts"
-import { MessageComponentData } from "harmony"
+import { Command, Locale, Interaction, Component } from "/command.ts"
 
 const issues: Command = {
     command: (loc: Locale) => ({
@@ -8,7 +7,7 @@ const issues: Command = {
     }),
 
     handler: (loc: Locale) => (async (inter: Interaction) => {
-        const component: MessageComponentData = {
+        const component: Component = {
             type: 1,
             components: [
                 {
@@ -40,6 +39,7 @@ const issues: Command = {
 
         await inter.reply({
             content: "Baco Tell Issue Tracker",
+            ephemeral: true,
             components: [component]
         })
     })

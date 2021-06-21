@@ -1,5 +1,5 @@
-import { getLocaleFromGuild, setLocaleForGuild, loadLocale, LocaleIdentifier } from "/locale.ts";
 import { Command, deployCommands, Interaction, Locale } from "/command.ts"
+import { getLocaleFromGuild, setLocaleForGuild, loadLocale, LocaleIdentifier } from "/locale.ts"
 
 const lang: Command = {
     command: (loc: Locale) => ({

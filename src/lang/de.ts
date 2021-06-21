@@ -32,12 +32,21 @@ const de: Locale = {
             }
         },
         issues: {
-            desc: "Erstelle Issues für Baco Tell auf GitHub.",
+            desc: "Erstellt Issues für Baco Tell auf GitHub.",
             button: {
                 bug: "Fehler melden",
                 feature: "Feature vorschlagen",
                 question: "Frage stelle",
                 other: "Anderen Issue erstellen"
+            }
+        },
+        clear: {
+            cmd: "lösche",
+            desc: "Löscht mehrere Nachrichten im Channel.",
+            reply: "Fertig!",
+            option: {
+                name: "anzahl",
+                desc: "Wie viele Nachrichten zu löschen sind"
             }
         }
     }
