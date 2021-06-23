@@ -20,7 +20,7 @@ export default {
         lang: {
             cmd: "language",
             desc: "Gets or changes the language the BOT uses.",
-            reply: {
+            replies: {
                 get: "I'm currently speaking",
                 set: "I'll now answer in English."
             },
@@ -31,7 +31,7 @@ export default {
         },
         issues: {
             desc: "Creates Issues for Baco Tell on GitHub.",
-            button: {
+            buttons: {
                 bug: "Report a bug",
                 feature: "Request a feature",
                 question: "Ask a question",
@@ -43,8 +43,25 @@ export default {
             desc: "Deletes multiple messages in the channel.",
             reply: "Done!",
             option: {
-                name: "count",
+                name: "amount",
                 desc: "How many messages to be deleted"
+            }
+        },
+        yeet: {
+            desc: "Repeatedly moves a member between two channels in quick succession.",
+            replies: {
+                offline: "is not connected!",
+                yeet: "glhf!"
+            },
+            options: {
+                member: {
+                    name: "member",
+                    desc: "The person who gets yeeted"
+                },
+                amount: {
+                    name: "amount",
+                    desc: "How often the person gets yeeted"
+                }
             }
         }
     }

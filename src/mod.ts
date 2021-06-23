@@ -10,4 +10,4 @@ client.once("ready", () => console.log(`logged in as "${client.user!.tag}"`))
 client.on("guildCreate", guild => deployCommands(guild))
 client.on("guildLoaded", guild => deployCommands(guild))
 
-client.connect(token, [GatewayIntents.GUILDS])
+client.connect(token, [GatewayIntents.GUILDS, GatewayIntents.GUILD_VOICE_STATES])

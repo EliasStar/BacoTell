@@ -22,7 +22,7 @@ const es: Locale = {
         lang: {
             cmd: "idioma",
             desc: "Obtiene o cambia el idioma del BOT.",
-            reply: {
+            replies: {
                 get: "Actualmente estoy hablando",
                 set: "A partir de ahora responderé en español."
             },
@@ -33,7 +33,7 @@ const es: Locale = {
         },
         issues: {
             desc: "Crear Issues para Baco Tell en GitHub.",
-            button: {
+            buttons: {
                 bug: "Informar de un error",
                 feature: "Solicitar una función",
                 question: "Haz una pregunta",
@@ -42,11 +42,28 @@ const es: Locale = {
         },
         clear: {
             cmd: "borras",
-            desc: "Elimina varios mensajes en el channel.",
+            desc: "Elimina varios mensajes en el canal.",
             reply: "¡Hecho!",
             option: {
                 name: "cantidad",
                 desc: "Cuántos mensajes eliminar"
+            }
+        },
+        yeet: {
+            desc: "Mueve repetidamente un miembro entre dos canales en rápida sucesión.",
+            replies: {
+                offline: "no está conectado.",
+                yeet: "aquí vamos. ¡Abróchate el cinturón, baja y listo!"
+            },
+            options: {
+                member: {
+                    name: "miembro",
+                    desc: "La persona que será yeeted"
+                },
+                amount: {
+                    name: "cantidad",
+                    desc: "El número de veces que la persona será yeeted"
+                }
             }
         }
     }

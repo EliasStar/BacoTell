@@ -17,6 +17,7 @@ const clear: Command = {
 
     handler: (loc: Locale) => (async (inter: Interaction) => {
         if (!(inter.channel instanceof GuildTextChannel)) return
+        if (inter.options.length !== 1) return
 
         const count = inter.options[0].value as number
         await inter.channel.bulkDelete(count)
