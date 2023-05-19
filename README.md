@@ -23,7 +23,6 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 If you made changes to the protobuf definitions, build them with the following command. After that you can adjust source code referencing the generated protobuf code.
 ``` sh
 protoc --go_out=. --go_opt=module=github.com/EliasStar/BacoTell --go-grpc_out=. --go-grpc_opt=module=github.com/EliasStar/BacoTell proto/*
-go build ./cmd/bacotell/
 ```
 
 To compile the BacoTell executable, use this command:
