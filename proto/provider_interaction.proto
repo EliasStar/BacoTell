@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package provider;
+
+import "google/protobuf/empty.proto";
+import "proto/discord_command_data.proto";
+
+option go_package = "github.com/EliasStar/BacoTell/internal/proto/providerpb";
+
+service InteractionProvider {
+    rpc GetPrefix(google.protobuf.Empty) returns (GetPrefixResponse);
+	rpc GetApplicationCommands(google.protobuf.Empty) returns (GetApplicationCommandsResponse);
+	rpc GetMessageComponents(google.protobuf.Empty) returns (GetMessageComponentsResponse);
+}
+
+message GetPrefixResponse {
+    string prefix = 1;
+}
+
+message GetApplicationCommandsResponse {
+    repeated uint32 command_ids = 1;
+}
+
+message GetMessageComponentsResponse {
+    repeated uint32 component_ids = 1;
+}
+
+service Command {
+    rpc CommandData(google.protobuf.Empty) returns (CommandDataResponse);
+    rpc Execute(ExecuteRequest) returns (google.protobuf.Empty);
+    rpc Autocomplete(AutocompleteRequest) returns (google.protobuf.Empty);
+}
+
+message CommandDataResponse {
+    discord.CommandData data = 1;
+}
+
+message ExecuteRequest {
+    uint32 interaction_proxy_id = 1;
+}
+
+message AutocompleteRequest {
+    uint32 interaction_proxy_id = 1;
+}
+
+service Component {
+    rpc CustomId(google.protobuf.Empty) returns (CustomIdResponse);
+    rpc Handle(HandleRequest) returns (google.protobuf.Empty);
+}
+
+message CustomIdResponse {
+    string custom_id = 1;
+}
+
+message HandleRequest {
+    uint32 interaction_proxy_id = 1;
+}
+
+service InteractionProxy {
+    rpc Defer(DeferRequest) returns (google.protobuf.Empty);
+    rpc Respond(RespondRequest) returns (google.protobuf.Empty);
+    rpc Followup(FollowupRequest) returns (FollowupResponse);
+    rpc Edit(EditRequest) returns (google.protobuf.Empty);
+    rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
+}
+
+message DeferRequest {
+    bool ephemeral = 1;
+    bool suppressEmbeds = 2;
+    bool tts = 3;
+}
+
+message RespondRequest {
+    string message = 1;
+    bool ephemeral = 2;
+    bool suppressEmbeds = 3;
+    bool tts = 4;
+}
+
+message FollowupRequest {
+    string message = 1;
+    bool ephemeral = 2;
+    bool suppressEmbeds = 3;
+    bool tts = 4;
+}
+
+message FollowupResponse {
+    string id = 1;
+}
+
+message EditRequest {
+    string id = 1;
+    string message = 2;
+}
+
+message DeleteRequest {
+    string id = 1;
+}
