@@ -20,8 +20,8 @@ type interactionProviderServer struct {
 var _ providerpb.InteractionProviderServer = interactionProviderServer{}
 
 // GetPrefix implements providerpb.InteractionProviderServer
-func (s interactionProviderServer) GetPrefix(context.Context, *emptypb.Empty) (*providerpb.GetPrefixResponse, error) {
-	prefix, err := s.impl.GetPrefix()
+func (s interactionProviderServer) Prefix(context.Context, *emptypb.Empty) (*providerpb.GetPrefixResponse, error) {
+	prefix, err := s.impl.Prefix()
 	if err != nil {
 		return nil, err
 	}
@@ -30,8 +30,8 @@ func (s interactionProviderServer) GetPrefix(context.Context, *emptypb.Empty) (*
 }
 
 // GetApplicationCommands implements providerpb.InteractionProviderServer
-func (s interactionProviderServer) GetApplicationCommands(context.Context, *emptypb.Empty) (*providerpb.GetApplicationCommandsResponse, error) {
-	commands, err := s.impl.GetApplicationCommands()
+func (s interactionProviderServer) ApplicationCommands(context.Context, *emptypb.Empty) (*providerpb.GetApplicationCommandsResponse, error) {
+	commands, err := s.impl.ApplicationCommands()
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func (s interactionProviderServer) GetApplicationCommands(context.Context, *empt
 		ids[i] = s.broker.NextId()
 		go s.broker.AcceptAndServe(ids[i], func(opts []grpc.ServerOption) *grpc.Server {
 			server := grpc.NewServer(opts...)
-			providerpb.RegisterCommandServer(server, commandServer{impl: command})
+			providerpb.RegisterCommandServer(server, commandServer{impl: command, broker: s.broker})
 			return server
 		})
 	}
@@ -50,8 +50,8 @@ func (s interactionProviderServer) GetApplicationCommands(context.Context, *empt
 }
 
 // GetMessageComponents implements providerpb.InteractionProviderServer
-func (s interactionProviderServer) GetMessageComponents(context.Context, *emptypb.Empty) (*providerpb.GetMessageComponentsResponse, error) {
-	components, err := s.impl.GetMessageComponents()
+func (s interactionProviderServer) MessageComponents(context.Context, *emptypb.Empty) (*providerpb.GetMessageComponentsResponse, error) {
+	components, err := s.impl.MessageComponents()
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (s interactionProviderServer) GetMessageComponents(context.Context, *emptyp
 		ids[i] = s.broker.NextId()
 		go s.broker.AcceptAndServe(ids[i], func(opts []grpc.ServerOption) *grpc.Server {
 			server := grpc.NewServer(opts...)
-			providerpb.RegisterComponentServer(server, componentServer{impl: component})
+			providerpb.RegisterComponentServer(server, componentServer{impl: component, broker: s.broker})
 			return server
 		})
 	}
@@ -77,8 +77,8 @@ type interactionProviderClient struct {
 var _ provider.InteractionProvider = interactionProviderClient{}
 
 // GetPrefix implements provider.InteractionProvider
-func (c interactionProviderClient) GetPrefix() (string, error) {
-	res, err := c.client.GetPrefix(context.Background(), &emptypb.Empty{})
+func (c interactionProviderClient) Prefix() (string, error) {
+	res, err := c.client.Prefix(context.Background(), &emptypb.Empty{})
 	if err != nil {
 		return "", err
 	}
@@ -87,8 +87,8 @@ func (c interactionProviderClient) GetPrefix() (string, error) {
 }
 
 // GetApplicationCommands implements provider.InteractionProvider
-func (c interactionProviderClient) GetApplicationCommands() ([]provider.Command, error) {
-	res, err := c.client.GetApplicationCommands(context.Background(), &emptypb.Empty{})
+func (c interactionProviderClient) ApplicationCommands() ([]provider.Command, error) {
+	res, err := c.client.ApplicationCommands(context.Background(), &emptypb.Empty{})
 	if err != nil {
 		return nil, err
 	}
@@ -100,15 +100,15 @@ func (c interactionProviderClient) GetApplicationCommands() ([]provider.Command,
 			return nil, err
 		}
 
-		commands[i] = &commandClient{client: providerpb.NewCommandClient(conn)}
+		commands[i] = &commandClient{client: providerpb.NewCommandClient(conn), broker: c.broker}
 	}
 
 	return commands, nil
 }
 
 // GetMessageComponents implements provider.InteractionProvider
-func (c interactionProviderClient) GetMessageComponents() ([]provider.Component, error) {
-	res, err := c.client.GetMessageComponents(context.Background(), &emptypb.Empty{})
+func (c interactionProviderClient) MessageComponents() ([]provider.Component, error) {
+	res, err := c.client.MessageComponents(context.Background(), &emptypb.Empty{})
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +120,7 @@ func (c interactionProviderClient) GetMessageComponents() ([]provider.Component,
 			return nil, err
 		}
 
-		components[i] = &componentClient{client: providerpb.NewComponentClient(conn)}
+		components[i] = &componentClient{client: providerpb.NewComponentClient(conn), broker: c.broker}
 	}
 
 	return components, nil

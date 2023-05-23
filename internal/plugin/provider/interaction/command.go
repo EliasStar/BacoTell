@@ -9,13 +9,16 @@ import (
 	"github.com/EliasStar/BacoTell/internal/proto/providerpb"
 	"github.com/EliasStar/BacoTell/pkg/provider"
 	"github.com/bwmarrin/discordgo"
+	"github.com/hashicorp/go-plugin"
+	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type commandServer struct {
 	providerpb.UnimplementedCommandServer
 
-	impl provider.Command
+	impl   provider.Command
+	broker *plugin.GRPCBroker
 }
 
 var _ providerpb.CommandServer = commandServer{}
@@ -47,12 +50,25 @@ func (s commandServer) CommandData(context.Context, *emptypb.Empty) (*providerpb
 }
 
 // Execute implements providerpb.CommandServer
-func (s commandServer) Execute(context.Context, *providerpb.ExecuteRequest) (*emptypb.Empty, error) {
-	return &emptypb.Empty{}, s.impl.Execute(nil)
+func (s commandServer) Execute(_ context.Context, req *providerpb.ExecuteRequest) (*emptypb.Empty, error) {
+	conn, err := s.broker.Dial(req.ExecuteProxyId)
+	if err != nil {
+		return nil, err
+	}
+
+	defer conn.Close()
+
+	return &emptypb.Empty{}, s.impl.Execute(executeProxyClient{
+		interactionProxyClient: interactionProxyClient{
+			client: providerpb.NewInteractionProxyClient(conn),
+		},
+		client: providerpb.NewExecuteProxyClient(conn),
+	})
 }
 
 type commandClient struct {
 	client providerpb.CommandClient
+	broker *plugin.GRPCBroker
 }
 
 var _ provider.Command = commandClient{}
@@ -82,8 +98,24 @@ func (c commandClient) CommandData() (discordgo.ApplicationCommand, error) {
 }
 
 // Execute implements provider.Command
-func (c commandClient) Execute(provider.InteractionProxy) error {
-	_, err := c.client.Execute(context.Background(), &providerpb.ExecuteRequest{})
+func (c commandClient) Execute(proxy provider.ExecuteProxy) error {
+	var s *grpc.Server
+	defer s.Stop()
+
+	id := c.broker.NextId()
+	go c.broker.AcceptAndServe(id, func(opts []grpc.ServerOption) *grpc.Server {
+		s = grpc.NewServer(opts...)
+
+		providerpb.RegisterExecuteProxyServer(s, executeProxyServer{impl: proxy})
+		providerpb.RegisterInteractionProxyServer(s, interactionProxyServer{impl: proxy})
+
+		return s
+	})
+
+	_, err := c.client.Execute(context.Background(), &providerpb.ExecuteRequest{
+		ExecuteProxyId: id,
+	})
+
 	return err
 }
 

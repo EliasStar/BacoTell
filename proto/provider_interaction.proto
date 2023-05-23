@@ -8,9 +8,9 @@ import "proto/discord_command_data.proto";
 option go_package = "github.com/EliasStar/BacoTell/internal/proto/providerpb";
 
 service InteractionProvider {
-    rpc GetPrefix(google.protobuf.Empty) returns (GetPrefixResponse);
-	rpc GetApplicationCommands(google.protobuf.Empty) returns (GetApplicationCommandsResponse);
-	rpc GetMessageComponents(google.protobuf.Empty) returns (GetMessageComponentsResponse);
+    rpc Prefix(google.protobuf.Empty) returns (GetPrefixResponse);
+	rpc ApplicationCommands(google.protobuf.Empty) returns (GetApplicationCommandsResponse);
+	rpc MessageComponents(google.protobuf.Empty) returns (GetMessageComponentsResponse);
 }
 
 message GetPrefixResponse {
@@ -28,7 +28,7 @@ message GetMessageComponentsResponse {
 service Command {
     rpc CommandData(google.protobuf.Empty) returns (CommandDataResponse);
     rpc Execute(ExecuteRequest) returns (google.protobuf.Empty);
-    rpc Autocomplete(AutocompleteRequest) returns (google.protobuf.Empty);
+    // rpc Autocomplete(AutocompleteRequest) returns (google.protobuf.Empty);
 }
 
 message CommandDataResponse {
@@ -36,12 +36,12 @@ message CommandDataResponse {
 }
 
 message ExecuteRequest {
-    uint32 interaction_proxy_id = 1;
+    uint32 execute_proxy_id = 1;
 }
 
-message AutocompleteRequest {
-    uint32 interaction_proxy_id = 1;
-}
+// message AutocompleteRequest {
+//     uint32 interaction_proxy_id = 1;
+// }
 
 service Component {
     rpc CustomId(google.protobuf.Empty) returns (CustomIdResponse);
@@ -53,7 +53,7 @@ message CustomIdResponse {
 }
 
 message HandleRequest {
-    uint32 interaction_proxy_id = 1;
+    uint32 handle_proxy_id = 1;
 }
 
 service InteractionProxy {
@@ -95,4 +95,42 @@ message EditRequest {
 
 message DeleteRequest {
     string id = 1;
+}
+
+service ExecuteProxy {
+	rpc StringOption(OptionRequest) returns (StringOptionResponse);
+	rpc IntegerOption(OptionRequest) returns (IntegerOptionResponse);
+	rpc NumberOption(OptionRequest) returns (NumberOptionResponse);
+	rpc BooleanOption(OptionRequest) returns (BooleanOptionResponse);
+
+	// rpc UserOption(OptionRequest)  returns (discordgo.User, error);
+	// rpc ChannelOption(OptionRequest) returns  (discordgo.Channel, error);
+	// rpc RoleOption(OptionRequest)  returns (discordgo.Role, error);
+	// rpc MentionableOption(OptionRequest) returns  (any, error);
+
+	// rpc AttachmentOption(OptionRequest) (discordgo.MessageAttachment, error);
+}
+
+message OptionRequest {
+    string name = 1;
+}
+
+message StringOptionResponse {
+    string value = 1;
+}
+
+message IntegerOptionResponse {
+    int64 value = 1;
+}
+
+message NumberOptionResponse {
+    double value = 1;
+}
+
+message BooleanOptionResponse {
+    bool value = 1;
+}
+
+service HandleProxy {
+
 }

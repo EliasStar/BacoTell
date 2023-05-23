@@ -17,12 +17,12 @@ func (TestCommand) CommandData() (discordgo.ApplicationCommand, error) {
 	}, nil
 }
 
-func (TestCommand) Execute(provider.InteractionProxy) error {
+func (TestCommand) Execute(provider.ExecuteProxy) error {
 	logger.Info("execute command")
 	return nil
 }
 
-func (TestCommand) Autocomplete(provider.InteractionProxy) error {
-	logger.Info("execute command")
-	return nil
-}
+// func (TestCommand) Autocomplete(provider.InteractionProxy) error {
+// 	logger.Info("execute command")
+// 	return nil
+// }

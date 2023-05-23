@@ -14,7 +14,7 @@ func (TestComponent) CustomId() (string, error) {
 }
 
 // Handle implements provider.Component
-func (TestComponent) Handle(provider.InteractionProxy) error {
+func (TestComponent) Handle(provider.HandleProxy) error {
 	logger.Info("handle component")
 	return nil
 }

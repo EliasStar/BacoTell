@@ -5,22 +5,27 @@ import (
 )
 
 type InteractionProvider interface {
-	GetPrefix() (string, error)
-	GetApplicationCommands() ([]Command, error)
-	GetMessageComponents() ([]Component, error)
-	// GetModals()
+	Prefix() (string, error)
+	ApplicationCommands() ([]Command, error)
+	MessageComponents() ([]Component, error)
+	// Modals() ([]Modal, error)
 }
 
 type Command interface {
 	CommandData() (discordgo.ApplicationCommand, error)
-	Execute(InteractionProxy) error
-	//Autocomplete(proxy) error
+	Execute(ExecuteProxy) error
+	//Autocomplete(AutocompleteProxy) error
 }
 
 type Component interface {
 	CustomId() (string, error)
-	Handle(InteractionProxy) error
+	Handle(HandleProxy) error
 }
+
+// type Modal interface {
+// 	CustomId() (string, error)
+// 	Submit(SubmitProxy) error
+// }
 
 type InteractionProxy interface {
 	Defer(ephemeral, suppressEmbeds, tts bool) error
@@ -30,7 +35,36 @@ type InteractionProxy interface {
 
 	Edit(id string, message string) error
 	Delete(id string) error
+
+	//Modal(id, title string)
 }
+
+type ExecuteProxy interface {
+	InteractionProxy
+
+	StringOption(name string) (string, error)
+	IntegerOption(name string) (int64, error)
+	NumberOption(name string) (float64, error)
+	BooleanOption(name string) (bool, error)
+
+	UserOption(name string) (discordgo.User, error)
+	RoleOption(name string) (discordgo.Role, error)
+	ChannelOption(name string) (discordgo.Channel, error)
+	// MentionableOption(name string) (any, error)
+
+	AttachmentOption(name string) (discordgo.MessageAttachment, error)
+}
+
+type HandleProxy interface {
+	InteractionProxy
+}
+
+// type AutocompleteProxy interface {
+// }
+
+// type SubmitProxy interface {
+// 	InteractionProxy
+// }
 
 type interactionProvider struct {
 	prefix     string
@@ -48,14 +82,14 @@ func NewInteractionProvider(prefix string, commands []Command, components []Comp
 	}
 }
 
-func (i interactionProvider) GetPrefix() (string, error) {
+func (i interactionProvider) Prefix() (string, error) {
 	return i.prefix, nil
 }
 
-func (i interactionProvider) GetApplicationCommands() ([]Command, error) {
+func (i interactionProvider) ApplicationCommands() ([]Command, error) {
 	return i.commands, nil
 }
 
-func (i interactionProvider) GetMessageComponents() ([]Component, error) {
+func (i interactionProvider) MessageComponents() ([]Component, error) {
 	return i.components, nil
 }

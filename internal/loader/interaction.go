@@ -33,19 +33,19 @@ func loadInteractionProvider(protocol plugin.ClientProtocol) {
 		return
 	}
 
-	prefix, err := ip.GetPrefix()
+	prefix, err := ip.Prefix()
 	if err != nil {
 		logger.Warn("could not get prefix", "err", err)
 		return
 	}
 
-	cmds, err := ip.GetApplicationCommands()
+	cmds, err := ip.ApplicationCommands()
 	if err != nil {
 		logger.Warn("could not get commands", "err", err)
 		return
 	}
 
-	cpts, err := ip.GetMessageComponents()
+	cpts, err := ip.MessageComponents()
 	if err != nil {
 		logger.Warn("could not get components", "err", err)
 		return
