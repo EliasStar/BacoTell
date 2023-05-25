@@ -3,7 +3,8 @@ syntax = "proto3";
 package provider;
 
 import "google/protobuf/empty.proto";
-import "proto/discord_command_data.proto";
+import "proto/discord_command.proto";
+import "proto/discord_channel.proto";
 
 option go_package = "github.com/EliasStar/BacoTell/internal/proto/providerpb";
 
@@ -32,7 +33,7 @@ service Command {
 }
 
 message CommandDataResponse {
-    discord.CommandData data = 1;
+    discord.ApplicationCommand data = 1;
 }
 
 message ExecuteRequest {
@@ -103,12 +104,12 @@ service ExecuteProxy {
 	rpc NumberOption(OptionRequest) returns (NumberOptionResponse);
 	rpc BooleanOption(OptionRequest) returns (BooleanOptionResponse);
 
-	// rpc UserOption(OptionRequest)  returns (discordgo.User, error);
-	// rpc ChannelOption(OptionRequest) returns  (discordgo.Channel, error);
-	// rpc RoleOption(OptionRequest)  returns (discordgo.Role, error);
-	// rpc MentionableOption(OptionRequest) returns  (any, error);
+	rpc UserOption(OptionRequest) returns (UserOptionResponse);
+    rpc RoleOption(OptionRequest) returns (RoleOptionResponse);
+	rpc ChannelOption(OptionRequest) returns (ChannelOptionResponse);
 
-	// rpc AttachmentOption(OptionRequest) (discordgo.MessageAttachment, error);
+
+	rpc AttachmentOption(OptionRequest) returns (AttachmentOptionResponse);
 }
 
 message OptionRequest {
@@ -129,6 +130,22 @@ message NumberOptionResponse {
 
 message BooleanOptionResponse {
     bool value = 1;
+}
+
+message UserOptionResponse {
+    discord.User value = 1;
+}
+
+message RoleOptionResponse {
+    discord.Role value = 1;
+}
+
+message ChannelOptionResponse {
+    discord.Channel value = 1;
+}
+
+message AttachmentOptionResponse {
+    discord.Attachment value = 1;
 }
 
 service HandleProxy {

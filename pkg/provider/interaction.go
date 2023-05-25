@@ -47,12 +47,11 @@ type ExecuteProxy interface {
 	NumberOption(name string) (float64, error)
 	BooleanOption(name string) (bool, error)
 
-	UserOption(name string) (discordgo.User, error)
-	RoleOption(name string) (discordgo.Role, error)
-	ChannelOption(name string) (discordgo.Channel, error)
-	// MentionableOption(name string) (any, error)
+	UserOption(name string) (*discordgo.User, error)
+	RoleOption(name string) (*discordgo.Role, error)
+	ChannelOption(name string) (*discordgo.Channel, error)
 
-	AttachmentOption(name string) (discordgo.MessageAttachment, error)
+	AttachmentOption(name string) (*discordgo.MessageAttachment, error)
 }
 
 type HandleProxy interface {

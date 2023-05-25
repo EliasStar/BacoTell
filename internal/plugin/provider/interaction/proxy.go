@@ -3,6 +3,7 @@ package interaction
 import (
 	context "context"
 
+	"github.com/EliasStar/BacoTell/internal/proto/discordpb"
 	"github.com/EliasStar/BacoTell/internal/proto/providerpb"
 	"github.com/EliasStar/BacoTell/pkg/provider"
 	"github.com/bwmarrin/discordgo"
@@ -113,10 +114,12 @@ func (c interactionProxyClient) Delete(id string) error {
 
 type executeProxyServer struct {
 	providerpb.UnimplementedExecuteProxyServer
+	interactionProxyServer
 
 	impl provider.ExecuteProxy
 }
 
+var _ providerpb.InteractionProxyServer = executeProxyServer{}
 var _ providerpb.ExecuteProxyServer = executeProxyServer{}
 
 // StringOption implements providerpb.ExecuteProxyServer
@@ -167,12 +170,106 @@ func (s executeProxyServer) BooleanOption(_ context.Context, req *providerpb.Opt
 	}, nil
 }
 
+// UserOption implements providerpb.ExecuteProxyServer
+func (s executeProxyServer) UserOption(_ context.Context, req *providerpb.OptionRequest) (*providerpb.UserOptionResponse, error) {
+	val, err := s.impl.UserOption(req.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	return &providerpb.UserOptionResponse{
+		Value: &discordpb.User{
+			Id:            val.ID,
+			Username:      val.Username,
+			Discriminator: val.Discriminator,
+			Email:         val.Email,
+
+			Avatar: val.Avatar,
+			Banner: val.Banner,
+
+			AccentColor: uint32(val.AccentColor),
+			Locale:      val.Locale,
+
+			Bot:        val.Bot,
+			System:     val.System,
+			MfaEnabled: val.MFAEnabled,
+			Verified:   val.Verified,
+
+			PremiumType: uint32(val.PremiumType),
+			Flags:       uint64(val.Flags),
+			PublicFlags: uint64(val.PublicFlags),
+		},
+	}, nil
+}
+
+// RoleOption implements providerpb.ExecuteProxyServer
+func (s executeProxyServer) RoleOption(_ context.Context, req *providerpb.OptionRequest) (*providerpb.RoleOptionResponse, error) {
+	val, err := s.impl.RoleOption(req.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	return &providerpb.RoleOptionResponse{
+		Value: &discordpb.Role{
+			Id:   val.ID,
+			Name: val.Name,
+
+			Color: uint32(val.Color),
+
+			Managed:     val.Managed,
+			Mentionable: val.Mentionable,
+			Hoist:       val.Hoist,
+
+			Position:    uint32(val.Position),
+			Permissions: val.Permissions,
+		},
+	}, nil
+}
+
+// ChannelOption implements providerpb.ExecuteProxyServer
+func (s executeProxyServer) ChannelOption(_ context.Context, req *providerpb.OptionRequest) (*providerpb.ChannelOptionResponse, error) {
+	_, err := s.impl.ChannelOption(req.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	return &providerpb.ChannelOptionResponse{
+		Value: &discordpb.Channel{}, // TODO
+	}, nil
+}
+
+// AttachmentOption implements providerpb.ExecuteProxyServer
+func (s executeProxyServer) AttachmentOption(_ context.Context, req *providerpb.OptionRequest) (*providerpb.AttachmentOptionResponse, error) {
+	val, err := s.impl.AttachmentOption(req.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	return &providerpb.AttachmentOptionResponse{
+		Value: &discordpb.Attachment{
+			Id:       val.ID,
+			Filename: val.Filename,
+
+			Url:         val.URL,
+			ProxyUrl:    val.ProxyURL,
+			ContentType: val.ContentType,
+			Size:        uint32(val.Size),
+
+			Height: uint32(val.Height),
+			Width:  uint32(val.Width),
+
+			Ephemeral: val.Ephemeral,
+		},
+	}, nil
+}
+
 type executeProxyClient struct {
 	interactionProxyClient
 
 	client providerpb.ExecuteProxyClient
 }
 
+var _ provider.InteractionProxy = executeProxyClient{}
 var _ provider.ExecuteProxy = executeProxyClient{}
 
 // StringOption implements provider.ExecuteProxy
@@ -228,31 +325,110 @@ func (c executeProxyClient) BooleanOption(name string) (bool, error) {
 }
 
 // UserOption implements provider.ExecuteProxy
-func (c executeProxyClient) UserOption(name string) (discordgo.User, error) {
-	panic("unimplemented")
+func (c executeProxyClient) UserOption(name string) (*discordgo.User, error) {
+	res, err := c.client.UserOption(context.Background(), &providerpb.OptionRequest{
+		Name: name,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &discordgo.User{
+		ID:            res.Value.Id,
+		Username:      res.Value.Username,
+		Discriminator: res.Value.Discriminator,
+		Email:         res.Value.Email,
+
+		Avatar: res.Value.Avatar,
+		Banner: res.Value.Banner,
+
+		AccentColor: int(res.Value.AccentColor),
+		Locale:      res.Value.Locale,
+
+		Bot:        res.Value.Bot,
+		System:     res.Value.System,
+		MFAEnabled: res.Value.MfaEnabled,
+		Verified:   res.Value.Verified,
+
+		PremiumType: int(res.Value.PremiumType),
+		Flags:       int(res.Value.Flags),
+		PublicFlags: discordgo.UserFlags(res.Value.PublicFlags),
+	}, nil
 }
 
 // RoleOption implements provider.ExecuteProxy
-func (c executeProxyClient) RoleOption(name string) (discordgo.Role, error) {
-	panic("unimplemented")
+func (c executeProxyClient) RoleOption(name string) (*discordgo.Role, error) {
+	res, err := c.client.RoleOption(context.Background(), &providerpb.OptionRequest{
+		Name: name,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &discordgo.Role{
+		ID:   res.Value.Id,
+		Name: res.Value.Name,
+
+		Color: int(res.Value.Color),
+
+		Managed:     res.Value.Managed,
+		Mentionable: res.Value.Mentionable,
+		Hoist:       res.Value.Hoist,
+
+		Position:    int(res.Value.Position),
+		Permissions: res.Value.Permissions,
+	}, nil
 }
 
 // ChannelOption implements provider.ExecuteProxy
-func (c executeProxyClient) ChannelOption(name string) (discordgo.Channel, error) {
-	panic("unimplemented")
+func (c executeProxyClient) ChannelOption(name string) (*discordgo.Channel, error) {
+	_, err := c.client.ChannelOption(context.Background(), &providerpb.OptionRequest{
+		Name: name,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &discordgo.Channel{}, nil // TODO
 }
 
 // AttachmentOption implements provider.ExecuteProxy
-func (c executeProxyClient) AttachmentOption(name string) (discordgo.MessageAttachment, error) {
-	panic("unimplemented")
+func (c executeProxyClient) AttachmentOption(name string) (*discordgo.MessageAttachment, error) {
+	res, err := c.client.AttachmentOption(context.Background(), &providerpb.OptionRequest{
+		Name: name,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &discordgo.MessageAttachment{
+		ID:       res.Value.Id,
+		Filename: res.Value.Filename,
+
+		URL:         res.Value.Url,
+		ProxyURL:    res.Value.ProxyUrl,
+		ContentType: res.Value.ContentType,
+		Size:        int(res.Value.Size),
+
+		Height: int(res.Value.Height),
+		Width:  int(res.Value.Width),
+
+		Ephemeral: res.Value.Ephemeral,
+	}, nil
 }
 
 type handleProxyServer struct {
 	providerpb.UnimplementedHandleProxyServer
+	interactionProxyServer
 
 	impl provider.HandleProxy
 }
 
+var _ providerpb.InteractionProxyServer = handleProxyServer{}
 var _ providerpb.HandleProxyServer = handleProxyServer{}
 
 type handleProxyClient struct {
@@ -261,4 +437,5 @@ type handleProxyClient struct {
 	client providerpb.HandleProxyClient
 }
 
+var _ provider.InteractionProxy = handleProxyClient{}
 var _ provider.HandleProxy = handleProxyClient{}

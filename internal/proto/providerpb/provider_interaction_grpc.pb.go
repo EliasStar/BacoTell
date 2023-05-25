@@ -659,6 +659,10 @@ type ExecuteProxyClient interface {
 	IntegerOption(ctx context.Context, in *OptionRequest, opts ...grpc.CallOption) (*IntegerOptionResponse, error)
 	NumberOption(ctx context.Context, in *OptionRequest, opts ...grpc.CallOption) (*NumberOptionResponse, error)
 	BooleanOption(ctx context.Context, in *OptionRequest, opts ...grpc.CallOption) (*BooleanOptionResponse, error)
+	UserOption(ctx context.Context, in *OptionRequest, opts ...grpc.CallOption) (*UserOptionResponse, error)
+	RoleOption(ctx context.Context, in *OptionRequest, opts ...grpc.CallOption) (*RoleOptionResponse, error)
+	ChannelOption(ctx context.Context, in *OptionRequest, opts ...grpc.CallOption) (*ChannelOptionResponse, error)
+	AttachmentOption(ctx context.Context, in *OptionRequest, opts ...grpc.CallOption) (*AttachmentOptionResponse, error)
 }
 
 type executeProxyClient struct {
@@ -705,6 +709,42 @@ func (c *executeProxyClient) BooleanOption(ctx context.Context, in *OptionReques
 	return out, nil
 }
 
+func (c *executeProxyClient) UserOption(ctx context.Context, in *OptionRequest, opts ...grpc.CallOption) (*UserOptionResponse, error) {
+	out := new(UserOptionResponse)
+	err := c.cc.Invoke(ctx, "/provider.ExecuteProxy/UserOption", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *executeProxyClient) RoleOption(ctx context.Context, in *OptionRequest, opts ...grpc.CallOption) (*RoleOptionResponse, error) {
+	out := new(RoleOptionResponse)
+	err := c.cc.Invoke(ctx, "/provider.ExecuteProxy/RoleOption", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *executeProxyClient) ChannelOption(ctx context.Context, in *OptionRequest, opts ...grpc.CallOption) (*ChannelOptionResponse, error) {
+	out := new(ChannelOptionResponse)
+	err := c.cc.Invoke(ctx, "/provider.ExecuteProxy/ChannelOption", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *executeProxyClient) AttachmentOption(ctx context.Context, in *OptionRequest, opts ...grpc.CallOption) (*AttachmentOptionResponse, error) {
+	out := new(AttachmentOptionResponse)
+	err := c.cc.Invoke(ctx, "/provider.ExecuteProxy/AttachmentOption", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ExecuteProxyServer is the server API for ExecuteProxy service.
 // All implementations must embed UnimplementedExecuteProxyServer
 // for forward compatibility
@@ -713,6 +753,10 @@ type ExecuteProxyServer interface {
 	IntegerOption(context.Context, *OptionRequest) (*IntegerOptionResponse, error)
 	NumberOption(context.Context, *OptionRequest) (*NumberOptionResponse, error)
 	BooleanOption(context.Context, *OptionRequest) (*BooleanOptionResponse, error)
+	UserOption(context.Context, *OptionRequest) (*UserOptionResponse, error)
+	RoleOption(context.Context, *OptionRequest) (*RoleOptionResponse, error)
+	ChannelOption(context.Context, *OptionRequest) (*ChannelOptionResponse, error)
+	AttachmentOption(context.Context, *OptionRequest) (*AttachmentOptionResponse, error)
 	mustEmbedUnimplementedExecuteProxyServer()
 }
 
@@ -731,6 +775,18 @@ func (UnimplementedExecuteProxyServer) NumberOption(context.Context, *OptionRequ
 }
 func (UnimplementedExecuteProxyServer) BooleanOption(context.Context, *OptionRequest) (*BooleanOptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BooleanOption not implemented")
+}
+func (UnimplementedExecuteProxyServer) UserOption(context.Context, *OptionRequest) (*UserOptionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserOption not implemented")
+}
+func (UnimplementedExecuteProxyServer) RoleOption(context.Context, *OptionRequest) (*RoleOptionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RoleOption not implemented")
+}
+func (UnimplementedExecuteProxyServer) ChannelOption(context.Context, *OptionRequest) (*ChannelOptionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChannelOption not implemented")
+}
+func (UnimplementedExecuteProxyServer) AttachmentOption(context.Context, *OptionRequest) (*AttachmentOptionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AttachmentOption not implemented")
 }
 func (UnimplementedExecuteProxyServer) mustEmbedUnimplementedExecuteProxyServer() {}
 
@@ -817,6 +873,78 @@ func _ExecuteProxy_BooleanOption_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ExecuteProxy_UserOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExecuteProxyServer).UserOption(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/provider.ExecuteProxy/UserOption",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExecuteProxyServer).UserOption(ctx, req.(*OptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExecuteProxy_RoleOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExecuteProxyServer).RoleOption(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/provider.ExecuteProxy/RoleOption",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExecuteProxyServer).RoleOption(ctx, req.(*OptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExecuteProxy_ChannelOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExecuteProxyServer).ChannelOption(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/provider.ExecuteProxy/ChannelOption",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExecuteProxyServer).ChannelOption(ctx, req.(*OptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExecuteProxy_AttachmentOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExecuteProxyServer).AttachmentOption(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/provider.ExecuteProxy/AttachmentOption",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExecuteProxyServer).AttachmentOption(ctx, req.(*OptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ExecuteProxy_ServiceDesc is the grpc.ServiceDesc for ExecuteProxy service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -839,6 +967,22 @@ var ExecuteProxy_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "BooleanOption",
 			Handler:    _ExecuteProxy_BooleanOption_Handler,
+		},
+		{
+			MethodName: "UserOption",
+			Handler:    _ExecuteProxy_UserOption_Handler,
+		},
+		{
+			MethodName: "RoleOption",
+			Handler:    _ExecuteProxy_RoleOption_Handler,
+		},
+		{
+			MethodName: "ChannelOption",
+			Handler:    _ExecuteProxy_ChannelOption_Handler,
+		},
+		{
+			MethodName: "AttachmentOption",
+			Handler:    _ExecuteProxy_AttachmentOption_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -31,7 +31,7 @@ func (s commandServer) CommandData(context.Context, *emptypb.Empty) (*providerpb
 	}
 
 	return &providerpb.CommandDataResponse{
-		Data: &discordpb.CommandData{
+		Data: &discordpb.ApplicationCommand{
 			Type: uint32(data.Type),
 
 			Name:              data.Name,
@@ -99,17 +99,24 @@ func (c commandClient) CommandData() (discordgo.ApplicationCommand, error) {
 
 // Execute implements provider.Command
 func (c commandClient) Execute(proxy provider.ExecuteProxy) error {
-	var s *grpc.Server
-	defer s.Stop()
+	var server *grpc.Server
+	defer server.Stop()
 
 	id := c.broker.NextId()
 	go c.broker.AcceptAndServe(id, func(opts []grpc.ServerOption) *grpc.Server {
-		s = grpc.NewServer(opts...)
+		server = grpc.NewServer(opts...)
 
-		providerpb.RegisterExecuteProxyServer(s, executeProxyServer{impl: proxy})
-		providerpb.RegisterInteractionProxyServer(s, interactionProxyServer{impl: proxy})
+		srv := executeProxyServer{
+			interactionProxyServer: interactionProxyServer{
+				impl: proxy,
+			},
+			impl: proxy,
+		}
 
-		return s
+		providerpb.RegisterExecuteProxyServer(server, srv)
+		providerpb.RegisterInteractionProxyServer(server, srv)
+
+		return server
 	})
 
 	_, err := c.client.Execute(context.Background(), &providerpb.ExecuteRequest{
@@ -139,11 +146,11 @@ func decodeLocalizations(localizations map[string]string) *map[discordgo.Locale]
 	return &result
 }
 
-func encodeOptions(options []*discordgo.ApplicationCommandOption) []*discordpb.CommandOptionData {
-	result := make([]*discordpb.CommandOptionData, len(options))
+func encodeOptions(options []*discordgo.ApplicationCommandOption) []*discordpb.ApplicationCommandOption {
+	result := make([]*discordpb.ApplicationCommandOption, len(options))
 
 	for i, option := range options {
-		result[i] = &discordpb.CommandOptionData{
+		result[i] = &discordpb.ApplicationCommandOption{
 			Type: uint32(option.Type),
 
 			Name:              option.Name,
@@ -172,7 +179,7 @@ func encodeOptions(options []*discordgo.ApplicationCommandOption) []*discordpb.C
 	return result
 }
 
-func decodeOptions(options []*discordpb.CommandOptionData) []*discordgo.ApplicationCommandOption {
+func decodeOptions(options []*discordpb.ApplicationCommandOption) []*discordgo.ApplicationCommandOption {
 	result := make([]*discordgo.ApplicationCommandOption, len(options))
 
 	for i, option := range options {
@@ -207,8 +214,8 @@ func decodeOptions(options []*discordpb.CommandOptionData) []*discordgo.Applicat
 	return result
 }
 
-func encodeChoices(choices []*discordgo.ApplicationCommandOptionChoice) []*discordpb.CommandOptionChoiceData {
-	result := make([]*discordpb.CommandOptionChoiceData, len(choices))
+func encodeChoices(choices []*discordgo.ApplicationCommandOptionChoice) []*discordpb.ApplicationCommandOptionChoice {
+	result := make([]*discordpb.ApplicationCommandOptionChoice, len(choices))
 
 	var buffer bytes.Buffer
 	enc := gob.NewEncoder(&buffer)
@@ -217,7 +224,7 @@ func encodeChoices(choices []*discordgo.ApplicationCommandOptionChoice) []*disco
 		buffer.Reset()
 		enc.Encode(choice.Value)
 
-		result[i] = &discordpb.CommandOptionChoiceData{
+		result[i] = &discordpb.ApplicationCommandOptionChoice{
 			Name:              choice.Name,
 			NameLocalizations: encodeLocalizations(choice.NameLocalizations),
 			Value:             buffer.Bytes(),
@@ -227,7 +234,7 @@ func encodeChoices(choices []*discordgo.ApplicationCommandOptionChoice) []*disco
 	return result
 }
 
-func decodeChoices(choices []*discordpb.CommandOptionChoiceData) []*discordgo.ApplicationCommandOptionChoice {
+func decodeChoices(choices []*discordpb.ApplicationCommandOptionChoice) []*discordgo.ApplicationCommandOptionChoice {
 	result := make([]*discordgo.ApplicationCommandOptionChoice, len(choices))
 
 	var buffer bytes.Buffer

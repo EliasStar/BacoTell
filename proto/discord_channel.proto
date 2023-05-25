@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package discord;
+
+option go_package = "github.com/EliasStar/BacoTell/internal/proto/discordpb";
+
+message User {
+    string id = 1;
+    string username = 2;
+    string discriminator = 3;
+    string email = 12;
+
+    string avatar = 4;
+    string banner = 8;
+
+    uint32 accent_color = 9;
+    string locale = 10;
+
+    bool bot = 5;
+    bool system = 6;
+    bool mfa_enabled = 7;
+    bool verified = 11;
+
+    uint32 premium_type = 14;
+    uint64 flags = 13;
+    uint64 public_flags = 15;
+}
+
+message Role {
+    string id = 1;
+    string name = 2;
+
+    uint32 color = 3;
+    string unicode_emoji = 6;
+    string icon = 5;
+
+    bool managed = 9;
+    bool mentionable = 10;
+    bool hoist = 4;
+
+    uint32 position = 7;
+    int64 permissions = 8;
+
+    RoleTags tags = 11;
+}
+
+message RoleTags {
+    string bot_id = 1;
+    string integration_id = 2;
+    string subscription_listing_id = 4;
+    bool premium_subscriber = 3;
+    bool available_for_purchase = 5;
+    bool guild_connections = 6;
+}
+
+message Channel {
+    // string id = 1;
+    // integer type = 2;
+    // string guild_id = 3;
+    // integer position = 4;
+    // array_of_overwrite_objects permission_overwrites = 5;
+    // string name = 6;
+    // string topic = 7;
+    // boolean nsfw = 8;
+    // string last_message_id = 9;
+    // integer bitrate = 10;
+    // integer user_limit = 11;
+    // integer rate_limit_per_user = 12;
+    // array_of_user_objects recipients = 13;
+    // string icon = 14;
+    // snowflake owner_id = 15;
+    // snowflake application_id = 16;
+    // boolean managed = 17;
+    // snowflake parent_id = 18;
+    // ISO8601_timestamp last_pin_timestamp = 19;
+    // string rtc_region = 20;
+    // integer video_quality_mode = 21;
+    // integer message_count = 22;
+    // integer member_count = 23;
+    // a_thread_metadata_object thread_metadata = 24;
+    // a_thread_member_object member = 25;
+    // integer default_auto_archive_duration = 26;
+    // string permissions = 27;
+    // integer flags = 28;
+    // integer total_message_sent = 29;
+    // array_of_tag_objects available_tags = 30;
+    // array_of_snowflakes applied_tags = 31;
+    // default_reaction_object default_reaction_emoji = 32;
+    // integer default_thread_rate_limit_per_user = 33;
+    // integer default_sort_order = 34;
+    // integer default_forum_layout = 35;
+}
+
+message Attachment {
+    string id = 1;
+    string filename = 2;
+    string description = 3;
+
+    string url = 6;
+    string proxy_url = 7;
+    string content_type = 4;
+    uint32 size = 5;
+
+    uint32 height = 8;
+    uint32 width = 9;
+
+    bool ephemeral = 10;
+
+    double duration_secs = 11;
+    string waveform = 12;
+}

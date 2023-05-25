@@ -65,17 +65,24 @@ func (c componentClient) CustomId() (string, error) {
 
 // Handle implements provider.Component
 func (c componentClient) Handle(proxy provider.HandleProxy) error {
-	var s *grpc.Server
-	defer s.Stop()
+	var server *grpc.Server
+	defer server.Stop()
 
 	id := c.broker.NextId()
 	go c.broker.AcceptAndServe(id, func(opts []grpc.ServerOption) *grpc.Server {
-		s = grpc.NewServer(opts...)
+		server = grpc.NewServer(opts...)
 
-		providerpb.RegisterHandleProxyServer(s, handleProxyServer{impl: proxy})
-		providerpb.RegisterInteractionProxyServer(s, interactionProxyServer{impl: proxy})
+		srv := handleProxyServer{
+			interactionProxyServer: interactionProxyServer{
+				impl: proxy,
+			},
+			impl: proxy,
+		}
 
-		return s
+		providerpb.RegisterHandleProxyServer(server, srv)
+		providerpb.RegisterInteractionProxyServer(server, srv)
+
+		return server
 	})
 
 	_, err := c.client.Handle(context.Background(), &providerpb.HandleRequest{

@@ -102,7 +102,7 @@ func interactionOnInteractionCreate(session *discordgo.Session, evt *discordgo.I
 			return
 		}
 
-		err := cmd.Execute(executeProxy{})
+		err := cmd.Execute(executeProxy{interactionProxy{session, evt.Interaction}})
 		if err != nil {
 			logger.Warn("command execution failed", "command", name, "err", err)
 		}
@@ -116,7 +116,7 @@ func interactionOnInteractionCreate(session *discordgo.Session, evt *discordgo.I
 			return
 		}
 
-		err := cpt.Handle(handleProxy{})
+		err := cpt.Handle(handleProxy{interactionProxy{session, evt.Interaction}})
 		if err != nil {
 			logger.Warn("component handling failed", "component", id, "err", err)
 		}

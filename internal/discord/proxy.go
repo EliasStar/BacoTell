@@ -1,6 +1,8 @@
 package discord
 
 import (
+	"errors"
+
 	"github.com/EliasStar/BacoTell/pkg/provider"
 	"github.com/bwmarrin/discordgo"
 )
@@ -112,42 +114,107 @@ var _ provider.ExecuteProxy = executeProxy{}
 
 // StringOption implements provider.ExecuteProxy
 func (p executeProxy) StringOption(name string) (string, error) {
-	panic("unimplemented")
+	option := findOption(p.interaction.ApplicationCommandData().Options, name)
+	if option.Type != discordgo.ApplicationCommandOptionString {
+		return "", errors.New("option is not a string")
+	}
+
+	return option.StringValue(), nil
 }
 
 // IntegerOption implements provider.ExecuteProxy
 func (p executeProxy) IntegerOption(name string) (int64, error) {
-	panic("unimplemented")
+	option := findOption(p.interaction.ApplicationCommandData().Options, name)
+	if option.Type != discordgo.ApplicationCommandOptionInteger {
+		return 0, errors.New("option is not an integer")
+	}
+
+	return option.IntValue(), nil
 }
 
 // NumberOption implements provider.ExecuteProxy
 func (p executeProxy) NumberOption(name string) (float64, error) {
-	panic("unimplemented")
+	option := findOption(p.interaction.ApplicationCommandData().Options, name)
+	if option.Type != discordgo.ApplicationCommandOptionNumber {
+		return 0, errors.New("option is not a number")
+	}
+
+	return option.FloatValue(), nil
 }
 
 // BooleanOption implements provider.ExecuteProxy
 func (p executeProxy) BooleanOption(name string) (bool, error) {
-	panic("unimplemented")
+	option := findOption(p.interaction.ApplicationCommandData().Options, name)
+	if option.Type != discordgo.ApplicationCommandOptionBoolean {
+		return false, errors.New("option is not a boolean")
+	}
+
+	return option.BoolValue(), nil
 }
 
 // UserOption implements provider.ExecuteProxy
-func (executeProxy) UserOption(name string) (discordgo.User, error) {
-	panic("unimplemented")
+func (p executeProxy) UserOption(name string) (*discordgo.User, error) {
+	option := findOption(p.interaction.ApplicationCommandData().Options, name)
+	if option.Type != discordgo.ApplicationCommandOptionUser && option.Type != discordgo.ApplicationCommandOptionMentionable {
+		return nil, errors.New("option is not a user nor a mentionable")
+	}
+
+	return option.UserValue(p.session), nil
 }
 
 // RoleOption implements provider.ExecuteProxy
-func (executeProxy) RoleOption(name string) (discordgo.Role, error) {
-	panic("unimplemented")
+func (p executeProxy) RoleOption(name string) (*discordgo.Role, error) {
+	option := findOption(p.interaction.ApplicationCommandData().Options, name)
+	if option.Type != discordgo.ApplicationCommandOptionRole && option.Type != discordgo.ApplicationCommandOptionMentionable {
+		return nil, errors.New("option is not a role nor a mentionable")
+	}
+
+	return option.RoleValue(p.session, p.interaction.GuildID), nil
 }
 
 // ChannelOption implements provider.ExecuteProxy
-func (executeProxy) ChannelOption(name string) (discordgo.Channel, error) {
-	panic("unimplemented")
+func (p executeProxy) ChannelOption(name string) (*discordgo.Channel, error) {
+	option := findOption(p.interaction.ApplicationCommandData().Options, name)
+	if option.Type != discordgo.ApplicationCommandOptionChannel {
+		return nil, errors.New("option is not a channel")
+	}
+
+	return option.ChannelValue(p.session), nil
 }
 
 // AttachmentOption implements provider.ExecuteProxy
-func (executeProxy) AttachmentOption(name string) (discordgo.MessageAttachment, error) {
-	panic("unimplemented")
+func (p executeProxy) AttachmentOption(name string) (*discordgo.MessageAttachment, error) {
+	data := p.interaction.ApplicationCommandData()
+	option := findOption(data.Options, name)
+	if option.Type != discordgo.ApplicationCommandOptionAttachment {
+		return nil, errors.New("option is not an attachment")
+	}
+
+	id, ok := option.Value.(string)
+	if !ok {
+		return nil, errors.New("cannot get attachment")
+	}
+
+	attachment, ok := data.Resolved.Attachments[id]
+	if !ok {
+		return nil, errors.New("cannot get attachment")
+	}
+
+	return attachment, nil
+}
+
+func findOption(options []*discordgo.ApplicationCommandInteractionDataOption, name string) *discordgo.ApplicationCommandInteractionDataOption {
+	for _, opt := range options {
+		if opt.Name == name {
+			return opt
+		}
+
+		if opt.Options != nil {
+			return findOption(opt.Options, name)
+		}
+	}
+
+	return nil
 }
 
 type handleProxy struct {
@@ -155,3 +222,46 @@ type handleProxy struct {
 }
 
 var _ provider.HandleProxy = handleProxy{}
+
+// Defer implements provider.HandleProxy
+func (p handleProxy) Defer(ephemeral bool, suppressEmbeds bool, tts bool) error {
+	var flags discordgo.MessageFlags
+
+	if ephemeral {
+		flags |= discordgo.MessageFlagsEphemeral
+	}
+
+	if suppressEmbeds {
+		flags |= discordgo.MessageFlagsSuppressEmbeds
+	}
+
+	return p.session.InteractionRespond(p.interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseDeferredMessageUpdate,
+		Data: &discordgo.InteractionResponseData{
+			Flags: flags,
+			TTS:   tts,
+		},
+	})
+}
+
+// Respond implements provider.HandleProxy
+func (p handleProxy) Respond(message string, ephemeral bool, suppressEmbeds bool, tts bool) error {
+	var flags discordgo.MessageFlags
+
+	if ephemeral {
+		flags |= discordgo.MessageFlagsEphemeral
+	}
+
+	if suppressEmbeds {
+		flags |= discordgo.MessageFlagsSuppressEmbeds
+	}
+
+	return p.session.InteractionRespond(p.interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseUpdateMessage,
+		Data: &discordgo.InteractionResponseData{
+			Content: message,
+			Flags:   flags,
+			TTS:     tts,
+		},
+	})
+}

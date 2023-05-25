@@ -4,7 +4,7 @@ package discord;
 
 option go_package = "github.com/EliasStar/BacoTell/internal/proto/discordpb";
 
-message CommandData {
+message ApplicationCommand {
     uint32 type = 1;
 
     string name = 2;
@@ -13,13 +13,13 @@ message CommandData {
     string description = 4;
     map<string, string> description_localizations = 5;
 
-    repeated CommandOptionData options = 6;
+    repeated ApplicationCommandOption options = 6;
 
     int64 default_member_permissions = 7;
     bool nsfw = 8;
 }
 
-message CommandOptionData {
+message ApplicationCommandOption {
     uint32 type = 1;
 
     string name = 2;
@@ -30,8 +30,8 @@ message CommandOptionData {
 
     bool required = 6;
 
-    repeated CommandOptionChoiceData choices = 7;
-    repeated CommandOptionData options = 8;
+    repeated ApplicationCommandOptionChoice choices = 7;
+    repeated ApplicationCommandOption options = 8;
 
     repeated uint32 channel_types = 9;
 
@@ -44,7 +44,7 @@ message CommandOptionData {
     bool autocomplete = 14;
 }
 
-message CommandOptionChoiceData {
+message ApplicationCommandOptionChoice {
     string name = 1;
     map<string, string> name_localizations = 2;
     bytes value = 3;
