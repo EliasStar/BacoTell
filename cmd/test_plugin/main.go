@@ -24,5 +24,5 @@ var components = []provider.Component{
 
 func main() {
 	bacotell.SetInteractionProvider(provider.NewInteractionProvider("test_plugin", commands, components))
-	bacotell.DebugPlugin(logger, "MTA4OTk3MjA5MTE0MDQ0NDIwMA.GD1PSP.3i4VfMmnHuPjenyFgUUxkpDoJqw_zC_pW1sMsQ")
+	bacotell.DebugPlugin(logger, os.Getenv("BACOTELL_BOT_TOKEN"))
 }

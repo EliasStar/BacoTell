@@ -10,6 +10,7 @@ import (
 	"github.com/EliasStar/BacoTell/pkg/provider"
 	"github.com/bwmarrin/discordgo"
 	"github.com/hashicorp/go-plugin"
+	"github.com/spf13/cast"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
@@ -35,16 +36,16 @@ func (s commandServer) CommandData(context.Context, *emptypb.Empty) (*providerpb
 			Type: uint32(data.Type),
 
 			Name:              data.Name,
-			NameLocalizations: encodeLocalizations(*data.NameLocalizations),
+			NameLocalizations: encodeLocalizations(data.NameLocalizations),
 
 			Description:              data.Description,
-			DescriptionLocalizations: encodeLocalizations(*data.DescriptionLocalizations),
+			DescriptionLocalizations: encodeLocalizations(data.DescriptionLocalizations),
 
 			Options: encodeOptions(data.Options),
 
-			DefaultMemberPermissions: *data.DefaultMemberPermissions,
+			DefaultMemberPermissions: cast.ToInt64(data.DefaultMemberPermissions),
 
-			Nsfw: *data.NSFW,
+			Nsfw: cast.ToBool(data.NSFW),
 		},
 	}, nil
 }
@@ -100,7 +101,7 @@ func (c commandClient) CommandData() (discordgo.ApplicationCommand, error) {
 // Execute implements provider.Command
 func (c commandClient) Execute(proxy provider.ExecuteProxy) error {
 	var server *grpc.Server
-	defer server.Stop()
+	//defer server.Stop() TODO
 
 	id := c.broker.NextId()
 	go c.broker.AcceptAndServe(id, func(opts []grpc.ServerOption) *grpc.Server {
@@ -126,10 +127,14 @@ func (c commandClient) Execute(proxy provider.ExecuteProxy) error {
 	return err
 }
 
-func encodeLocalizations(localizations map[discordgo.Locale]string) map[string]string {
+func encodeLocalizations(localizations *map[discordgo.Locale]string) map[string]string {
 	result := make(map[string]string)
 
-	for locale, str := range localizations {
+	if localizations == nil {
+		return result
+	}
+
+	for locale, str := range *localizations {
 		result[string(locale)] = str
 	}
 
@@ -154,10 +159,10 @@ func encodeOptions(options []*discordgo.ApplicationCommandOption) []*discordpb.A
 			Type: uint32(option.Type),
 
 			Name:              option.Name,
-			NameLocalizations: encodeLocalizations(option.NameLocalizations),
+			NameLocalizations: encodeLocalizations(&option.NameLocalizations),
 
 			Description:              option.Description,
-			DescriptionLocalizations: encodeLocalizations(option.DescriptionLocalizations),
+			DescriptionLocalizations: encodeLocalizations(&option.DescriptionLocalizations),
 
 			Required: option.Required,
 
@@ -166,11 +171,11 @@ func encodeOptions(options []*discordgo.ApplicationCommandOption) []*discordpb.A
 
 			ChannelTypes: encodeChannelTypes(option.ChannelTypes),
 
-			MinValue: *option.MinValue,
-			MaxValue: option.MaxValue,
+			MinValue: cast.ToFloat64(option.MinValue),
+			MaxValue: cast.ToFloat64(option.MaxValue),
 
-			MinLength: uint32(*option.MinLength),
-			MaxLength: uint32(option.MaxLength),
+			MinLength: cast.ToUint32(option.MinLength),
+			MaxLength: cast.ToUint32(option.MaxLength),
 
 			Autocomplete: option.Autocomplete,
 		}
@@ -183,7 +188,7 @@ func decodeOptions(options []*discordpb.ApplicationCommandOption) []*discordgo.A
 	result := make([]*discordgo.ApplicationCommandOption, len(options))
 
 	for i, option := range options {
-		minLength := int(option.MinLength)
+		minLength := cast.ToInt(option.MinLength)
 
 		result[i] = &discordgo.ApplicationCommandOption{
 			Type: discordgo.ApplicationCommandOptionType(option.Type),
@@ -205,7 +210,7 @@ func decodeOptions(options []*discordpb.ApplicationCommandOption) []*discordgo.A
 			MaxValue: option.MaxValue,
 
 			MinLength: &minLength,
-			MaxLength: int(option.MaxLength),
+			MaxLength: cast.ToInt(option.MaxLength),
 
 			Autocomplete: option.Autocomplete,
 		}
@@ -222,11 +227,11 @@ func encodeChoices(choices []*discordgo.ApplicationCommandOptionChoice) []*disco
 
 	for i, choice := range choices {
 		buffer.Reset()
-		enc.Encode(choice.Value)
+		enc.Encode(&choice.Value)
 
 		result[i] = &discordpb.ApplicationCommandOptionChoice{
 			Name:              choice.Name,
-			NameLocalizations: encodeLocalizations(choice.NameLocalizations),
+			NameLocalizations: encodeLocalizations(&choice.NameLocalizations),
 			Value:             buffer.Bytes(),
 		}
 	}
@@ -245,7 +250,7 @@ func decodeChoices(choices []*discordpb.ApplicationCommandOptionChoice) []*disco
 		buffer.Write(choice.Value)
 
 		var value any
-		dec.Decode(value)
+		dec.Decode(&value)
 
 		result[i] = &discordgo.ApplicationCommandOptionChoice{
 			Name:              choice.Name,

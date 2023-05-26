@@ -17,8 +17,9 @@ func (TestCommand) CommandData() (discordgo.ApplicationCommand, error) {
 	}, nil
 }
 
-func (TestCommand) Execute(provider.ExecuteProxy) error {
+func (TestCommand) Execute(proxy provider.ExecuteProxy) error {
 	logger.Info("execute command")
+	proxy.Respond("Test Response", false, false, false)
 	return nil
 }
 
