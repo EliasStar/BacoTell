@@ -50,11 +50,3 @@ func FollowupEphemeral(session *discordgo.Session, interaction *discordgo.Intera
 		Flags:   1 << 6,
 	})
 }
-
-type Message struct {
-	Content         string
-	Components      []discordgo.MessageComponent
-	Embeds          []discordgo.MessageEmbed
-	AllowedMentions discordgo.MessageAllowedMentions
-	Files           []discordgo.File
-}

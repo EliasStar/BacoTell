@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package discord;
+
+option go_package = "github.com/EliasStar/BacoTell/internal/proto/discordpb";
+
+message Attachment {
+    string id = 1;
+    string filename = 2;
+    string description = 3;
+
+    string url = 6;
+    string proxy_url = 7;
+    string content_type = 4;
+    uint32 size = 5;
+
+    uint32 height = 8;
+    uint32 width = 9;
+
+    bool ephemeral = 10;
+
+    double duration_secs = 11;
+    string waveform = 12;
+}
+
+message MessageAllowedMentions {
+	repeated string parse = 1;
+	repeated string roles = 2;
+    repeated string users = 3;
+    bool replied_user = 4;
+}
+
+message MessageComponent {
+    bytes raw = 1;
+}
+
+message MessageEmbed {
+	string url = 1;
+	string type = 2;
+	string title = 3;
+	string description = 4;
+	string timestamp = 5;
+	uint32 color = 6;
+	MessageEmbedFooter footer = 7;
+	MessageEmbedImage image = 8;
+	MessageEmbedThumbnail thumbnail = 9;
+	MessageEmbedVideo video = 10;
+	MessageEmbedProvider provider = 11;
+	MessageEmbedAuthor author = 12;
+	repeated MessageEmbedField fields = 13;
+}
+
+message MessageEmbedFooter {
+    string text = 1;
+    string icon_url = 2;
+    string proxy_icon_url = 3;
+}
+
+message MessageEmbedImage {
+    string url = 1;
+	string proxy_url = 2;
+	uint32 width = 3;
+	uint32 height = 4;
+}
+
+message MessageEmbedThumbnail {
+    string url = 1;
+	string proxy_url = 2;
+	uint32 width = 3;
+	uint32 height = 4;
+}
+
+message MessageEmbedVideo {
+    string url = 1;
+	uint32 width = 2;
+	uint32 height = 3;
+}
+
+message MessageEmbedProvider {
+    string url = 1;
+	string name = 2;
+}
+
+message MessageEmbedAuthor {
+    string url = 1;
+	string name = 2;
+    string icon_url = 3;
+	string proxy_icon_url = 4;
+}
+
+message MessageEmbedField {
+    string name = 1;
+	string value = 2;
+    bool inline = 3;
+}
+
+message File {
+    string name = 1;
+	string content_type = 2;
+    bytes content = 3;
+}

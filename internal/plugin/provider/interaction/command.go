@@ -33,7 +33,7 @@ func (s commandServer) CommandData(context.Context, *emptypb.Empty) (*providerpb
 
 	return &providerpb.CommandDataResponse{
 		Data: &discordpb.ApplicationCommand{
-			Type: uint32(data.Type),
+			Type: cast.ToUint32(data.Type),
 
 			Name:              data.Name,
 			NameLocalizations: encodeLocalizations(data.NameLocalizations),
@@ -135,7 +135,7 @@ func encodeLocalizations(localizations *map[discordgo.Locale]string) map[string]
 	}
 
 	for locale, str := range *localizations {
-		result[string(locale)] = str
+		result[cast.ToString(locale)] = str
 	}
 
 	return result
@@ -156,7 +156,7 @@ func encodeOptions(options []*discordgo.ApplicationCommandOption) []*discordpb.A
 
 	for i, option := range options {
 		result[i] = &discordpb.ApplicationCommandOption{
-			Type: uint32(option.Type),
+			Type: cast.ToUint32(option.Type),
 
 			Name:              option.Name,
 			NameLocalizations: encodeLocalizations(&option.NameLocalizations),
@@ -266,7 +266,7 @@ func encodeChannelTypes(types []discordgo.ChannelType) []uint32 {
 	result := make([]uint32, len(types))
 
 	for i, typ := range types {
-		result[i] = uint32(typ)
+		result[i] = cast.ToUint32(typ)
 	}
 
 	return result

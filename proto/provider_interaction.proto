@@ -5,6 +5,7 @@ package provider;
 import "google/protobuf/empty.proto";
 import "proto/discord_command.proto";
 import "proto/discord_channel.proto";
+import "proto/discord_message.proto";
 
 option go_package = "github.com/EliasStar/BacoTell/internal/proto/providerpb";
 
@@ -72,14 +73,14 @@ message DeferRequest {
 }
 
 message RespondRequest {
-    string message = 1;
+    Response message = 1;
     bool ephemeral = 2;
     bool suppressEmbeds = 3;
     bool tts = 4;
 }
 
 message FollowupRequest {
-    string message = 1;
+    Response message = 1;
     bool ephemeral = 2;
     bool suppressEmbeds = 3;
     bool tts = 4;
@@ -91,11 +92,19 @@ message FollowupResponse {
 
 message EditRequest {
     string id = 1;
-    string message = 2;
+    Response message = 2;
 }
 
 message DeleteRequest {
     string id = 1;
+}
+
+message Response {
+	string content = 1;
+    discord.MessageAllowedMentions AllowedMentions = 2;
+    repeated discord.MessageComponent components = 3;
+    repeated discord.MessageEmbed embeds = 4;
+    repeated discord.File files = 5;
 }
 
 service ExecuteProxy {

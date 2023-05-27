@@ -36,7 +36,7 @@ func (p interactionProxy) Defer(ephemeral bool, suppressEmbeds bool, tts bool) e
 }
 
 // Respond implements provider.InteractionProxy
-func (p interactionProxy) Respond(message string, ephemeral bool, suppressEmbeds bool, tts bool) error {
+func (p interactionProxy) Respond(message provider.Response, ephemeral bool, suppressEmbeds bool, tts bool) error {
 	var flags discordgo.MessageFlags
 
 	if ephemeral {
@@ -50,15 +50,19 @@ func (p interactionProxy) Respond(message string, ephemeral bool, suppressEmbeds
 	return p.session.InteractionRespond(p.interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
-			Content: message,
-			Flags:   flags,
-			TTS:     tts,
+			Content:         message.Content,
+			AllowedMentions: &message.AllowedMentions,
+			Components:      message.Components,
+			Embeds:          message.Embeds,
+			Files:           message.Files,
+			Flags:           flags,
+			TTS:             tts,
 		},
 	})
 }
 
 // Followup implements provider.InteractionProxy
-func (p interactionProxy) Followup(message string, ephemeral bool, suppressEmbeds bool, tts bool) (string, error) {
+func (p interactionProxy) Followup(message provider.Response, ephemeral bool, suppressEmbeds bool, tts bool) (string, error) {
 	var flags discordgo.MessageFlags
 
 	if ephemeral {
@@ -70,9 +74,13 @@ func (p interactionProxy) Followup(message string, ephemeral bool, suppressEmbed
 	}
 
 	msg, err := p.session.FollowupMessageCreate(p.interaction, true, &discordgo.WebhookParams{
-		Content: message,
-		Flags:   flags,
-		TTS:     tts,
+		Content:         message.Content,
+		AllowedMentions: &message.AllowedMentions,
+		Components:      message.Components,
+		Embeds:          message.Embeds,
+		Files:           message.Files,
+		Flags:           flags,
+		TTS:             tts,
 	})
 
 	if err != nil {
@@ -83,9 +91,13 @@ func (p interactionProxy) Followup(message string, ephemeral bool, suppressEmbed
 }
 
 // Edit implements provider.InteractionProxy
-func (p interactionProxy) Edit(id string, message string) (err error) {
+func (p interactionProxy) Edit(id string, message provider.Response) (err error) {
 	msg := &discordgo.WebhookEdit{
-		Content: &message,
+		Content:         &message.Content,
+		AllowedMentions: &message.AllowedMentions,
+		Components:      &message.Components,
+		Embeds:          &message.Embeds,
+		Files:           message.Files,
 	}
 
 	if id == "" {
@@ -245,7 +257,7 @@ func (p handleProxy) Defer(ephemeral bool, suppressEmbeds bool, tts bool) error 
 }
 
 // Respond implements provider.HandleProxy
-func (p handleProxy) Respond(message string, ephemeral bool, suppressEmbeds bool, tts bool) error {
+func (p handleProxy) Respond(message provider.Response, ephemeral bool, suppressEmbeds bool, tts bool) error {
 	var flags discordgo.MessageFlags
 
 	if ephemeral {
@@ -259,9 +271,13 @@ func (p handleProxy) Respond(message string, ephemeral bool, suppressEmbeds bool
 	return p.session.InteractionRespond(p.interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseUpdateMessage,
 		Data: &discordgo.InteractionResponseData{
-			Content: message,
-			Flags:   flags,
-			TTS:     tts,
+			Content:         message.Content,
+			AllowedMentions: &message.AllowedMentions,
+			Components:      message.Components,
+			Embeds:          message.Embeds,
+			Files:           message.Files,
+			Flags:           flags,
+			TTS:             tts,
 		},
 	})
 }

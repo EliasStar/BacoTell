@@ -54,58 +54,96 @@ message RoleTags {
 }
 
 message Channel {
-    // string id = 1;
-    // integer type = 2;
-    // string guild_id = 3;
-    // integer position = 4;
-    // array_of_overwrite_objects permission_overwrites = 5;
-    // string name = 6;
-    // string topic = 7;
-    // boolean nsfw = 8;
-    // string last_message_id = 9;
-    // integer bitrate = 10;
-    // integer user_limit = 11;
-    // integer rate_limit_per_user = 12;
-    // array_of_user_objects recipients = 13;
-    // string icon = 14;
-    // snowflake owner_id = 15;
-    // snowflake application_id = 16;
-    // boolean managed = 17;
-    // snowflake parent_id = 18;
-    // ISO8601_timestamp last_pin_timestamp = 19;
-    // string rtc_region = 20;
-    // integer video_quality_mode = 21;
-    // integer message_count = 22;
-    // integer member_count = 23;
-    // a_thread_metadata_object thread_metadata = 24;
-    // a_thread_member_object member = 25;
-    // integer default_auto_archive_duration = 26;
-    // string permissions = 27;
-    // integer flags = 28;
-    // integer total_message_sent = 29;
-    // array_of_tag_objects available_tags = 30;
-    // array_of_snowflakes applied_tags = 31;
-    // default_reaction_object default_reaction_emoji = 32;
-    // integer default_thread_rate_limit_per_user = 33;
-    // integer default_sort_order = 34;
-    // integer default_forum_layout = 35;
+    string id = 1;
+    uint32 type = 2;
+    string guild_id = 3;
+    uint32 position = 4;
+    repeated Overwrite permission_overwrites = 5;
+    string name = 6;
+    string topic = 7;
+    bool nsfw = 8;
+    string last_message_id = 9;
+    uint32 bitrate = 10;
+    uint32 user_limit = 11;
+    uint32 rate_limit_per_user = 12;
+    repeated User recipients = 13;
+    string icon = 14;
+    string owner_id = 15;
+    string application_id = 16;
+    bool managed = 17;
+    string parent_id = 18;
+    string last_pin_timestamp = 19;
+    string rtc_region = 20;
+    uint32 video_quality_mode = 21;
+    uint32 message_count = 22;
+    uint32 member_count = 23;
+    ThreadMetadata thread_metadata = 24;
+    ThreadMember member = 25;
+    uint32 default_auto_archive_duration = 26;
+    string permissions = 27;
+    uint64 flags = 28;
+    uint32 total_message_sent = 29;
+    repeated ForumTag available_tags = 30;
+    repeated string applied_tags = 31;
+    DefaultReaction default_reaction_emoji = 32;
+    uint32 default_thread_rate_limit_per_user = 33;
+    optional uint32 default_sort_order = 34;
+    uint32 default_forum_layout = 35;
 }
 
-message Attachment {
+message Overwrite {
     string id = 1;
-    string filename = 2;
-    string description = 3;
+    uint32 type = 2;
+    string allow = 3;
+    string deny = 4;
+}
 
-    string url = 6;
-    string proxy_url = 7;
-    string content_type = 4;
-    uint32 size = 5;
+message ThreadMetadata {
+    string create_timestamp = 6;
+    bool invitable = 5;
+    bool locked	= 4;
+    bool archived = 1;
+    uint32 auto_archive_duration = 2;
+    string archive_timestamp = 3;
+}
 
-    uint32 height = 8;
-    uint32 width = 9;
+message ThreadMember {
+    string id = 1;
+    string user_id = 2;
+    string join_timestamp = 3;
+    uint64 flags = 4;
+    GuildMember member = 5;
+}
 
-    bool ephemeral = 10;
+message GuildMember {
+    User user = 1;
+    string nick = 2;
+    string avatar = 3;
 
-    double duration_secs = 11;
-    string waveform = 12;
+    string joined_at = 5;
+    string premium_since = 6;
+
+    bool deaf = 7;
+    bool mute = 8;
+    bool pending = 10;
+
+    uint64 flags = 9;
+
+    repeated string roles = 4;
+    string permissions = 11;
+
+    string communication_disabled_until = 12;
+}
+
+message ForumTag {
+    string id = 1;
+    string name = 2;
+    string emoji_id = 4;
+    string emoji_name = 5;
+    bool moderated = 3;
+}
+
+message DefaultReaction {
+    string emoji_id = 1;
+    string emoji_name = 2;
 }

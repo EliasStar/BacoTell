@@ -29,14 +29,16 @@ type Component interface {
 
 type InteractionProxy interface {
 	Defer(ephemeral, suppressEmbeds, tts bool) error
-	Respond(message string, ephemeral, suppressEmbeds, tts bool) error
+	Respond(message Response, ephemeral, suppressEmbeds, tts bool) error
 
-	Followup(message string, ephemeral, suppressEmbeds, tts bool) (string, error)
+	Followup(message Response, ephemeral, suppressEmbeds, tts bool) (string, error)
 
-	Edit(id string, message string) error
+	Edit(id string, message Response) error
 	Delete(id string) error
 
-	//Modal(id, title string)
+	//Modal(id, title string) error
+
+	//Locale() string error
 }
 
 type ExecuteProxy interface {
@@ -64,6 +66,14 @@ type HandleProxy interface {
 // type SubmitProxy interface {
 // 	InteractionProxy
 // }
+
+type Response struct {
+	Content         string
+	AllowedMentions discordgo.MessageAllowedMentions
+	Components      []discordgo.MessageComponent
+	Embeds          []*discordgo.MessageEmbed
+	Files           []*discordgo.File
+}
 
 type interactionProvider struct {
 	prefix     string
