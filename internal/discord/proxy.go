@@ -3,7 +3,7 @@ package discord
 import (
 	"errors"
 
-	"github.com/EliasStar/BacoTell/pkg/provider"
+	"github.com/EliasStar/BacoTell/pkg/bacotell"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -12,9 +12,9 @@ type interactionProxy struct {
 	interaction *discordgo.Interaction
 }
 
-var _ provider.InteractionProxy = interactionProxy{}
+var _ bacotell.InteractionProxy = interactionProxy{}
 
-// Defer implements provider.InteractionProxy
+// Defer implements bacotell.InteractionProxy
 func (p interactionProxy) Defer(ephemeral bool, suppressEmbeds bool, tts bool) error {
 	var flags discordgo.MessageFlags
 
@@ -35,8 +35,8 @@ func (p interactionProxy) Defer(ephemeral bool, suppressEmbeds bool, tts bool) e
 	})
 }
 
-// Respond implements provider.InteractionProxy
-func (p interactionProxy) Respond(message provider.Response, ephemeral bool, suppressEmbeds bool, tts bool) error {
+// Respond implements bacotell.InteractionProxy
+func (p interactionProxy) Respond(message bacotell.Response, ephemeral bool, suppressEmbeds bool, tts bool) error {
 	var flags discordgo.MessageFlags
 
 	if ephemeral {
@@ -61,8 +61,8 @@ func (p interactionProxy) Respond(message provider.Response, ephemeral bool, sup
 	})
 }
 
-// Followup implements provider.InteractionProxy
-func (p interactionProxy) Followup(message provider.Response, ephemeral bool, suppressEmbeds bool, tts bool) (string, error) {
+// Followup implements bacotell.InteractionProxy
+func (p interactionProxy) Followup(message bacotell.Response, ephemeral bool, suppressEmbeds bool, tts bool) (string, error) {
 	var flags discordgo.MessageFlags
 
 	if ephemeral {
@@ -90,8 +90,8 @@ func (p interactionProxy) Followup(message provider.Response, ephemeral bool, su
 	return msg.ID, nil
 }
 
-// Edit implements provider.InteractionProxy
-func (p interactionProxy) Edit(id string, message provider.Response) (err error) {
+// Edit implements bacotell.InteractionProxy
+func (p interactionProxy) Edit(id string, message bacotell.Response) (err error) {
 	msg := &discordgo.WebhookEdit{
 		Content:         &message.Content,
 		AllowedMentions: &message.AllowedMentions,
@@ -109,7 +109,7 @@ func (p interactionProxy) Edit(id string, message provider.Response) (err error)
 	return
 }
 
-// Delete implements provider.InteractionProxy
+// Delete implements bacotell.InteractionProxy
 func (p interactionProxy) Delete(id string) error {
 	if id == "" {
 		return p.session.InteractionResponseDelete(p.interaction)
@@ -122,9 +122,9 @@ type executeProxy struct {
 	interactionProxy
 }
 
-var _ provider.ExecuteProxy = executeProxy{}
+var _ bacotell.ExecuteProxy = executeProxy{}
 
-// StringOption implements provider.ExecuteProxy
+// StringOption implements bacotell.ExecuteProxy
 func (p executeProxy) StringOption(name string) (string, error) {
 	option := findOption(p.interaction.ApplicationCommandData().Options, name)
 	if option.Type != discordgo.ApplicationCommandOptionString {
@@ -134,7 +134,7 @@ func (p executeProxy) StringOption(name string) (string, error) {
 	return option.StringValue(), nil
 }
 
-// IntegerOption implements provider.ExecuteProxy
+// IntegerOption implements bacotell.ExecuteProxy
 func (p executeProxy) IntegerOption(name string) (int64, error) {
 	option := findOption(p.interaction.ApplicationCommandData().Options, name)
 	if option.Type != discordgo.ApplicationCommandOptionInteger {
@@ -144,7 +144,7 @@ func (p executeProxy) IntegerOption(name string) (int64, error) {
 	return option.IntValue(), nil
 }
 
-// NumberOption implements provider.ExecuteProxy
+// NumberOption implements bacotell.ExecuteProxy
 func (p executeProxy) NumberOption(name string) (float64, error) {
 	option := findOption(p.interaction.ApplicationCommandData().Options, name)
 	if option.Type != discordgo.ApplicationCommandOptionNumber {
@@ -154,7 +154,7 @@ func (p executeProxy) NumberOption(name string) (float64, error) {
 	return option.FloatValue(), nil
 }
 
-// BooleanOption implements provider.ExecuteProxy
+// BooleanOption implements bacotell.ExecuteProxy
 func (p executeProxy) BooleanOption(name string) (bool, error) {
 	option := findOption(p.interaction.ApplicationCommandData().Options, name)
 	if option.Type != discordgo.ApplicationCommandOptionBoolean {
@@ -164,7 +164,7 @@ func (p executeProxy) BooleanOption(name string) (bool, error) {
 	return option.BoolValue(), nil
 }
 
-// UserOption implements provider.ExecuteProxy
+// UserOption implements bacotell.ExecuteProxy
 func (p executeProxy) UserOption(name string) (*discordgo.User, error) {
 	option := findOption(p.interaction.ApplicationCommandData().Options, name)
 	if option.Type != discordgo.ApplicationCommandOptionUser && option.Type != discordgo.ApplicationCommandOptionMentionable {
@@ -174,7 +174,7 @@ func (p executeProxy) UserOption(name string) (*discordgo.User, error) {
 	return option.UserValue(p.session), nil
 }
 
-// RoleOption implements provider.ExecuteProxy
+// RoleOption implements bacotell.ExecuteProxy
 func (p executeProxy) RoleOption(name string) (*discordgo.Role, error) {
 	option := findOption(p.interaction.ApplicationCommandData().Options, name)
 	if option.Type != discordgo.ApplicationCommandOptionRole && option.Type != discordgo.ApplicationCommandOptionMentionable {
@@ -184,7 +184,7 @@ func (p executeProxy) RoleOption(name string) (*discordgo.Role, error) {
 	return option.RoleValue(p.session, p.interaction.GuildID), nil
 }
 
-// ChannelOption implements provider.ExecuteProxy
+// ChannelOption implements bacotell.ExecuteProxy
 func (p executeProxy) ChannelOption(name string) (*discordgo.Channel, error) {
 	option := findOption(p.interaction.ApplicationCommandData().Options, name)
 	if option.Type != discordgo.ApplicationCommandOptionChannel {
@@ -194,7 +194,7 @@ func (p executeProxy) ChannelOption(name string) (*discordgo.Channel, error) {
 	return option.ChannelValue(p.session), nil
 }
 
-// AttachmentOption implements provider.ExecuteProxy
+// AttachmentOption implements bacotell.ExecuteProxy
 func (p executeProxy) AttachmentOption(name string) (*discordgo.MessageAttachment, error) {
 	data := p.interaction.ApplicationCommandData()
 	option := findOption(data.Options, name)
@@ -233,9 +233,9 @@ type handleProxy struct {
 	interactionProxy
 }
 
-var _ provider.HandleProxy = handleProxy{}
+var _ bacotell.HandleProxy = handleProxy{}
 
-// Defer implements provider.HandleProxy
+// Defer implements bacotell.HandleProxy
 func (p handleProxy) Defer(ephemeral bool, suppressEmbeds bool, tts bool) error {
 	var flags discordgo.MessageFlags
 
@@ -256,8 +256,8 @@ func (p handleProxy) Defer(ephemeral bool, suppressEmbeds bool, tts bool) error 
 	})
 }
 
-// Respond implements provider.HandleProxy
-func (p handleProxy) Respond(message provider.Response, ephemeral bool, suppressEmbeds bool, tts bool) error {
+// Respond implements bacotell.HandleProxy
+func (p handleProxy) Respond(message bacotell.Response, ephemeral bool, suppressEmbeds bool, tts bool) error {
 	var flags discordgo.MessageFlags
 
 	if ephemeral {

@@ -4,18 +4,18 @@ import (
 	"reflect"
 
 	"github.com/EliasStar/BacoTell/internal/loader"
-	"github.com/EliasStar/BacoTell/pkg/provider"
+	"github.com/EliasStar/BacoTell/pkg/bacotell"
 	"github.com/bwmarrin/discordgo"
 )
 
 var (
 	commandDataCache []discordgo.ApplicationCommand
-	commandCache     = make(map[string]provider.Command)
-	componentCache   = make(map[string]provider.Component)
+	commandCache     = make(map[string]bacotell.Command)
+	componentCache   = make(map[string]bacotell.Component)
 )
 
 func interactionOnConnect(*discordgo.Session, *discordgo.Connect) {
-	for prefix, cmds := range loader.GetApplicationCommands() {
+	for prefix, cmds := range loader.ApplicationCommands() {
 		for _, cmd := range cmds {
 			data, err := cmd.CommandData()
 			if err != nil {
@@ -29,9 +29,9 @@ func interactionOnConnect(*discordgo.Session, *discordgo.Connect) {
 		}
 	}
 
-	for prefix, cpts := range loader.GetMessageComponents() {
+	for prefix, cpts := range loader.MessageComponents() {
 		for _, cpt := range cpts {
-			id, err := cpt.CustomId()
+			id, err := cpt.CustomID()
 			if err != nil {
 				logger.Warn("cannot get custom id", "prefix", prefix, "err", err)
 				continue

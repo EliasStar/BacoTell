@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package bacotell;
+
+import "proto/discord_message.proto";
+
+option go_package = "github.com/EliasStar/BacoTell/internal/proto/bacotellpb";
+
+service InteractionProxy {
+    rpc Defer(DeferRequest) returns (DeferResponse);
+    rpc Respond(RespondRequest) returns (RespondResponse);
+    rpc Followup(FollowupRequest) returns (FollowupResponse);
+    rpc Edit(EditRequest) returns (EditResponse);
+    rpc Delete(DeleteRequest) returns (DeleteResponse);
+}
+
+message DeferRequest {
+    bool ephemeral = 1;
+    bool suppressEmbeds = 2;
+    bool tts = 3;
+}
+
+message DeferResponse {}
+
+message RespondRequest {
+    Response message = 1;
+    bool ephemeral = 2;
+    bool suppressEmbeds = 3;
+    bool tts = 4;
+}
+
+message RespondResponse {}
+
+message FollowupRequest {
+    Response message = 1;
+    bool ephemeral = 2;
+    bool suppressEmbeds = 3;
+    bool tts = 4;
+}
+
+message FollowupResponse {
+    string id = 1;
+}
+
+message EditRequest {
+    string id = 1;
+    Response message = 2;
+}
+
+message EditResponse {}
+
+message DeleteRequest {
+    string id = 1;
+}
+
+message DeleteResponse {}
+
+message Response {
+	string content = 1;
+    discord.MessageAllowedMentions AllowedMentions = 2;
+    repeated discord.MessageComponent components = 3;
+    repeated discord.MessageEmbed embeds = 4;
+    repeated discord.File files = 5;
+}

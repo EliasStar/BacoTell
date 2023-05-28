@@ -1,4 +1,4 @@
-package bacotell
+package common
 
 import (
 	"os"

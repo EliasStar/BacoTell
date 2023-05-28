@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package bacotell;
+
+option go_package = "github.com/EliasStar/BacoTell/internal/proto/bacotellpb";
+
+service Component {
+    rpc CustomId(CustomIdRequest) returns (CustomIdResponse);
+    rpc Handle(HandleRequest) returns (HandleResponse);
+}
+
+message CustomIdRequest {}
+
+message CustomIdResponse {
+    string custom_id = 1;
+}
+
+message HandleRequest {
+    uint32 handle_proxy_id = 1;
+}
+
+message HandleResponse {}
+
+service HandleProxy {}

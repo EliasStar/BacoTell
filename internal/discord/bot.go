@@ -5,13 +5,13 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/EliasStar/BacoTell/internal/bacotell"
+	"github.com/EliasStar/BacoTell/internal/common"
 	"github.com/bwmarrin/discordgo"
 	"github.com/spf13/viper"
 )
 
 var (
-	logger   = bacotell.GetLogger().Named("discord")
+	logger   = common.GetLogger().Named("discord")
 	handlers = []any{
 		onConnect,
 		onDisconnect,
@@ -24,12 +24,12 @@ var (
 )
 
 func Connect() {
-	session, err := discordgo.New("Bot " + viper.GetString(bacotell.ConfigBotToken))
+	session, err := discordgo.New("Bot " + viper.GetString(common.ConfigBotToken))
 	if err != nil {
 		panic(err)
 	}
 
-	session.UserAgent = "BacoTell " + bacotell.Version
+	session.UserAgent = "BacoTell " + common.Version
 
 	logger.Info("registering handlers")
 	for _, handler := range handlers {

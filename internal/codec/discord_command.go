@@ -1,130 +1,48 @@
-package interaction
+package codec
 
 import (
 	"bytes"
-	"context"
 	"encoding/gob"
 
 	"github.com/EliasStar/BacoTell/internal/proto/discordpb"
-	"github.com/EliasStar/BacoTell/internal/proto/providerpb"
-	"github.com/EliasStar/BacoTell/pkg/provider"
 	"github.com/bwmarrin/discordgo"
-	"github.com/hashicorp/go-plugin"
 	"github.com/spf13/cast"
-	"google.golang.org/grpc"
-	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-type commandServer struct {
-	providerpb.UnimplementedCommandServer
+func encodeApplicationCommand(command discordgo.ApplicationCommand) *discordpb.ApplicationCommand {
+	return &discordpb.ApplicationCommand{
+		Type: cast.ToUint32(command.Type),
 
-	impl   provider.Command
-	broker *plugin.GRPCBroker
-}
+		Name:              command.Name,
+		NameLocalizations: encodeLocalizations(command.NameLocalizations),
 
-var _ providerpb.CommandServer = commandServer{}
+		Description:              command.Description,
+		DescriptionLocalizations: encodeLocalizations(command.DescriptionLocalizations),
 
-// CommandData implements providerpb.CommandServer
-func (s commandServer) CommandData(context.Context, *emptypb.Empty) (*providerpb.CommandDataResponse, error) {
-	data, err := s.impl.CommandData()
-	if err != nil {
-		return nil, err
+		Options: encodeOptions(command.Options),
+
+		DefaultMemberPermissions: cast.ToInt64(command.DefaultMemberPermissions),
+
+		Nsfw: cast.ToBool(command.NSFW),
 	}
-
-	return &providerpb.CommandDataResponse{
-		Data: &discordpb.ApplicationCommand{
-			Type: cast.ToUint32(data.Type),
-
-			Name:              data.Name,
-			NameLocalizations: encodeLocalizations(data.NameLocalizations),
-
-			Description:              data.Description,
-			DescriptionLocalizations: encodeLocalizations(data.DescriptionLocalizations),
-
-			Options: encodeOptions(data.Options),
-
-			DefaultMemberPermissions: cast.ToInt64(data.DefaultMemberPermissions),
-
-			Nsfw: cast.ToBool(data.NSFW),
-		},
-	}, nil
 }
 
-// Execute implements providerpb.CommandServer
-func (s commandServer) Execute(_ context.Context, req *providerpb.ExecuteRequest) (*emptypb.Empty, error) {
-	conn, err := s.broker.Dial(req.ExecuteProxyId)
-	if err != nil {
-		return nil, err
-	}
-
-	defer conn.Close()
-
-	return &emptypb.Empty{}, s.impl.Execute(executeProxyClient{
-		interactionProxyClient: interactionProxyClient{
-			client: providerpb.NewInteractionProxyClient(conn),
-		},
-		client: providerpb.NewExecuteProxyClient(conn),
-	})
-}
-
-type commandClient struct {
-	client providerpb.CommandClient
-	broker *plugin.GRPCBroker
-}
-
-var _ provider.Command = commandClient{}
-
-// CommandData implements provider.Command
-func (c commandClient) CommandData() (discordgo.ApplicationCommand, error) {
-	res, err := c.client.CommandData(context.Background(), &emptypb.Empty{})
-	if err != nil {
-		return discordgo.ApplicationCommand{}, err
-	}
-
+func decodeApplicationCommand(command *discordpb.ApplicationCommand) discordgo.ApplicationCommand {
 	return discordgo.ApplicationCommand{
-		Type: discordgo.ApplicationCommandType(res.Data.Type),
+		Type: discordgo.ApplicationCommandType(command.Type),
 
-		Name:              res.Data.Name,
-		NameLocalizations: decodeLocalizations(res.Data.NameLocalizations),
+		Name:              command.Name,
+		NameLocalizations: decodeLocalizations(command.NameLocalizations),
 
-		Description:              res.Data.Description,
-		DescriptionLocalizations: decodeLocalizations(res.Data.DescriptionLocalizations),
+		Description:              command.Description,
+		DescriptionLocalizations: decodeLocalizations(command.DescriptionLocalizations),
 
-		Options: decodeOptions(res.Data.Options),
+		Options: decodeOptions(command.Options),
 
-		DefaultMemberPermissions: &res.Data.DefaultMemberPermissions,
+		DefaultMemberPermissions: &command.DefaultMemberPermissions,
 
-		NSFW: &res.Data.Nsfw,
-	}, nil
-}
-
-// Execute implements provider.Command
-func (c commandClient) Execute(proxy provider.ExecuteProxy) error {
-	var server *grpc.Server
-	//defer server.Stop() TODO
-
-	id := c.broker.NextId()
-	go c.broker.AcceptAndServe(id, func(opts []grpc.ServerOption) *grpc.Server {
-		server = grpc.NewServer(opts...)
-
-		srv := executeProxyServer{
-			interactionProxyServer: interactionProxyServer{
-				impl: proxy,
-			},
-			impl: proxy,
-		}
-
-		providerpb.RegisterExecuteProxyServer(server, srv)
-		providerpb.RegisterInteractionProxyServer(server, srv)
-
-		return server
-	})
-
-	_, err := c.client.Execute(context.Background(), &providerpb.ExecuteRequest{
-		ExecuteProxyId: id,
-	})
-
-	return err
+		NSFW: &command.Nsfw,
+	}
 }
 
 func encodeLocalizations(localizations *map[discordgo.Locale]string) map[string]string {
@@ -232,7 +150,7 @@ func encodeChoices(choices []*discordgo.ApplicationCommandOptionChoice) []*disco
 		result[i] = &discordpb.ApplicationCommandOptionChoice{
 			Name:              choice.Name,
 			NameLocalizations: encodeLocalizations(&choice.NameLocalizations),
-			Value:             buffer.Bytes(),
+			Value:             buffer.Bytes(), // TODO fix ref
 		}
 	}
 

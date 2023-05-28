@@ -1,26 +1,15 @@
 package loader
 
 import (
-	"github.com/EliasStar/BacoTell/internal/bacotell"
-	"github.com/EliasStar/BacoTell/internal/plugin/provider/interaction"
-	"github.com/EliasStar/BacoTell/pkg/provider"
+	"github.com/EliasStar/BacoTell/internal/codec"
+	"github.com/EliasStar/BacoTell/internal/common"
+	"github.com/EliasStar/BacoTell/pkg/bacotell"
 	"github.com/hashicorp/go-plugin"
 )
 
-const (
-	interactionProviderPlugin = "interaction_provider"
-)
+const bacotellPlugin = "bacotell_plugin"
 
-var (
-	InteractionProvider provider.InteractionProvider
-
-	clients []*plugin.Client
-
-	logger          = bacotell.GetLogger().Named("loader")
-	providerLoaders = []func(plugin.ClientProtocol){
-		loadInteractionProvider,
-	}
-)
+var clients []*plugin.Client
 
 func HandshakeConfig() plugin.HandshakeConfig {
 	return plugin.HandshakeConfig{
@@ -30,10 +19,8 @@ func HandshakeConfig() plugin.HandshakeConfig {
 	}
 }
 
-func PluginMap() plugin.PluginSet {
-	return plugin.PluginSet{
-		interactionProviderPlugin: interaction.NewProviderPlugin(InteractionProvider),
-	}
+func PluginMap(pluginImpl bacotell.Plugin) plugin.PluginSet {
+	return plugin.PluginSet{bacotellPlugin: codec.NewBacoTellPlugin(pluginImpl)}
 }
 
 func LoadFromFolder() {
@@ -43,9 +30,9 @@ func LoadFromFolder() {
 func LoadFromRunning(reattachConfig *plugin.ReattachConfig) {
 	load(plugin.NewClient(&plugin.ClientConfig{
 		HandshakeConfig:  HandshakeConfig(),
-		Plugins:          PluginMap(),
+		Plugins:          PluginMap(nil),
 		AllowedProtocols: []plugin.Protocol{plugin.ProtocolGRPC},
-		Logger:           bacotell.GetLogger(),
+		Logger:           common.GetLogger(),
 		Reattach:         reattachConfig,
 	}))
 }
@@ -57,16 +44,39 @@ func Unload() {
 }
 
 func load(client *plugin.Client) {
+	logger := common.GetLogger().Named("loader")
+
 	protocol, err := client.Client()
 	if err != nil {
-		logger.Warn("could not connect to plugin", "error", err)
+		logger.Warn("could not connect to plugin process", "error", err)
+		client.Kill()
+		return
+	}
+
+	raw, err := protocol.Dispense(bacotellPlugin)
+	if err != nil {
+		logger.Warn("could not dispense plugin", "error", err)
+		client.Kill()
+		return
+	}
+
+	pluginImpl, ok := raw.(bacotell.Plugin)
+	if !ok {
+		logger.Warn("unexpected plugin type", "raw", raw)
+		client.Kill()
+		return
+	}
+
+	id, err := pluginImpl.ID()
+	if err != nil {
+		logger.Warn("could not get plugin id", "err", err)
 		client.Kill()
 		return
 	}
 
 	clients = append(clients, client)
+	pluginLogger := logger.With("plugin", id)
 
-	for _, loadProvider := range providerLoaders {
-		loadProvider(protocol)
-	}
+	loadApplicationCommands(id, pluginImpl, pluginLogger)
+	loadMessageComponents(id, pluginImpl, pluginLogger)
 }

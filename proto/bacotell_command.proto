@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+package bacotell;
+
+import "proto/discord_command.proto";
+import "proto/discord_channel.proto";
+import "proto/discord_message.proto";
+
+option go_package = "github.com/EliasStar/BacoTell/internal/proto/bacotellpb";
+
+service Command {
+    rpc CommandData(CommandDataRequest) returns (CommandDataResponse);
+    rpc Execute(ExecuteRequest) returns (ExecuteResponse);
+    // rpc Autocomplete(AutocompleteRequest) returns (AutocompleteResponse);
+}
+
+message CommandDataRequest {}
+
+message CommandDataResponse {
+    discord.ApplicationCommand data = 1;
+}
+
+message ExecuteRequest {
+    uint32 execute_proxy_id = 1;
+}
+
+message ExecuteResponse {}
+
+// message AutocompleteRequest {
+//     uint32 autocomplete_proxy_id = 1;
+// }
+
+// message AutocompleteResponse {}
+
+service ExecuteProxy {
+	rpc StringOption(StringOptionRequest) returns (StringOptionResponse);
+	rpc IntegerOption(IntegerOptionRequest) returns (IntegerOptionResponse);
+	rpc NumberOption(NumberOptionRequest) returns (NumberOptionResponse);
+	rpc BooleanOption(BooleanOptionRequest) returns (BooleanOptionResponse);
+	rpc UserOption(UserOptionRequest) returns (UserOptionResponse);
+    rpc RoleOption(RoleOptionRequest) returns (RoleOptionResponse);
+	rpc ChannelOption(ChannelOptionRequest) returns (ChannelOptionResponse);
+	rpc AttachmentOption(AttachmentOptionRequest) returns (AttachmentOptionResponse);
+}
+
+message StringOptionRequest {
+    string name = 1;
+}
+
+message StringOptionResponse {
+    string value = 1;
+}
+
+message IntegerOptionRequest {
+    string name = 1;
+}
+
+message IntegerOptionResponse {
+    int64 value = 1;
+}
+
+message NumberOptionRequest {
+    string name = 1;
+}
+
+message NumberOptionResponse {
+    double value = 1;
+}
+
+message BooleanOptionRequest {
+    string name = 1;
+}
+
+message BooleanOptionResponse {
+    bool value = 1;
+}
+
+message UserOptionRequest {
+    string name = 1;
+}
+
+message UserOptionResponse {
+    discord.User value = 1;
+}
+
+message RoleOptionRequest {
+    string name = 1;
+}
+
+message RoleOptionResponse {
+    discord.Role value = 1;
+}
+
+message ChannelOptionRequest {
+    string name = 1;
+}
+
+message ChannelOptionResponse {
+    discord.Channel value = 1;
+}
+
+message AttachmentOptionRequest {
+    string name = 1;
+}
+
+message AttachmentOptionResponse {
+    discord.Attachment value = 1;
+}
+
+// service ExecuteProxy {}

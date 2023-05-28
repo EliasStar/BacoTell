@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package bacotell;
+
+option go_package = "github.com/EliasStar/BacoTell/internal/proto/bacotellpb";
