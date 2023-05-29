@@ -87,7 +87,7 @@ func encodeApplicationCommandOption(option *discordgo.ApplicationCommandOption) 
 		MinValue: option.MinValue,
 		MaxValue: option.MaxValue,
 
-		MinLength: util.Ptr(int32(*option.MinLength)),
+		MinLength: util.PtrConv[int, int32](option.MinLength),
 		MaxLength: int32(option.MaxLength),
 	}
 }
@@ -126,7 +126,7 @@ func decodeApplicationCommandOption(option *discordgopb.ApplicationCommandOption
 		MinValue: option.MinValue,
 		MaxValue: option.MaxValue,
 
-		MinLength: util.Ptr(int(*option.MinLength)),
+		MinLength: util.PtrConv[int32, int](option.MinLength),
 		MaxLength: int(option.MaxLength),
 	}
 }
