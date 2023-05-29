@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package bacotell;
 
-import "proto/discord_message.proto";
+import "proto/discordgo_message.proto";
 
 option go_package = "github.com/EliasStar/BacoTell/internal/proto/bacotellpb";
 
@@ -57,8 +57,8 @@ message DeleteResponse {}
 
 message Response {
 	string content = 1;
-    discord.MessageAllowedMentions AllowedMentions = 2;
-    repeated discord.MessageComponent components = 3;
-    repeated discord.MessageEmbed embeds = 4;
-    repeated discord.File files = 5;
+    discordgo.MessageAllowedMentions AllowedMentions = 2;
+    repeated discordgo.MessageComponent components = 3;
+    repeated discordgo.MessageEmbed embeds = 4;
+    repeated discordgo.File files = 5;
 }

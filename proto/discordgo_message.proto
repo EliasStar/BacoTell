@@ -1,0 +1,160 @@
+syntax = "proto3";
+
+package discordgo;
+
+import "proto/discordgo_user.proto";
+
+option go_package = "github.com/EliasStar/BacoTell/internal/proto/discordgopb";
+
+message MessageAllowedMentions {
+	repeated string parse = 1;
+	repeated string roles = 2;
+    repeated string users = 3;
+    bool replied_user = 4;
+}
+
+message MessageAttachment {
+    string id = 1;
+    string url = 2;
+    string proxy_url = 3;
+    string filename = 4;
+    string content_type = 5;
+
+    int32 height = 6;
+    int32 width = 7;
+    int32 size = 8;
+
+    bool ephemeral = 9;
+}
+
+message MessageComponent {}
+
+message MessageEmbed {
+	string url = 1;
+	string type = 2;
+	string title = 3;
+	string description = 4;
+	string timestamp = 5;
+	int32 color = 6;
+
+	MessageEmbedFooter footer = 7;
+	MessageEmbedImage image = 8;
+	MessageEmbedThumbnail thumbnail = 9;
+	MessageEmbedVideo video = 10;
+	MessageEmbedProvider provider = 11;
+	MessageEmbedAuthor author = 12;
+	repeated MessageEmbedField fields = 13;
+}
+
+message MessageEmbedFooter {
+    string text = 1;
+    string icon_url = 2;
+    string proxy_icon_url = 3;
+}
+
+message MessageEmbedImage {
+    string url = 1;
+	string proxy_url = 2;
+	int32 width = 3;
+	int32 height = 4;
+}
+
+message MessageEmbedThumbnail {
+    string url = 1;
+	string proxy_url = 2;
+	int32 width = 3;
+	int32 height = 4;
+}
+
+message MessageEmbedVideo {
+    string url = 1;
+	int32 width = 2;
+	int32 height = 3;
+}
+
+message MessageEmbedProvider {
+    string url = 1;
+	string name = 2;
+}
+
+message MessageEmbedAuthor {
+    string url = 1;
+	string name = 2;
+    string icon_url = 3;
+	string proxy_icon_url = 4;
+}
+
+message MessageEmbedField {
+    string name = 1;
+	string value = 2;
+    bool inline = 3;
+}
+
+message MessageReactions {
+	int32 count = 1;
+	bool me = 2;
+	Emoji emoji = 3;
+}
+
+message Emoji {
+	string id = 1;
+	string name = 2;
+
+	repeated string roles = 3;
+	User user = 4;
+
+	bool require_colons = 5;
+	bool managed = 6;
+	bool animated = 7;
+	bool available = 8;
+}
+
+message MessageActivity {
+	int32 type = 1;
+	string party_id = 2;
+}
+
+message MessageApplication {
+	string id = 1;
+	string cover_image = 2;
+	string description = 3;
+	string icon = 4;
+	string name = 5;
+}
+
+message MessageReference {
+	string message_id = 1;
+	string channel_id = 2;
+	string guild_id = 3;
+}
+
+message MessageInteraction {
+	string id = 1;
+	uint32 type = 2;
+	string name = 3;
+
+	User user = 4;
+	Member member = 5;
+}
+
+message Sticker {
+	string id = 1;
+	string pack_id = 2;
+	string name = 3;
+	string description = 4;
+	string tags = 5;
+
+	int32 type = 6;
+	int32 format_type = 7;
+
+	bool available = 8;
+	string guild_id = 9;
+	User user = 10;
+	int32 sort_value = 11;
+}
+
+message File {
+    string name = 1;
+	string content_type = 2;
+    bytes content = 3;
+}

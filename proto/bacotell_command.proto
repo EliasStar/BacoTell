@@ -2,9 +2,10 @@ syntax = "proto3";
 
 package bacotell;
 
-import "proto/discord_command.proto";
-import "proto/discord_channel.proto";
-import "proto/discord_message.proto";
+import "proto/discordgo_channel.proto";
+import "proto/discordgo_command.proto";
+import "proto/discordgo_message.proto";
+import "proto/discordgo_user.proto";
 
 option go_package = "github.com/EliasStar/BacoTell/internal/proto/bacotellpb";
 
@@ -17,7 +18,7 @@ service Command {
 message CommandDataRequest {}
 
 message CommandDataResponse {
-    discord.ApplicationCommand data = 1;
+    discordgo.ApplicationCommand data = 1;
 }
 
 message ExecuteRequest {
@@ -80,7 +81,7 @@ message UserOptionRequest {
 }
 
 message UserOptionResponse {
-    discord.User value = 1;
+    discordgo.User value = 1;
 }
 
 message RoleOptionRequest {
@@ -88,7 +89,7 @@ message RoleOptionRequest {
 }
 
 message RoleOptionResponse {
-    discord.Role value = 1;
+    discordgo.Role value = 1;
 }
 
 message ChannelOptionRequest {
@@ -96,7 +97,7 @@ message ChannelOptionRequest {
 }
 
 message ChannelOptionResponse {
-    discord.Channel value = 1;
+    discordgo.Channel value = 1;
 }
 
 message AttachmentOptionRequest {
@@ -104,7 +105,7 @@ message AttachmentOptionRequest {
 }
 
 message AttachmentOptionResponse {
-    discord.Attachment value = 1;
+    discordgo.MessageAttachment value = 1;
 }
 
 // service ExecuteProxy {}

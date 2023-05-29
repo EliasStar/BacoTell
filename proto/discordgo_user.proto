@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package discordgo;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/EliasStar/BacoTell/internal/proto/discordgopb";
+
+message User {
+    string id = 1;
+    string email = 2;
+    string username = 3;
+
+    string avatar = 4;
+    string locale = 5;
+    string discriminator = 6;
+    string token = 7;
+
+    bool verified = 8;
+    bool mfa_enabled = 9;
+
+    string banner = 10;
+    int32 accent_color = 11;
+
+    bool bot = 12;
+    int32 public_flags = 13;
+    int32 premium_type = 14;
+    bool system = 15;
+    int32 flags = 16;
+}
+
+message Member {
+	string guild_id = 1;
+	google.protobuf.Timestamp joined_at = 2;
+	string nick = 3;
+
+	bool deaf = 4;
+	bool mute = 5;
+
+	string avatar = 6;
+	User user = 7;
+	repeated string roles = 8;
+	google.protobuf.Timestamp premium_since = 9;
+
+	bool pending = 10;
+	int64 permissions = 11;
+	google.protobuf.Timestamp communication_disabled_until = 12;
+}
+
+message Role {
+    string id = 1;
+    string name = 2;
+
+    bool managed = 3;
+    bool mentionable = 4;
+    bool hoist = 5;
+
+    int32 color = 6;
+
+    int32 position = 7;
+    int64 permissions = 8;
+}

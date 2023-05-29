@@ -127,6 +127,11 @@ var _ bacotell.ExecuteProxy = executeProxy{}
 // StringOption implements bacotell.ExecuteProxy
 func (p executeProxy) StringOption(name string) (string, error) {
 	option := findOption(p.interaction.ApplicationCommandData().Options, name)
+
+	if option == nil {
+		return "", errors.New("option was not set")
+	}
+
 	if option.Type != discordgo.ApplicationCommandOptionString {
 		return "", errors.New("option is not a string")
 	}
@@ -137,6 +142,11 @@ func (p executeProxy) StringOption(name string) (string, error) {
 // IntegerOption implements bacotell.ExecuteProxy
 func (p executeProxy) IntegerOption(name string) (int64, error) {
 	option := findOption(p.interaction.ApplicationCommandData().Options, name)
+
+	if option == nil {
+		return 0, errors.New("option was not set")
+	}
+
 	if option.Type != discordgo.ApplicationCommandOptionInteger {
 		return 0, errors.New("option is not an integer")
 	}
@@ -147,6 +157,11 @@ func (p executeProxy) IntegerOption(name string) (int64, error) {
 // NumberOption implements bacotell.ExecuteProxy
 func (p executeProxy) NumberOption(name string) (float64, error) {
 	option := findOption(p.interaction.ApplicationCommandData().Options, name)
+
+	if option == nil {
+		return 0, errors.New("option was not set")
+	}
+
 	if option.Type != discordgo.ApplicationCommandOptionNumber {
 		return 0, errors.New("option is not a number")
 	}
@@ -157,6 +172,11 @@ func (p executeProxy) NumberOption(name string) (float64, error) {
 // BooleanOption implements bacotell.ExecuteProxy
 func (p executeProxy) BooleanOption(name string) (bool, error) {
 	option := findOption(p.interaction.ApplicationCommandData().Options, name)
+
+	if option == nil {
+		return false, errors.New("option was not set")
+	}
+
 	if option.Type != discordgo.ApplicationCommandOptionBoolean {
 		return false, errors.New("option is not a boolean")
 	}
@@ -167,6 +187,11 @@ func (p executeProxy) BooleanOption(name string) (bool, error) {
 // UserOption implements bacotell.ExecuteProxy
 func (p executeProxy) UserOption(name string) (*discordgo.User, error) {
 	option := findOption(p.interaction.ApplicationCommandData().Options, name)
+
+	if option == nil {
+		return nil, errors.New("option was not set")
+	}
+
 	if option.Type != discordgo.ApplicationCommandOptionUser && option.Type != discordgo.ApplicationCommandOptionMentionable {
 		return nil, errors.New("option is not a user nor a mentionable")
 	}
@@ -177,6 +202,11 @@ func (p executeProxy) UserOption(name string) (*discordgo.User, error) {
 // RoleOption implements bacotell.ExecuteProxy
 func (p executeProxy) RoleOption(name string) (*discordgo.Role, error) {
 	option := findOption(p.interaction.ApplicationCommandData().Options, name)
+
+	if option == nil {
+		return nil, errors.New("option was not set")
+	}
+
 	if option.Type != discordgo.ApplicationCommandOptionRole && option.Type != discordgo.ApplicationCommandOptionMentionable {
 		return nil, errors.New("option is not a role nor a mentionable")
 	}
@@ -187,6 +217,11 @@ func (p executeProxy) RoleOption(name string) (*discordgo.Role, error) {
 // ChannelOption implements bacotell.ExecuteProxy
 func (p executeProxy) ChannelOption(name string) (*discordgo.Channel, error) {
 	option := findOption(p.interaction.ApplicationCommandData().Options, name)
+
+	if option == nil {
+		return nil, errors.New("option was not set")
+	}
+
 	if option.Type != discordgo.ApplicationCommandOptionChannel {
 		return nil, errors.New("option is not a channel")
 	}
@@ -198,6 +233,11 @@ func (p executeProxy) ChannelOption(name string) (*discordgo.Channel, error) {
 func (p executeProxy) AttachmentOption(name string) (*discordgo.MessageAttachment, error) {
 	data := p.interaction.ApplicationCommandData()
 	option := findOption(data.Options, name)
+
+	if option == nil {
+		return nil, errors.New("option was not set")
+	}
+
 	if option.Type != discordgo.ApplicationCommandOptionAttachment {
 		return nil, errors.New("option is not an attachment")
 	}

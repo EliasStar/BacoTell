@@ -26,7 +26,7 @@ func (s commandServer) CommandData(context.Context, *bacotellpb.CommandDataReque
 		return nil, err
 	}
 
-	return &bacotellpb.CommandDataResponse{Data: encodeApplicationCommand(data)}, nil
+	return &bacotellpb.CommandDataResponse{Data: encodeApplicationCommand(&data)}, nil
 }
 
 // Execute implements bacotellpb.CommandServer
@@ -61,7 +61,7 @@ func (c commandClient) CommandData() (discordgo.ApplicationCommand, error) {
 		return discordgo.ApplicationCommand{}, err
 	}
 
-	return decodeApplicationCommand(res.Data), nil
+	return *decodeApplicationCommand(res.Data), nil
 }
 
 // Execute implements bacotell.Command
@@ -180,7 +180,7 @@ func (s executeProxyServer) AttachmentOption(_ context.Context, req *bacotellpb.
 		return nil, err
 	}
 
-	return &bacotellpb.AttachmentOptionResponse{Value: encodeAttachment(val)}, nil
+	return &bacotellpb.AttachmentOptionResponse{Value: encodeMessageAttachment(val)}, nil
 }
 
 type executeProxyClient struct {
@@ -295,5 +295,5 @@ func (c executeProxyClient) AttachmentOption(name string) (*discordgo.MessageAtt
 		return nil, err
 	}
 
-	return decodeAttachment(res.Value), nil
+	return decodeMessageAttachment(res.Value), nil
 }

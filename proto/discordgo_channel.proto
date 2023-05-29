@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+package discordgo;
+
+import "google/protobuf/timestamp.proto";
+import "proto/discordgo_message.proto";
+import "proto/discordgo_user.proto";
+
+option go_package = "github.com/EliasStar/BacoTell/internal/proto/discordgopb";
+
+message Channel {
+    string id = 1;
+    string guild_id = 2;
+    string name = 3;
+    string topic = 4;
+    int32 type = 5;
+
+    string last_message_id = 6;
+    google.protobuf.Timestamp last_pin_timestamp = 7;
+
+    int32 message_count = 8;
+    int32 member_count = 9;
+
+    bool nsfw = 10;
+    string icon = 11;
+    int32 position = 12;
+    int32 bitrate = 13;
+
+    repeated User recipients = 14;
+    repeated Message messages = 15;
+    repeated PermissionOverwrite permission_overwrites = 16;
+
+    int32 user_limit = 17;
+    string parent_id = 18;
+    int32 rate_limit_per_user = 19;
+    string owner_id = 20;
+    string application_id = 21;
+
+    ThreadMetadata thread_metadata = 22;
+    ThreadMember member = 23;
+    repeated ThreadMember members = 24;
+
+    int32 flags = 25;
+
+    repeated ForumTag available_tags = 26;
+    repeated string applied_tags = 27;
+
+    ForumDefaultReaction default_reaction_emoji = 28;
+    int32 default_thread_rate_limit_per_user = 29;
+    optional int32 default_sort_order = 30;
+    int32 default_forum_layout = 31;
+}
+
+message Message {
+	string id = 1;
+	string channel_id = 2;
+	string guild_id = 3;
+	string content = 4;
+
+	google.protobuf.Timestamp timestamp = 5;
+	google.protobuf.Timestamp edited_timestamp = 6;
+	repeated string mention_roles = 7;
+	bool tts = 8;
+	bool mention_everyone = 9;
+	User author = 10;
+
+	repeated MessageAttachment attachments = 11;
+	repeated MessageComponent components = 12;
+	repeated MessageEmbed embeds = 13;
+	repeated User mentions = 14;
+	repeated MessageReactions reactions = 15;
+
+	bool pinned = 16;
+	int32 type = 17;
+	string webhook_id = 18;
+	Member member = 19;
+	repeated Channel mention_channels = 20;
+
+	MessageActivity activity = 21;
+	MessageApplication application = 22;
+	MessageReference message_reference = 23;
+	Message referenced_message = 24;
+	MessageInteraction interaction = 25;
+
+	int32 flags = 26;
+	Channel thread = 27;
+	repeated Sticker sticker_items = 28;
+}
+
+message PermissionOverwrite {
+    string id = 1;
+    int32 type = 2;
+    int64 allow = 3;
+    int64 deny = 4;
+}
+
+message ThreadMetadata {
+    bool archived = 1;
+    int32 auto_archive_duration = 2;
+    google.protobuf.Timestamp archive_timestamp = 3;
+
+    bool locked	= 4;
+    bool invitable = 5;
+}
+
+message ThreadMember {
+    string id = 1;
+    string user_id = 2;
+    google.protobuf.Timestamp join_timestamp = 3;
+    int32 flags = 4;
+}
+
+message ForumTag {
+    string id = 1;
+    string name = 2;
+    bool moderated = 3;
+    string emoji_id = 4;
+    string emoji_name = 5;
+}
+
+message ForumDefaultReaction {
+    string emoji_id = 1;
+    string emoji_name = 2;
+}
