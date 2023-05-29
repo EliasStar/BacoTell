@@ -5,10 +5,10 @@ import (
 )
 
 type InteractionProxy interface {
-	Defer(ephemeral, suppressEmbeds, tts bool) error
-	Respond(message Response, ephemeral, suppressEmbeds, tts bool) error
+	Defer(ephemeral bool) error
+	Respond(message Response, ephemeral bool) error
 
-	Followup(message Response, ephemeral, suppressEmbeds, tts bool) (string, error)
+	Followup(message Response, ephemeral bool) (string, error)
 
 	Edit(id string, message Response) error
 	Delete(id string) error
@@ -19,6 +19,8 @@ type InteractionProxy interface {
 
 type Response struct {
 	Content         string
+	SuppressEmbeds  bool
+	TTS             bool
 	AllowedMentions discordgo.MessageAllowedMentions
 	Components      []discordgo.MessageComponent
 	Embeds          []*discordgo.MessageEmbed

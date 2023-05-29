@@ -92,17 +92,19 @@ func interactionOnGuildCreate(session *discordgo.Session, guild *discordgo.Guild
 func interactionOnInteractionCreate(session *discordgo.Session, evt *discordgo.InteractionCreate) {
 	logger.Info("handling interaction", "type", evt.Type, "guild", evt.GuildID)
 
+	proxy := interactionProxy{session, evt.Interaction}
+
 	switch evt.Type {
 	case discordgo.InteractionApplicationCommand:
 		name := evt.ApplicationCommandData().Name
 		cmd, ok := commandCache[name]
 		if !ok {
 			logger.Warn("cannot execute nonexistent command", "command", name)
-			RespondEphemeral(session, evt.Interaction, "Command not found: "+name)
+			proxy.Respond(bacotell.Response{Content: "Command not found: " + name}, true)
 			return
 		}
 
-		err := cmd.Execute(executeProxy{interactionProxy{session, evt.Interaction}})
+		err := cmd.Execute(executeProxy{proxy})
 		if err != nil {
 			logger.Warn("command execution failed", "command", name, "err", err)
 		}
@@ -112,11 +114,11 @@ func interactionOnInteractionCreate(session *discordgo.Session, evt *discordgo.I
 		cpt, ok := componentCache[id]
 		if !ok {
 			logger.Warn("cannot handle nonexistent component", "component", id)
-			RespondEphemeral(session, evt.Interaction, "Component not found: "+id)
+			proxy.Respond(bacotell.Response{Content: "Component not found: " + id}, true)
 			return
 		}
 
-		err := cpt.Handle(handleProxy{interactionProxy{session, evt.Interaction}})
+		err := cpt.Handle(handleProxy{proxy})
 		if err != nil {
 			logger.Warn("component handling failed", "component", id, "err", err)
 		}

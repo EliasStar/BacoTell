@@ -16,8 +16,6 @@ service InteractionProxy {
 
 message DeferRequest {
     bool ephemeral = 1;
-    bool suppressEmbeds = 2;
-    bool tts = 3;
 }
 
 message DeferResponse {}
@@ -25,8 +23,6 @@ message DeferResponse {}
 message RespondRequest {
     Response message = 1;
     bool ephemeral = 2;
-    bool suppressEmbeds = 3;
-    bool tts = 4;
 }
 
 message RespondResponse {}
@@ -34,8 +30,6 @@ message RespondResponse {}
 message FollowupRequest {
     Response message = 1;
     bool ephemeral = 2;
-    bool suppressEmbeds = 3;
-    bool tts = 4;
 }
 
 message FollowupResponse {
@@ -57,8 +51,10 @@ message DeleteResponse {}
 
 message Response {
 	string content = 1;
-    discordgo.MessageAllowedMentions AllowedMentions = 2;
-    repeated discordgo.MessageComponent components = 3;
-    repeated discordgo.MessageEmbed embeds = 4;
-    repeated discordgo.File files = 5;
+    bool suppress_embeds = 2;
+    bool tts = 3;
+    discordgo.MessageAllowedMentions allowed_mentions = 4;
+    repeated discordgo.MessageComponent components = 5;
+    repeated discordgo.MessageEmbed embeds = 6;
+    repeated discordgo.File files = 7;
 }

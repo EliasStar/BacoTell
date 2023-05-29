@@ -15,35 +15,30 @@ type interactionProxy struct {
 var _ bacotell.InteractionProxy = interactionProxy{}
 
 // Defer implements bacotell.InteractionProxy
-func (p interactionProxy) Defer(ephemeral bool, suppressEmbeds bool, tts bool) error {
+func (p interactionProxy) Defer(ephemeral bool) error {
 	var flags discordgo.MessageFlags
 
 	if ephemeral {
 		flags |= discordgo.MessageFlagsEphemeral
-	}
-
-	if suppressEmbeds {
-		flags |= discordgo.MessageFlagsSuppressEmbeds
 	}
 
 	return p.session.InteractionRespond(p.interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Flags: flags,
-			TTS:   tts,
 		},
 	})
 }
 
 // Respond implements bacotell.InteractionProxy
-func (p interactionProxy) Respond(message bacotell.Response, ephemeral bool, suppressEmbeds bool, tts bool) error {
+func (p interactionProxy) Respond(message bacotell.Response, ephemeral bool) error {
 	var flags discordgo.MessageFlags
 
 	if ephemeral {
 		flags |= discordgo.MessageFlagsEphemeral
 	}
 
-	if suppressEmbeds {
+	if message.SuppressEmbeds {
 		flags |= discordgo.MessageFlagsSuppressEmbeds
 	}
 
@@ -51,36 +46,36 @@ func (p interactionProxy) Respond(message bacotell.Response, ephemeral bool, sup
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content:         message.Content,
+			TTS:             message.TTS,
 			AllowedMentions: &message.AllowedMentions,
 			Components:      message.Components,
 			Embeds:          message.Embeds,
 			Files:           message.Files,
 			Flags:           flags,
-			TTS:             tts,
 		},
 	})
 }
 
 // Followup implements bacotell.InteractionProxy
-func (p interactionProxy) Followup(message bacotell.Response, ephemeral bool, suppressEmbeds bool, tts bool) (string, error) {
+func (p interactionProxy) Followup(message bacotell.Response, ephemeral bool) (string, error) {
 	var flags discordgo.MessageFlags
 
 	if ephemeral {
 		flags |= discordgo.MessageFlagsEphemeral
 	}
 
-	if suppressEmbeds {
+	if message.SuppressEmbeds {
 		flags |= discordgo.MessageFlagsSuppressEmbeds
 	}
 
 	msg, err := p.session.FollowupMessageCreate(p.interaction, true, &discordgo.WebhookParams{
 		Content:         message.Content,
+		TTS:             message.TTS,
 		AllowedMentions: &message.AllowedMentions,
 		Components:      message.Components,
 		Embeds:          message.Embeds,
 		Files:           message.Files,
 		Flags:           flags,
-		TTS:             tts,
 	})
 
 	if err != nil {
@@ -276,35 +271,30 @@ type handleProxy struct {
 var _ bacotell.HandleProxy = handleProxy{}
 
 // Defer implements bacotell.HandleProxy
-func (p handleProxy) Defer(ephemeral bool, suppressEmbeds bool, tts bool) error {
+func (p handleProxy) Defer(ephemeral bool) error {
 	var flags discordgo.MessageFlags
 
 	if ephemeral {
 		flags |= discordgo.MessageFlagsEphemeral
-	}
-
-	if suppressEmbeds {
-		flags |= discordgo.MessageFlagsSuppressEmbeds
 	}
 
 	return p.session.InteractionRespond(p.interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseDeferredMessageUpdate,
 		Data: &discordgo.InteractionResponseData{
 			Flags: flags,
-			TTS:   tts,
 		},
 	})
 }
 
 // Respond implements bacotell.HandleProxy
-func (p handleProxy) Respond(message bacotell.Response, ephemeral bool, suppressEmbeds bool, tts bool) error {
+func (p handleProxy) Respond(message bacotell.Response, ephemeral bool) error {
 	var flags discordgo.MessageFlags
 
 	if ephemeral {
 		flags |= discordgo.MessageFlagsEphemeral
 	}
 
-	if suppressEmbeds {
+	if message.SuppressEmbeds {
 		flags |= discordgo.MessageFlagsSuppressEmbeds
 	}
 
@@ -312,12 +302,12 @@ func (p handleProxy) Respond(message bacotell.Response, ephemeral bool, suppress
 		Type: discordgo.InteractionResponseUpdateMessage,
 		Data: &discordgo.InteractionResponseData{
 			Content:         message.Content,
+			TTS:             message.TTS,
 			AllowedMentions: &message.AllowedMentions,
 			Components:      message.Components,
 			Embeds:          message.Embeds,
 			Files:           message.Files,
 			Flags:           flags,
-			TTS:             tts,
 		},
 	})
 }

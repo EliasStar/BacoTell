@@ -17,17 +17,17 @@ var _ bacotellpb.InteractionProxyServer = interactionProxyServer{}
 
 // Defer implements bacotellpb.InteractionProxyServer
 func (s interactionProxyServer) Defer(_ context.Context, req *bacotellpb.DeferRequest) (*bacotellpb.DeferResponse, error) {
-	return &bacotellpb.DeferResponse{}, s.impl.Defer(req.Ephemeral, req.SuppressEmbeds, req.Tts)
+	return &bacotellpb.DeferResponse{}, s.impl.Defer(req.Ephemeral)
 }
 
 // Respond implements bacotellpb.InteractionProxyServer
 func (s interactionProxyServer) Respond(_ context.Context, req *bacotellpb.RespondRequest) (*bacotellpb.RespondResponse, error) {
-	return &bacotellpb.RespondResponse{}, s.impl.Respond(*decodeResponse(req.Message), req.Ephemeral, req.SuppressEmbeds, req.Tts)
+	return &bacotellpb.RespondResponse{}, s.impl.Respond(*decodeResponse(req.Message), req.Ephemeral)
 }
 
 // Followup implements bacotellpb.InteractionProxyServer
 func (s interactionProxyServer) Followup(_ context.Context, req *bacotellpb.FollowupRequest) (*bacotellpb.FollowupResponse, error) {
-	id, err := s.impl.Followup(*decodeResponse(req.Message), req.Ephemeral, req.SuppressEmbeds, req.Tts)
+	id, err := s.impl.Followup(*decodeResponse(req.Message), req.Ephemeral)
 	if err != nil {
 		return nil, err
 	}
@@ -52,35 +52,27 @@ type interactionProxyClient struct {
 var _ bacotell.InteractionProxy = interactionProxyClient{}
 
 // Defer implements bacotell.InteractionProxy
-func (c interactionProxyClient) Defer(ephemeral bool, suppressEmbeds bool, tts bool) error {
-	_, err := c.client.Defer(context.Background(), &bacotellpb.DeferRequest{
-		Ephemeral:      ephemeral,
-		SuppressEmbeds: suppressEmbeds,
-		Tts:            tts,
-	})
+func (c interactionProxyClient) Defer(ephemeral bool) error {
+	_, err := c.client.Defer(context.Background(), &bacotellpb.DeferRequest{Ephemeral: ephemeral})
 
 	return err
 }
 
 // Respond implements bacotell.InteractionProxy
-func (c interactionProxyClient) Respond(message bacotell.Response, ephemeral bool, suppressEmbeds bool, tts bool) error {
+func (c interactionProxyClient) Respond(message bacotell.Response, ephemeral bool) error {
 	_, err := c.client.Respond(context.Background(), &bacotellpb.RespondRequest{
-		Message:        encodeResponse(&message),
-		Ephemeral:      ephemeral,
-		SuppressEmbeds: suppressEmbeds,
-		Tts:            tts,
+		Message:   encodeResponse(&message),
+		Ephemeral: ephemeral,
 	})
 
 	return err
 }
 
 // Followup implements bacotell.InteractionProxy
-func (c interactionProxyClient) Followup(message bacotell.Response, ephemeral bool, suppressEmbeds bool, tts bool) (string, error) {
+func (c interactionProxyClient) Followup(message bacotell.Response, ephemeral bool) (string, error) {
 	res, err := c.client.Followup(context.Background(), &bacotellpb.FollowupRequest{
-		Message:        encodeResponse(&message),
-		Ephemeral:      ephemeral,
-		SuppressEmbeds: suppressEmbeds,
-		Tts:            tts,
+		Message:   encodeResponse(&message),
+		Ephemeral: ephemeral,
 	})
 
 	if err != nil {
@@ -114,6 +106,8 @@ func encodeResponse(response *bacotell.Response) *bacotellpb.Response {
 
 	return &bacotellpb.Response{
 		Content:         response.Content,
+		SuppressEmbeds:  response.SuppressEmbeds,
+		Tts:             response.TTS,
 		AllowedMentions: encodeMessageAllowedMention(&response.AllowedMentions),
 		Components:      encodeMessageComponents(response.Components),
 		Embeds:          encodeMessageEmbeds(response.Embeds),
@@ -128,6 +122,8 @@ func decodeResponse(response *bacotellpb.Response) *bacotell.Response {
 
 	return &bacotell.Response{
 		Content:         response.Content,
+		SuppressEmbeds:  response.SuppressEmbeds,
+		TTS:             response.Tts,
 		AllowedMentions: *decodeMessageAllowedMention(response.AllowedMentions),
 		Components:      decodeMessageComponents(response.Components),
 		Embeds:          decodeMessageEmbeds(response.Embeds),
