@@ -94,34 +94,6 @@ func decodeMessageAttachments(attachments []*discordgopb.MessageAttachment) []*d
 	return result
 }
 
-func encodeMessageComponent(component discordgo.MessageComponent) *discordgopb.MessageComponent {
-	return nil // TODO
-}
-
-func encodeMessageComponents(components []discordgo.MessageComponent) []*discordgopb.MessageComponent {
-	result := make([]*discordgopb.MessageComponent, len(components))
-
-	for i, component := range components {
-		result[i] = encodeMessageComponent(component)
-	}
-
-	return result
-}
-
-func decodeMessageComponent(component *discordgopb.MessageComponent) discordgo.MessageComponent {
-	return nil // TODO
-}
-
-func decodeMessageComponents(components []*discordgopb.MessageComponent) []discordgo.MessageComponent {
-	result := make([]discordgo.MessageComponent, len(components))
-
-	for i, component := range components {
-		result[i] = decodeMessageComponent(component)
-	}
-
-	return result
-}
-
 func encodeMessageEmbed(embed *discordgo.MessageEmbed) *discordgopb.MessageEmbed {
 	if embed == nil {
 		return nil

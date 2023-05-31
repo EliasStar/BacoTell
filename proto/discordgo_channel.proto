@@ -3,6 +3,7 @@ syntax = "proto3";
 package discordgo;
 
 import "google/protobuf/timestamp.proto";
+import "proto/discordgo_component.proto";
 import "proto/discordgo_message.proto";
 import "proto/discordgo_user.proto";
 

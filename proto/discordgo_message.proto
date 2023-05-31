@@ -27,8 +27,6 @@ message MessageAttachment {
     bool ephemeral = 9;
 }
 
-message MessageComponent {}
-
 message MessageEmbed {
 	string url = 1;
 	string type = 2;

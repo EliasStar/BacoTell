@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package bacotell;
 
+import "proto/discordgo_component.proto";
 import "proto/discordgo_message.proto";
 
 option go_package = "github.com/EliasStar/BacoTell/internal/proto/bacotellpb";

@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package discordgo;
+
+option go_package = "github.com/EliasStar/BacoTell/internal/proto/discordgopb";
+
+message MessageComponent {
+    oneof component {
+        ActionsRow actions_row = 2;
+        Button button = 3;
+        SelectMenu select_menu = 4;
+        TextInput text_input = 5;
+    }
+}
+
+message ActionsRow {
+    repeated MessageComponent components = 1;
+}
+
+message Button {
+    string label = 1;
+    uint32 style = 2;
+    bool disabled = 3;
+    ComponentEmoji emoji = 4;
+
+    string url = 5;
+    string custom_id = 6;
+}
+
+message SelectMenu {
+    uint32 menu_type = 1;
+    string custom_id = 2;
+    string placeholder = 3;
+    optional int32 min_values = 4;
+    int32 max_values = 5;
+    repeated SelectMenuOption options = 6;
+    bool disabled = 7;
+    repeated int32 channel_types = 8;
+}
+
+message SelectMenuOption {
+	string label = 1;
+	string value = 2;
+	string description = 3;
+	ComponentEmoji emoji = 4;
+	bool default = 5;
+}
+
+message TextInput {
+    string custom_id = 1;
+    string label = 2;
+    uint32 style = 3;
+    string placeholder = 4;
+    string value = 5;
+    bool required = 6;
+    int32 min_length = 7;
+    int32 max_length = 8;
+}
+
+message ComponentEmoji {
+    string name = 1;
+    string id = 2;
+    bool animated = 3;
+}
