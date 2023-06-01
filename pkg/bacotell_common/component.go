@@ -1,4 +1,4 @@
-package bacotell
+package bacotell_common
 
 type Component interface {
 	CustomID() (string, error)

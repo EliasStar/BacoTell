@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/EliasStar/BacoTell/internal/proto/bacotellpb"
-	"github.com/EliasStar/BacoTell/pkg/bacotell"
+	common "github.com/EliasStar/BacoTell/pkg/bacotell_common"
 	"github.com/bwmarrin/discordgo"
 	"github.com/hashicorp/go-plugin"
 	"google.golang.org/grpc"
@@ -13,7 +13,7 @@ import (
 type commandServer struct {
 	bacotellpb.UnimplementedCommandServer
 
-	impl   bacotell.Command
+	impl   common.Command
 	broker *plugin.GRPCBroker
 }
 
@@ -52,7 +52,7 @@ type commandClient struct {
 	broker *plugin.GRPCBroker
 }
 
-var _ bacotell.Command = commandClient{}
+var _ common.Command = commandClient{}
 
 // CommandData implements bacotell.Command
 func (c commandClient) CommandData() (discordgo.ApplicationCommand, error) {
@@ -65,7 +65,7 @@ func (c commandClient) CommandData() (discordgo.ApplicationCommand, error) {
 }
 
 // Execute implements bacotell.Command
-func (c commandClient) Execute(proxy bacotell.ExecuteProxy) error {
+func (c commandClient) Execute(proxy common.ExecuteProxy) error {
 	var server *grpc.Server
 
 	id := c.broker.NextId()
@@ -95,7 +95,7 @@ type executeProxyServer struct {
 	bacotellpb.UnimplementedExecuteProxyServer
 	interactionProxyServer
 
-	impl bacotell.ExecuteProxy
+	impl common.ExecuteProxy
 }
 
 var (
@@ -190,11 +190,11 @@ type executeProxyClient struct {
 }
 
 var (
-	_ bacotell.InteractionProxy = executeProxyClient{}
-	_ bacotell.ExecuteProxy     = executeProxyClient{}
+	_ common.InteractionProxy = executeProxyClient{}
+	_ common.ExecuteProxy     = executeProxyClient{}
 )
 
-// StringOption implements bacotell.ExecuteProxy
+// StringOption implements bacotell_common.ExecuteProxy
 func (c executeProxyClient) StringOption(name string) (string, error) {
 	res, err := c.client.StringOption(context.Background(), &bacotellpb.StringOptionRequest{
 		Name: name,
@@ -207,7 +207,7 @@ func (c executeProxyClient) StringOption(name string) (string, error) {
 	return res.Value, nil
 }
 
-// IntegerOption implements bacotell.ExecuteProxy
+// IntegerOption implements bacotell_common.ExecuteProxy
 func (c executeProxyClient) IntegerOption(name string) (int64, error) {
 	res, err := c.client.IntegerOption(context.Background(), &bacotellpb.IntegerOptionRequest{
 		Name: name,
@@ -220,7 +220,7 @@ func (c executeProxyClient) IntegerOption(name string) (int64, error) {
 	return res.Value, nil
 }
 
-// NumberOption implements bacotell.ExecuteProxy
+// NumberOption implements bacotell_common.ExecuteProxy
 func (c executeProxyClient) NumberOption(name string) (float64, error) {
 	res, err := c.client.NumberOption(context.Background(), &bacotellpb.NumberOptionRequest{
 		Name: name,
@@ -233,7 +233,7 @@ func (c executeProxyClient) NumberOption(name string) (float64, error) {
 	return res.Value, nil
 }
 
-// BooleanOption implements bacotell.ExecuteProxy
+// BooleanOption implements bacotell_common.ExecuteProxy
 func (c executeProxyClient) BooleanOption(name string) (bool, error) {
 	res, err := c.client.BooleanOption(context.Background(), &bacotellpb.BooleanOptionRequest{
 		Name: name,
@@ -246,7 +246,7 @@ func (c executeProxyClient) BooleanOption(name string) (bool, error) {
 	return res.Value, nil
 }
 
-// UserOption implements bacotell.ExecuteProxy
+// UserOption implements bacotell_common.ExecuteProxy
 func (c executeProxyClient) UserOption(name string) (*discordgo.User, error) {
 	res, err := c.client.UserOption(context.Background(), &bacotellpb.UserOptionRequest{
 		Name: name,
@@ -259,7 +259,7 @@ func (c executeProxyClient) UserOption(name string) (*discordgo.User, error) {
 	return decodeUser(res.Value), nil
 }
 
-// RoleOption implements bacotell.ExecuteProxy
+// RoleOption implements bacotell_common.ExecuteProxy
 func (c executeProxyClient) RoleOption(name string) (*discordgo.Role, error) {
 	res, err := c.client.RoleOption(context.Background(), &bacotellpb.RoleOptionRequest{
 		Name: name,
@@ -272,7 +272,7 @@ func (c executeProxyClient) RoleOption(name string) (*discordgo.Role, error) {
 	return decodeRole(res.Value), nil
 }
 
-// ChannelOption implements bacotell.ExecuteProxy
+// ChannelOption implements bacotell_common.ExecuteProxy
 func (c executeProxyClient) ChannelOption(name string) (*discordgo.Channel, error) {
 	res, err := c.client.ChannelOption(context.Background(), &bacotellpb.ChannelOptionRequest{
 		Name: name,
@@ -285,7 +285,7 @@ func (c executeProxyClient) ChannelOption(name string) (*discordgo.Channel, erro
 	return decodeChannel(res.Value), nil
 }
 
-// AttachmentOption implements bacotell.ExecuteProxy
+// AttachmentOption implements bacotell_common.ExecuteProxy
 func (c executeProxyClient) AttachmentOption(name string) (*discordgo.MessageAttachment, error) {
 	res, err := c.client.AttachmentOption(context.Background(), &bacotellpb.AttachmentOptionRequest{
 		Name: name,

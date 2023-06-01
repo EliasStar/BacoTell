@@ -1,11 +1,11 @@
-package bacotell
+package bacotell_common
 
 import "github.com/bwmarrin/discordgo"
 
 type Command interface {
 	CommandData() (discordgo.ApplicationCommand, error)
 	Execute(ExecuteProxy) error
-	//Autocomplete(AutocompleteProxy) error
+	//Autocomplete(AutocompleteProxy) error TODO
 }
 
 type ExecuteProxy interface {
@@ -23,4 +23,4 @@ type ExecuteProxy interface {
 	AttachmentOption(name string) (*discordgo.MessageAttachment, error)
 }
 
-// type AutocompleteProxy interface {}
+// type AutocompleteProxy interface {} TODO

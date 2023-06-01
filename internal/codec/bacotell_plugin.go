@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/EliasStar/BacoTell/internal/proto/bacotellpb"
-	"github.com/EliasStar/BacoTell/pkg/bacotell"
+	common "github.com/EliasStar/BacoTell/pkg/bacotell_common"
 	"github.com/hashicorp/go-plugin"
 	"google.golang.org/grpc"
 )
@@ -12,7 +12,7 @@ import (
 type pluginServer struct {
 	bacotellpb.UnimplementedPluginServer
 
-	impl   bacotell.Plugin
+	impl   common.Plugin
 	broker *plugin.GRPCBroker
 }
 
@@ -73,9 +73,9 @@ type pluginClient struct {
 	broker *plugin.GRPCBroker
 }
 
-var _ bacotell.Plugin = pluginClient{}
+var _ common.Plugin = pluginClient{}
 
-// ID implements bacotell.Plugin
+// ID implements bacotell_common.Plugin
 func (c pluginClient) ID() (string, error) {
 	res, err := c.client.Id(context.Background(), &bacotellpb.IdRequest{})
 	if err != nil {
@@ -85,14 +85,14 @@ func (c pluginClient) ID() (string, error) {
 	return res.Id, nil
 }
 
-// ApplicationCommands implements bacotell.Plugin
-func (c pluginClient) ApplicationCommands() ([]bacotell.Command, error) {
+// ApplicationCommands implements bacotell_common.Plugin
+func (c pluginClient) ApplicationCommands() ([]common.Command, error) {
 	res, err := c.client.ApplicationCommands(context.Background(), &bacotellpb.ApplicationCommandsRequest{})
 	if err != nil {
 		return nil, err
 	}
 
-	commands := make([]bacotell.Command, len(res.CommandIds))
+	commands := make([]common.Command, len(res.CommandIds))
 	for i, id := range res.CommandIds {
 		conn, err := c.broker.Dial(id)
 		if err != nil {
@@ -105,14 +105,14 @@ func (c pluginClient) ApplicationCommands() ([]bacotell.Command, error) {
 	return commands, nil
 }
 
-// MessageComponents implements bacotell.Plugin
-func (c pluginClient) MessageComponents() ([]bacotell.Component, error) {
+// MessageComponents implements bacotell_common.Plugin
+func (c pluginClient) MessageComponents() ([]common.Component, error) {
 	res, err := c.client.MessageComponents(context.Background(), &bacotellpb.MessageComponentsRequest{})
 	if err != nil {
 		return nil, err
 	}
 
-	components := make([]bacotell.Component, len(res.ComponentIds))
+	components := make([]common.Component, len(res.ComponentIds))
 	for i, id := range res.ComponentIds {
 		conn, err := c.broker.Dial(id)
 		if err != nil {

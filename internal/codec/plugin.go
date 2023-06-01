@@ -4,14 +4,14 @@ import (
 	"context"
 
 	"github.com/EliasStar/BacoTell/internal/proto/bacotellpb"
-	"github.com/EliasStar/BacoTell/pkg/bacotell"
+	common "github.com/EliasStar/BacoTell/pkg/bacotell_common"
 	"github.com/hashicorp/go-plugin"
 	"google.golang.org/grpc"
 )
 
 type bacotellPlugin struct {
 	plugin.NetRPCUnsupportedPlugin
-	bacotell.Plugin
+	common.Plugin
 }
 
 var (
@@ -19,7 +19,7 @@ var (
 	_ plugin.GRPCPlugin = bacotellPlugin{}
 )
 
-func NewBacoTellPlugin(pluginImpl bacotell.Plugin) plugin.Plugin {
+func NewPlugin(pluginImpl common.Plugin) plugin.Plugin {
 	return bacotellPlugin{Plugin: pluginImpl}
 }
 

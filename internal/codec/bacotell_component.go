@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/EliasStar/BacoTell/internal/proto/bacotellpb"
-	"github.com/EliasStar/BacoTell/pkg/bacotell"
+	common "github.com/EliasStar/BacoTell/pkg/bacotell_common"
 	"github.com/hashicorp/go-plugin"
 	"google.golang.org/grpc"
 )
@@ -12,7 +12,7 @@ import (
 type componentServer struct {
 	bacotellpb.UnimplementedComponentServer
 
-	impl   bacotell.Component
+	impl   common.Component
 	broker *plugin.GRPCBroker
 }
 
@@ -51,9 +51,9 @@ type componentClient struct {
 	broker *plugin.GRPCBroker
 }
 
-var _ bacotell.Component = componentClient{}
+var _ common.Component = componentClient{}
 
-// CustomID implements bacotell.Component
+// CustomID implements bacotell_common.Component
 func (c componentClient) CustomID() (string, error) {
 	res, err := c.client.CustomId(context.Background(), &bacotellpb.CustomIdRequest{})
 	if err != nil {
@@ -63,8 +63,8 @@ func (c componentClient) CustomID() (string, error) {
 	return res.CustomId, nil
 }
 
-// Handle implements bacotell.Component
-func (c componentClient) Handle(proxy bacotell.HandleProxy) error {
+// Handle implements bacotell_common.Component
+func (c componentClient) Handle(proxy common.HandleProxy) error {
 	var server *grpc.Server
 
 	id := c.broker.NextId()
@@ -94,7 +94,7 @@ type handleProxyServer struct {
 	bacotellpb.UnimplementedHandleProxyServer
 	interactionProxyServer
 
-	impl bacotell.HandleProxy
+	impl common.HandleProxy
 }
 
 var (
@@ -109,6 +109,6 @@ type handleProxyClient struct {
 }
 
 var (
-	_ bacotell.InteractionProxy = handleProxyClient{}
-	_ bacotell.HandleProxy      = handleProxyClient{}
+	_ common.InteractionProxy = handleProxyClient{}
+	_ common.HandleProxy      = handleProxyClient{}
 )

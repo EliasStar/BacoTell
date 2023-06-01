@@ -4,42 +4,39 @@ import (
 	"context"
 	"os"
 
-	"github.com/EliasStar/BacoTell/internal/common"
-	"github.com/EliasStar/BacoTell/internal/discord"
-	"github.com/EliasStar/BacoTell/internal/loader"
-	"github.com/EliasStar/BacoTell/pkg/bacotell"
+	"github.com/EliasStar/BacoTell/internal/bacotell"
+	common "github.com/EliasStar/BacoTell/pkg/bacotell_common"
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
-	"github.com/spf13/viper"
 )
 
 type defaultPlugin struct {
 	id         string
-	commands   []bacotell.Command
-	components []bacotell.Component
+	commands   []common.Command
+	components []common.Component
 }
 
-var _ bacotell.Plugin = defaultPlugin{}
+var _ common.Plugin = defaultPlugin{}
 
 func (i defaultPlugin) ID() (string, error) {
 	return i.id, nil
 }
 
-func (i defaultPlugin) ApplicationCommands() ([]bacotell.Command, error) {
+func (i defaultPlugin) ApplicationCommands() ([]common.Command, error) {
 	return i.commands, nil
 }
 
-func (i defaultPlugin) MessageComponents() ([]bacotell.Component, error) {
+func (i defaultPlugin) MessageComponents() ([]common.Component, error) {
 	return i.components, nil
 }
 
 var internalPlugin defaultPlugin
 
-func SetApplicationCommands(commands []bacotell.Command) {
+func SetApplicationCommands(commands []common.Command) {
 	internalPlugin.commands = commands
 }
 
-func SetMessageComponents(components []bacotell.Component) {
+func SetMessageComponents(components []common.Component) {
 	internalPlugin.components = components
 }
 
@@ -53,7 +50,7 @@ func Debug(id, token string) (hclog.Logger, <-chan struct{}, error) {
 	return DebugCustom(internalPlugin, token)
 }
 
-func RunCustom(customPlugin bacotell.Plugin) (hclog.Logger, <-chan struct{}, error) {
+func RunCustom(customPlugin common.Plugin) (hclog.Logger, <-chan struct{}, error) {
 	id, err := customPlugin.ID()
 	if err != nil {
 		return nil, nil, err
@@ -69,8 +66,8 @@ func RunCustom(customPlugin bacotell.Plugin) (hclog.Logger, <-chan struct{}, err
 	go func() {
 		plugin.Serve(&plugin.ServeConfig{
 			GRPCServer:      plugin.DefaultGRPCServer,
-			HandshakeConfig: loader.HandshakeConfig(),
-			Plugins:         loader.PluginMap(customPlugin),
+			HandshakeConfig: bacotell.HandshakeConfig(),
+			Plugins:         bacotell.PluginMap(customPlugin),
 			Logger:          logger,
 		})
 
@@ -80,7 +77,7 @@ func RunCustom(customPlugin bacotell.Plugin) (hclog.Logger, <-chan struct{}, err
 	return logger, closeChan, nil
 }
 
-func DebugCustom(customPlugin bacotell.Plugin, token string) (hclog.Logger, <-chan struct{}, error) {
+func DebugCustom(customPlugin common.Plugin, token string) (hclog.Logger, <-chan struct{}, error) {
 	id, err := customPlugin.ID()
 	if err != nil {
 		return nil, nil, err
@@ -92,13 +89,13 @@ func DebugCustom(customPlugin bacotell.Plugin, token string) (hclog.Logger, <-ch
 	logger := hclog.New(&hclog.LoggerOptions{
 		Name:   id,
 		Output: os.Stdout,
-		Level:  hclog.Info,
+		Level:  hclog.Debug,
 	})
 
 	go plugin.Serve(&plugin.ServeConfig{
 		GRPCServer:      plugin.DefaultGRPCServer,
-		HandshakeConfig: loader.HandshakeConfig(),
-		Plugins:         loader.PluginMap(customPlugin),
+		HandshakeConfig: bacotell.HandshakeConfig(),
+		Plugins:         bacotell.PluginMap(customPlugin),
 		Logger:          logger,
 
 		Test: &plugin.ServeTestConfig{
@@ -109,13 +106,7 @@ func DebugCustom(customPlugin bacotell.Plugin, token string) (hclog.Logger, <-ch
 	})
 
 	go func() {
-		common.InitConfig()
-		viper.Set(common.ConfigBotToken, token)
-
-		loader.LoadFromRunning(<-reattachConfigChan)
-		discord.Connect()
-		loader.Unload()
-
+		bacotell.Debug(token, <-reattachConfigChan)
 		cancel()
 	}()
 

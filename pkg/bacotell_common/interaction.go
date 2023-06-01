@@ -1,4 +1,4 @@
-package bacotell
+package bacotell_common
 
 import (
 	"github.com/bwmarrin/discordgo"
@@ -13,8 +13,8 @@ type InteractionProxy interface {
 	Edit(id string, message Response) error
 	Delete(id string) error
 
-	//Modal(id, title string) error
-	//Locale() string error
+	//Modal(id, title string) error TODO
+	//Locale() string error TODO
 }
 
 type Response struct {

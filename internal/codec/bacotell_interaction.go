@@ -4,13 +4,13 @@ import (
 	"context"
 
 	"github.com/EliasStar/BacoTell/internal/proto/bacotellpb"
-	"github.com/EliasStar/BacoTell/pkg/bacotell"
+	common "github.com/EliasStar/BacoTell/pkg/bacotell_common"
 )
 
 type interactionProxyServer struct {
 	bacotellpb.UnimplementedInteractionProxyServer
 
-	impl bacotell.InteractionProxy
+	impl common.InteractionProxy
 }
 
 var _ bacotellpb.InteractionProxyServer = interactionProxyServer{}
@@ -49,17 +49,17 @@ type interactionProxyClient struct {
 	client bacotellpb.InteractionProxyClient
 }
 
-var _ bacotell.InteractionProxy = interactionProxyClient{}
+var _ common.InteractionProxy = interactionProxyClient{}
 
-// Defer implements bacotell.InteractionProxy
+// Defer implements bacotell_common.InteractionProxy
 func (c interactionProxyClient) Defer(ephemeral bool) error {
 	_, err := c.client.Defer(context.Background(), &bacotellpb.DeferRequest{Ephemeral: ephemeral})
 
 	return err
 }
 
-// Respond implements bacotell.InteractionProxy
-func (c interactionProxyClient) Respond(message bacotell.Response, ephemeral bool) error {
+// Respond implements bacotell_common.InteractionProxy
+func (c interactionProxyClient) Respond(message common.Response, ephemeral bool) error {
 	_, err := c.client.Respond(context.Background(), &bacotellpb.RespondRequest{
 		Message:   encodeResponse(&message),
 		Ephemeral: ephemeral,
@@ -68,8 +68,8 @@ func (c interactionProxyClient) Respond(message bacotell.Response, ephemeral boo
 	return err
 }
 
-// Followup implements bacotell.InteractionProxy
-func (c interactionProxyClient) Followup(message bacotell.Response, ephemeral bool) (string, error) {
+// Followup implements bacotell_common.InteractionProxy
+func (c interactionProxyClient) Followup(message common.Response, ephemeral bool) (string, error) {
 	res, err := c.client.Followup(context.Background(), &bacotellpb.FollowupRequest{
 		Message:   encodeResponse(&message),
 		Ephemeral: ephemeral,
@@ -82,8 +82,8 @@ func (c interactionProxyClient) Followup(message bacotell.Response, ephemeral bo
 	return res.Id, nil
 }
 
-// Edit implements bacotell.InteractionProxy
-func (c interactionProxyClient) Edit(id string, message bacotell.Response) error {
+// Edit implements bacotell_common.InteractionProxy
+func (c interactionProxyClient) Edit(id string, message common.Response) error {
 	_, err := c.client.Edit(context.Background(), &bacotellpb.EditRequest{
 		Id:      id,
 		Message: encodeResponse(&message),
@@ -92,14 +92,14 @@ func (c interactionProxyClient) Edit(id string, message bacotell.Response) error
 	return err
 }
 
-// Delete implements bacotell.InteractionProxy
+// Delete implements bacotell_common.InteractionProxy
 func (c interactionProxyClient) Delete(id string) error {
 	_, err := c.client.Delete(context.Background(), &bacotellpb.DeleteRequest{Id: id})
 
 	return err
 }
 
-func encodeResponse(response *bacotell.Response) *bacotellpb.Response {
+func encodeResponse(response *common.Response) *bacotellpb.Response {
 	if response == nil {
 		return nil
 	}
@@ -115,12 +115,12 @@ func encodeResponse(response *bacotell.Response) *bacotellpb.Response {
 	}
 }
 
-func decodeResponse(response *bacotellpb.Response) *bacotell.Response {
+func decodeResponse(response *bacotellpb.Response) *common.Response {
 	if response == nil {
 		return nil
 	}
 
-	return &bacotell.Response{
+	return &common.Response{
 		Content:         response.Content,
 		SuppressEmbeds:  response.SuppressEmbeds,
 		TTS:             response.Tts,

@@ -1,10 +1,10 @@
-package bacotell
+package bacotell_common
 
-// type Modal interface {
+// type Modal interface { TODO
 // 	CustomId() (string, error)
 // 	Submit(SubmitProxy) error
 // }
 
-// type SubmitProxy interface {
+// type SubmitProxy interface { TODO
 // 	InteractionProxy
 // }
