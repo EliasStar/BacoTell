@@ -61,6 +61,18 @@ func (p interactionProxy) Respond(message common.Response, ephemeral bool) error
 	})
 }
 
+// Modal implements bacotell_common.InteractionProxy
+func (p interactionProxy) Modal(customId string, title string, components ...discordgo.MessageComponent) error {
+	return p.session.InteractionRespond(p.interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseModal,
+		Data: &discordgo.InteractionResponseData{
+			CustomID:   customId,
+			Title:      title,
+			Components: components,
+		},
+	})
+}
+
 // Followup implements bacotell_common.InteractionProxy
 func (p interactionProxy) Followup(message common.Response, ephemeral bool) (string, error) {
 	var flags discordgo.MessageFlags
@@ -116,4 +128,48 @@ func (p interactionProxy) Delete(id string) error {
 	}
 
 	return p.session.FollowupMessageDelete(p.interaction, id)
+}
+
+// GuildID implements bacotell_common.InteractionProxy
+func (p interactionProxy) GuildID() (string, error) {
+	return p.interaction.GuildID, nil
+}
+
+// ChannelID implements bacotell_common.InteractionProxy
+func (p interactionProxy) ChannelID() (string, error) {
+	return p.interaction.ChannelID, nil
+}
+
+// UserLocale implements bacotell_common.InteractionProxy
+func (p interactionProxy) UserLocale() (discordgo.Locale, error) {
+	return p.interaction.Locale, nil
+}
+
+// GuildLocale implements bacotell_common.InteractionProxy
+func (p interactionProxy) GuildLocale() (discordgo.Locale, error) {
+	if p.interaction.GuildLocale != nil {
+		return *p.interaction.GuildLocale, nil
+	}
+
+	return p.interaction.Locale, nil
+}
+
+// User implements bacotell_common.InteractionProxy
+func (p interactionProxy) User() (*discordgo.User, error) {
+	return p.interaction.User, nil
+}
+
+// Member implements bacotell_common.InteractionProxy
+func (p interactionProxy) Member() (*discordgo.Member, error) {
+	return p.interaction.Member, nil
+}
+
+// Message implements bacotell_common.InteractionProxy
+func (p interactionProxy) Message() (*discordgo.Message, error) {
+	return p.interaction.Message, nil
+}
+
+// Permissions implements bacotell_common.InteractionProxy
+func (p interactionProxy) Permissions() (int64, error) {
+	return p.interaction.AppPermissions, nil
 }

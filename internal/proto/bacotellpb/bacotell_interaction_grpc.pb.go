@@ -19,22 +19,40 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	InteractionProxy_Defer_FullMethodName    = "/bacotell.InteractionProxy/Defer"
-	InteractionProxy_Respond_FullMethodName  = "/bacotell.InteractionProxy/Respond"
-	InteractionProxy_Followup_FullMethodName = "/bacotell.InteractionProxy/Followup"
-	InteractionProxy_Edit_FullMethodName     = "/bacotell.InteractionProxy/Edit"
-	InteractionProxy_Delete_FullMethodName   = "/bacotell.InteractionProxy/Delete"
+	InteractionProxy_Defer_FullMethodName       = "/bacotell.InteractionProxy/Defer"
+	InteractionProxy_Respond_FullMethodName     = "/bacotell.InteractionProxy/Respond"
+	InteractionProxy_Modal_FullMethodName       = "/bacotell.InteractionProxy/Modal"
+	InteractionProxy_Followup_FullMethodName    = "/bacotell.InteractionProxy/Followup"
+	InteractionProxy_Edit_FullMethodName        = "/bacotell.InteractionProxy/Edit"
+	InteractionProxy_Delete_FullMethodName      = "/bacotell.InteractionProxy/Delete"
+	InteractionProxy_GuildId_FullMethodName     = "/bacotell.InteractionProxy/GuildId"
+	InteractionProxy_ChannelId_FullMethodName   = "/bacotell.InteractionProxy/ChannelId"
+	InteractionProxy_UserLocale_FullMethodName  = "/bacotell.InteractionProxy/UserLocale"
+	InteractionProxy_GuildLocale_FullMethodName = "/bacotell.InteractionProxy/GuildLocale"
+	InteractionProxy_User_FullMethodName        = "/bacotell.InteractionProxy/User"
+	InteractionProxy_Member_FullMethodName      = "/bacotell.InteractionProxy/Member"
+	InteractionProxy_Message_FullMethodName     = "/bacotell.InteractionProxy/Message"
+	InteractionProxy_Permissions_FullMethodName = "/bacotell.InteractionProxy/Permissions"
 )
 
 // InteractionProxyClient is the client API for InteractionProxy service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InteractionProxyClient interface {
-	Defer(ctx context.Context, in *DeferRequest, opts ...grpc.CallOption) (*DeferResponse, error)
-	Respond(ctx context.Context, in *RespondRequest, opts ...grpc.CallOption) (*RespondResponse, error)
-	Followup(ctx context.Context, in *FollowupRequest, opts ...grpc.CallOption) (*FollowupResponse, error)
-	Edit(ctx context.Context, in *EditRequest, opts ...grpc.CallOption) (*EditResponse, error)
-	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
+	Defer(ctx context.Context, in *InteractionProxyDeferRequest, opts ...grpc.CallOption) (*InteractionProxyDeferResponse, error)
+	Respond(ctx context.Context, in *InteractionProxyRespondRequest, opts ...grpc.CallOption) (*InteractionProxyRespondResponse, error)
+	Modal(ctx context.Context, in *InteractionProxyModalRequest, opts ...grpc.CallOption) (*InteractionProxyModalResponse, error)
+	Followup(ctx context.Context, in *InteractionProxyFollowupRequest, opts ...grpc.CallOption) (*InteractionProxyFollowupResponse, error)
+	Edit(ctx context.Context, in *InteractionProxyEditRequest, opts ...grpc.CallOption) (*InteractionProxyEditResponse, error)
+	Delete(ctx context.Context, in *InteractionProxyDeleteRequest, opts ...grpc.CallOption) (*InteractionProxyDeleteResponse, error)
+	GuildId(ctx context.Context, in *InteractionProxyGuildIdRequest, opts ...grpc.CallOption) (*InteractionProxyGuildIdResponse, error)
+	ChannelId(ctx context.Context, in *InteractionProxyChannelIdRequest, opts ...grpc.CallOption) (*InteractionProxyChannelIdResponse, error)
+	UserLocale(ctx context.Context, in *InteractionProxyUserLocaleRequest, opts ...grpc.CallOption) (*InteractionProxyUserLocaleResponse, error)
+	GuildLocale(ctx context.Context, in *InteractionProxyGuildLocaleRequest, opts ...grpc.CallOption) (*InteractionProxyGuildLocaleResponse, error)
+	User(ctx context.Context, in *InteractionProxyUserRequest, opts ...grpc.CallOption) (*InteractionProxyUserResponse, error)
+	Member(ctx context.Context, in *InteractionProxyMemberRequest, opts ...grpc.CallOption) (*InteractionProxyMemberResponse, error)
+	Message(ctx context.Context, in *InteractionProxyMessageRequest, opts ...grpc.CallOption) (*InteractionProxyMessageResponse, error)
+	Permissions(ctx context.Context, in *InteractionProxyPermissionsRequest, opts ...grpc.CallOption) (*InteractionProxyPermissionsResponse, error)
 }
 
 type interactionProxyClient struct {
@@ -45,8 +63,8 @@ func NewInteractionProxyClient(cc grpc.ClientConnInterface) InteractionProxyClie
 	return &interactionProxyClient{cc}
 }
 
-func (c *interactionProxyClient) Defer(ctx context.Context, in *DeferRequest, opts ...grpc.CallOption) (*DeferResponse, error) {
-	out := new(DeferResponse)
+func (c *interactionProxyClient) Defer(ctx context.Context, in *InteractionProxyDeferRequest, opts ...grpc.CallOption) (*InteractionProxyDeferResponse, error) {
+	out := new(InteractionProxyDeferResponse)
 	err := c.cc.Invoke(ctx, InteractionProxy_Defer_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -54,8 +72,8 @@ func (c *interactionProxyClient) Defer(ctx context.Context, in *DeferRequest, op
 	return out, nil
 }
 
-func (c *interactionProxyClient) Respond(ctx context.Context, in *RespondRequest, opts ...grpc.CallOption) (*RespondResponse, error) {
-	out := new(RespondResponse)
+func (c *interactionProxyClient) Respond(ctx context.Context, in *InteractionProxyRespondRequest, opts ...grpc.CallOption) (*InteractionProxyRespondResponse, error) {
+	out := new(InteractionProxyRespondResponse)
 	err := c.cc.Invoke(ctx, InteractionProxy_Respond_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -63,8 +81,17 @@ func (c *interactionProxyClient) Respond(ctx context.Context, in *RespondRequest
 	return out, nil
 }
 
-func (c *interactionProxyClient) Followup(ctx context.Context, in *FollowupRequest, opts ...grpc.CallOption) (*FollowupResponse, error) {
-	out := new(FollowupResponse)
+func (c *interactionProxyClient) Modal(ctx context.Context, in *InteractionProxyModalRequest, opts ...grpc.CallOption) (*InteractionProxyModalResponse, error) {
+	out := new(InteractionProxyModalResponse)
+	err := c.cc.Invoke(ctx, InteractionProxy_Modal_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *interactionProxyClient) Followup(ctx context.Context, in *InteractionProxyFollowupRequest, opts ...grpc.CallOption) (*InteractionProxyFollowupResponse, error) {
+	out := new(InteractionProxyFollowupResponse)
 	err := c.cc.Invoke(ctx, InteractionProxy_Followup_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -72,8 +99,8 @@ func (c *interactionProxyClient) Followup(ctx context.Context, in *FollowupReque
 	return out, nil
 }
 
-func (c *interactionProxyClient) Edit(ctx context.Context, in *EditRequest, opts ...grpc.CallOption) (*EditResponse, error) {
-	out := new(EditResponse)
+func (c *interactionProxyClient) Edit(ctx context.Context, in *InteractionProxyEditRequest, opts ...grpc.CallOption) (*InteractionProxyEditResponse, error) {
+	out := new(InteractionProxyEditResponse)
 	err := c.cc.Invoke(ctx, InteractionProxy_Edit_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -81,9 +108,81 @@ func (c *interactionProxyClient) Edit(ctx context.Context, in *EditRequest, opts
 	return out, nil
 }
 
-func (c *interactionProxyClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
-	out := new(DeleteResponse)
+func (c *interactionProxyClient) Delete(ctx context.Context, in *InteractionProxyDeleteRequest, opts ...grpc.CallOption) (*InteractionProxyDeleteResponse, error) {
+	out := new(InteractionProxyDeleteResponse)
 	err := c.cc.Invoke(ctx, InteractionProxy_Delete_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *interactionProxyClient) GuildId(ctx context.Context, in *InteractionProxyGuildIdRequest, opts ...grpc.CallOption) (*InteractionProxyGuildIdResponse, error) {
+	out := new(InteractionProxyGuildIdResponse)
+	err := c.cc.Invoke(ctx, InteractionProxy_GuildId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *interactionProxyClient) ChannelId(ctx context.Context, in *InteractionProxyChannelIdRequest, opts ...grpc.CallOption) (*InteractionProxyChannelIdResponse, error) {
+	out := new(InteractionProxyChannelIdResponse)
+	err := c.cc.Invoke(ctx, InteractionProxy_ChannelId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *interactionProxyClient) UserLocale(ctx context.Context, in *InteractionProxyUserLocaleRequest, opts ...grpc.CallOption) (*InteractionProxyUserLocaleResponse, error) {
+	out := new(InteractionProxyUserLocaleResponse)
+	err := c.cc.Invoke(ctx, InteractionProxy_UserLocale_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *interactionProxyClient) GuildLocale(ctx context.Context, in *InteractionProxyGuildLocaleRequest, opts ...grpc.CallOption) (*InteractionProxyGuildLocaleResponse, error) {
+	out := new(InteractionProxyGuildLocaleResponse)
+	err := c.cc.Invoke(ctx, InteractionProxy_GuildLocale_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *interactionProxyClient) User(ctx context.Context, in *InteractionProxyUserRequest, opts ...grpc.CallOption) (*InteractionProxyUserResponse, error) {
+	out := new(InteractionProxyUserResponse)
+	err := c.cc.Invoke(ctx, InteractionProxy_User_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *interactionProxyClient) Member(ctx context.Context, in *InteractionProxyMemberRequest, opts ...grpc.CallOption) (*InteractionProxyMemberResponse, error) {
+	out := new(InteractionProxyMemberResponse)
+	err := c.cc.Invoke(ctx, InteractionProxy_Member_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *interactionProxyClient) Message(ctx context.Context, in *InteractionProxyMessageRequest, opts ...grpc.CallOption) (*InteractionProxyMessageResponse, error) {
+	out := new(InteractionProxyMessageResponse)
+	err := c.cc.Invoke(ctx, InteractionProxy_Message_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *interactionProxyClient) Permissions(ctx context.Context, in *InteractionProxyPermissionsRequest, opts ...grpc.CallOption) (*InteractionProxyPermissionsResponse, error) {
+	out := new(InteractionProxyPermissionsResponse)
+	err := c.cc.Invoke(ctx, InteractionProxy_Permissions_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -94,11 +193,20 @@ func (c *interactionProxyClient) Delete(ctx context.Context, in *DeleteRequest, 
 // All implementations must embed UnimplementedInteractionProxyServer
 // for forward compatibility
 type InteractionProxyServer interface {
-	Defer(context.Context, *DeferRequest) (*DeferResponse, error)
-	Respond(context.Context, *RespondRequest) (*RespondResponse, error)
-	Followup(context.Context, *FollowupRequest) (*FollowupResponse, error)
-	Edit(context.Context, *EditRequest) (*EditResponse, error)
-	Delete(context.Context, *DeleteRequest) (*DeleteResponse, error)
+	Defer(context.Context, *InteractionProxyDeferRequest) (*InteractionProxyDeferResponse, error)
+	Respond(context.Context, *InteractionProxyRespondRequest) (*InteractionProxyRespondResponse, error)
+	Modal(context.Context, *InteractionProxyModalRequest) (*InteractionProxyModalResponse, error)
+	Followup(context.Context, *InteractionProxyFollowupRequest) (*InteractionProxyFollowupResponse, error)
+	Edit(context.Context, *InteractionProxyEditRequest) (*InteractionProxyEditResponse, error)
+	Delete(context.Context, *InteractionProxyDeleteRequest) (*InteractionProxyDeleteResponse, error)
+	GuildId(context.Context, *InteractionProxyGuildIdRequest) (*InteractionProxyGuildIdResponse, error)
+	ChannelId(context.Context, *InteractionProxyChannelIdRequest) (*InteractionProxyChannelIdResponse, error)
+	UserLocale(context.Context, *InteractionProxyUserLocaleRequest) (*InteractionProxyUserLocaleResponse, error)
+	GuildLocale(context.Context, *InteractionProxyGuildLocaleRequest) (*InteractionProxyGuildLocaleResponse, error)
+	User(context.Context, *InteractionProxyUserRequest) (*InteractionProxyUserResponse, error)
+	Member(context.Context, *InteractionProxyMemberRequest) (*InteractionProxyMemberResponse, error)
+	Message(context.Context, *InteractionProxyMessageRequest) (*InteractionProxyMessageResponse, error)
+	Permissions(context.Context, *InteractionProxyPermissionsRequest) (*InteractionProxyPermissionsResponse, error)
 	mustEmbedUnimplementedInteractionProxyServer()
 }
 
@@ -106,20 +214,47 @@ type InteractionProxyServer interface {
 type UnimplementedInteractionProxyServer struct {
 }
 
-func (UnimplementedInteractionProxyServer) Defer(context.Context, *DeferRequest) (*DeferResponse, error) {
+func (UnimplementedInteractionProxyServer) Defer(context.Context, *InteractionProxyDeferRequest) (*InteractionProxyDeferResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Defer not implemented")
 }
-func (UnimplementedInteractionProxyServer) Respond(context.Context, *RespondRequest) (*RespondResponse, error) {
+func (UnimplementedInteractionProxyServer) Respond(context.Context, *InteractionProxyRespondRequest) (*InteractionProxyRespondResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Respond not implemented")
 }
-func (UnimplementedInteractionProxyServer) Followup(context.Context, *FollowupRequest) (*FollowupResponse, error) {
+func (UnimplementedInteractionProxyServer) Modal(context.Context, *InteractionProxyModalRequest) (*InteractionProxyModalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Modal not implemented")
+}
+func (UnimplementedInteractionProxyServer) Followup(context.Context, *InteractionProxyFollowupRequest) (*InteractionProxyFollowupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Followup not implemented")
 }
-func (UnimplementedInteractionProxyServer) Edit(context.Context, *EditRequest) (*EditResponse, error) {
+func (UnimplementedInteractionProxyServer) Edit(context.Context, *InteractionProxyEditRequest) (*InteractionProxyEditResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Edit not implemented")
 }
-func (UnimplementedInteractionProxyServer) Delete(context.Context, *DeleteRequest) (*DeleteResponse, error) {
+func (UnimplementedInteractionProxyServer) Delete(context.Context, *InteractionProxyDeleteRequest) (*InteractionProxyDeleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedInteractionProxyServer) GuildId(context.Context, *InteractionProxyGuildIdRequest) (*InteractionProxyGuildIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GuildId not implemented")
+}
+func (UnimplementedInteractionProxyServer) ChannelId(context.Context, *InteractionProxyChannelIdRequest) (*InteractionProxyChannelIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChannelId not implemented")
+}
+func (UnimplementedInteractionProxyServer) UserLocale(context.Context, *InteractionProxyUserLocaleRequest) (*InteractionProxyUserLocaleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserLocale not implemented")
+}
+func (UnimplementedInteractionProxyServer) GuildLocale(context.Context, *InteractionProxyGuildLocaleRequest) (*InteractionProxyGuildLocaleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GuildLocale not implemented")
+}
+func (UnimplementedInteractionProxyServer) User(context.Context, *InteractionProxyUserRequest) (*InteractionProxyUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method User not implemented")
+}
+func (UnimplementedInteractionProxyServer) Member(context.Context, *InteractionProxyMemberRequest) (*InteractionProxyMemberResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Member not implemented")
+}
+func (UnimplementedInteractionProxyServer) Message(context.Context, *InteractionProxyMessageRequest) (*InteractionProxyMessageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Message not implemented")
+}
+func (UnimplementedInteractionProxyServer) Permissions(context.Context, *InteractionProxyPermissionsRequest) (*InteractionProxyPermissionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Permissions not implemented")
 }
 func (UnimplementedInteractionProxyServer) mustEmbedUnimplementedInteractionProxyServer() {}
 
@@ -135,7 +270,7 @@ func RegisterInteractionProxyServer(s grpc.ServiceRegistrar, srv InteractionProx
 }
 
 func _InteractionProxy_Defer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeferRequest)
+	in := new(InteractionProxyDeferRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -147,13 +282,13 @@ func _InteractionProxy_Defer_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: InteractionProxy_Defer_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InteractionProxyServer).Defer(ctx, req.(*DeferRequest))
+		return srv.(InteractionProxyServer).Defer(ctx, req.(*InteractionProxyDeferRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _InteractionProxy_Respond_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RespondRequest)
+	in := new(InteractionProxyRespondRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -165,13 +300,31 @@ func _InteractionProxy_Respond_Handler(srv interface{}, ctx context.Context, dec
 		FullMethod: InteractionProxy_Respond_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InteractionProxyServer).Respond(ctx, req.(*RespondRequest))
+		return srv.(InteractionProxyServer).Respond(ctx, req.(*InteractionProxyRespondRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InteractionProxy_Modal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InteractionProxyModalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InteractionProxyServer).Modal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InteractionProxy_Modal_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InteractionProxyServer).Modal(ctx, req.(*InteractionProxyModalRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _InteractionProxy_Followup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FollowupRequest)
+	in := new(InteractionProxyFollowupRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -183,13 +336,13 @@ func _InteractionProxy_Followup_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: InteractionProxy_Followup_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InteractionProxyServer).Followup(ctx, req.(*FollowupRequest))
+		return srv.(InteractionProxyServer).Followup(ctx, req.(*InteractionProxyFollowupRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _InteractionProxy_Edit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EditRequest)
+	in := new(InteractionProxyEditRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -201,13 +354,13 @@ func _InteractionProxy_Edit_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: InteractionProxy_Edit_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InteractionProxyServer).Edit(ctx, req.(*EditRequest))
+		return srv.(InteractionProxyServer).Edit(ctx, req.(*InteractionProxyEditRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _InteractionProxy_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteRequest)
+	in := new(InteractionProxyDeleteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -219,7 +372,151 @@ func _InteractionProxy_Delete_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: InteractionProxy_Delete_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InteractionProxyServer).Delete(ctx, req.(*DeleteRequest))
+		return srv.(InteractionProxyServer).Delete(ctx, req.(*InteractionProxyDeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InteractionProxy_GuildId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InteractionProxyGuildIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InteractionProxyServer).GuildId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InteractionProxy_GuildId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InteractionProxyServer).GuildId(ctx, req.(*InteractionProxyGuildIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InteractionProxy_ChannelId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InteractionProxyChannelIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InteractionProxyServer).ChannelId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InteractionProxy_ChannelId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InteractionProxyServer).ChannelId(ctx, req.(*InteractionProxyChannelIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InteractionProxy_UserLocale_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InteractionProxyUserLocaleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InteractionProxyServer).UserLocale(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InteractionProxy_UserLocale_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InteractionProxyServer).UserLocale(ctx, req.(*InteractionProxyUserLocaleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InteractionProxy_GuildLocale_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InteractionProxyGuildLocaleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InteractionProxyServer).GuildLocale(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InteractionProxy_GuildLocale_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InteractionProxyServer).GuildLocale(ctx, req.(*InteractionProxyGuildLocaleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InteractionProxy_User_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InteractionProxyUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InteractionProxyServer).User(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InteractionProxy_User_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InteractionProxyServer).User(ctx, req.(*InteractionProxyUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InteractionProxy_Member_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InteractionProxyMemberRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InteractionProxyServer).Member(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InteractionProxy_Member_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InteractionProxyServer).Member(ctx, req.(*InteractionProxyMemberRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InteractionProxy_Message_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InteractionProxyMessageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InteractionProxyServer).Message(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InteractionProxy_Message_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InteractionProxyServer).Message(ctx, req.(*InteractionProxyMessageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InteractionProxy_Permissions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InteractionProxyPermissionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InteractionProxyServer).Permissions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InteractionProxy_Permissions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InteractionProxyServer).Permissions(ctx, req.(*InteractionProxyPermissionsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -240,6 +537,10 @@ var InteractionProxy_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _InteractionProxy_Respond_Handler,
 		},
 		{
+			MethodName: "Modal",
+			Handler:    _InteractionProxy_Modal_Handler,
+		},
+		{
 			MethodName: "Followup",
 			Handler:    _InteractionProxy_Followup_Handler,
 		},
@@ -250,6 +551,38 @@ var InteractionProxy_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Delete",
 			Handler:    _InteractionProxy_Delete_Handler,
+		},
+		{
+			MethodName: "GuildId",
+			Handler:    _InteractionProxy_GuildId_Handler,
+		},
+		{
+			MethodName: "ChannelId",
+			Handler:    _InteractionProxy_ChannelId_Handler,
+		},
+		{
+			MethodName: "UserLocale",
+			Handler:    _InteractionProxy_UserLocale_Handler,
+		},
+		{
+			MethodName: "GuildLocale",
+			Handler:    _InteractionProxy_GuildLocale_Handler,
+		},
+		{
+			MethodName: "User",
+			Handler:    _InteractionProxy_User_Handler,
+		},
+		{
+			MethodName: "Member",
+			Handler:    _InteractionProxy_Member_Handler,
+		},
+		{
+			MethodName: "Message",
+			Handler:    _InteractionProxy_Message_Handler,
+		},
+		{
+			MethodName: "Permissions",
+			Handler:    _InteractionProxy_Permissions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -19,17 +19,17 @@ type componentServer struct {
 var _ bacotellpb.ComponentServer = componentServer{}
 
 // CustomId implements bacotellpb.ComponentServer
-func (s componentServer) CustomId(context.Context, *bacotellpb.CustomIdRequest) (*bacotellpb.CustomIdResponse, error) {
+func (s componentServer) CustomId(context.Context, *bacotellpb.ComponentCustomIdRequest) (*bacotellpb.ComponentCustomIdResponse, error) {
 	id, err := s.impl.CustomID()
 	if err != nil {
 		return nil, err
 	}
 
-	return &bacotellpb.CustomIdResponse{CustomId: id}, nil
+	return &bacotellpb.ComponentCustomIdResponse{CustomId: id}, nil
 }
 
 // Handle implements bacotellpb.ComponentServer
-func (s componentServer) Handle(_ context.Context, req *bacotellpb.HandleRequest) (*bacotellpb.HandleResponse, error) {
+func (s componentServer) Handle(_ context.Context, req *bacotellpb.ComponentHandleRequest) (*bacotellpb.ComponentHandleResponse, error) {
 	conn, err := s.broker.Dial(req.HandleProxyId)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (s componentServer) Handle(_ context.Context, req *bacotellpb.HandleRequest
 	})
 
 	conn.Close()
-	return &bacotellpb.HandleResponse{}, err
+	return &bacotellpb.ComponentHandleResponse{}, err
 }
 
 type componentClient struct {
@@ -55,7 +55,7 @@ var _ common.Component = componentClient{}
 
 // CustomID implements bacotell_common.Component
 func (c componentClient) CustomID() (string, error) {
-	res, err := c.client.CustomId(context.Background(), &bacotellpb.CustomIdRequest{})
+	res, err := c.client.CustomId(context.Background(), &bacotellpb.ComponentCustomIdRequest{})
 	if err != nil {
 		return "", err
 	}
@@ -84,7 +84,7 @@ func (c componentClient) Handle(proxy common.HandleProxy) error {
 		return server
 	})
 
-	_, err := c.client.Handle(context.Background(), &bacotellpb.HandleRequest{HandleProxyId: id})
+	_, err := c.client.Handle(context.Background(), &bacotellpb.ComponentHandleRequest{HandleProxyId: id})
 
 	server.Stop()
 	return err

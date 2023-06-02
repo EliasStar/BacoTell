@@ -5,25 +5,32 @@ package bacotell;
 option go_package = "github.com/EliasStar/BacoTell/internal/proto/bacotellpb";
 
 service Plugin {
-    rpc Id(IdRequest) returns (IdResponse);
-	rpc ApplicationCommands(ApplicationCommandsRequest) returns (ApplicationCommandsResponse);
-	rpc MessageComponents(MessageComponentsRequest) returns (MessageComponentsResponse);
+    rpc Id(PluginIdRequest) returns (PluginIdResponse);
+	rpc ApplicationCommands(PluginApplicationCommandsRequest) returns (PluginApplicationCommandsResponse);
+	rpc MessageComponents(PluginMessageComponentsRequest) returns (PluginMessageComponentsResponse);
+    rpc Modals(PluginModalsRequest) returns (PluginModalsResponse);
 }
 
-message IdRequest {}
+message PluginIdRequest {}
 
-message IdResponse {
+message PluginIdResponse {
     string id = 1;
 }
 
-message ApplicationCommandsRequest {}
+message PluginApplicationCommandsRequest {}
 
-message ApplicationCommandsResponse {
+message PluginApplicationCommandsResponse {
     repeated uint32 command_ids = 1;
 }
 
-message MessageComponentsRequest {}
+message PluginMessageComponentsRequest {}
 
-message MessageComponentsResponse {
+message PluginMessageComponentsResponse {
     repeated uint32 component_ids = 1;
+}
+
+message PluginModalsRequest {}
+
+message PluginModalsResponse {
+    repeated uint32 modal_ids = 1;
 }

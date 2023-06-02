@@ -20,14 +20,14 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type IdRequest struct {
+type PluginIdRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *IdRequest) Reset() {
-	*x = IdRequest{}
+func (x *PluginIdRequest) Reset() {
+	*x = PluginIdRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_bacotell_plugin_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -35,13 +35,13 @@ func (x *IdRequest) Reset() {
 	}
 }
 
-func (x *IdRequest) String() string {
+func (x *PluginIdRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*IdRequest) ProtoMessage() {}
+func (*PluginIdRequest) ProtoMessage() {}
 
-func (x *IdRequest) ProtoReflect() protoreflect.Message {
+func (x *PluginIdRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_bacotell_plugin_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -53,12 +53,12 @@ func (x *IdRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use IdRequest.ProtoReflect.Descriptor instead.
-func (*IdRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use PluginIdRequest.ProtoReflect.Descriptor instead.
+func (*PluginIdRequest) Descriptor() ([]byte, []int) {
 	return file_proto_bacotell_plugin_proto_rawDescGZIP(), []int{0}
 }
 
-type IdResponse struct {
+type PluginIdResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -66,8 +66,8 @@ type IdResponse struct {
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 }
 
-func (x *IdResponse) Reset() {
-	*x = IdResponse{}
+func (x *PluginIdResponse) Reset() {
+	*x = PluginIdResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_bacotell_plugin_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -75,13 +75,13 @@ func (x *IdResponse) Reset() {
 	}
 }
 
-func (x *IdResponse) String() string {
+func (x *PluginIdResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*IdResponse) ProtoMessage() {}
+func (*PluginIdResponse) ProtoMessage() {}
 
-func (x *IdResponse) ProtoReflect() protoreflect.Message {
+func (x *PluginIdResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_bacotell_plugin_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -93,26 +93,26 @@ func (x *IdResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use IdResponse.ProtoReflect.Descriptor instead.
-func (*IdResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use PluginIdResponse.ProtoReflect.Descriptor instead.
+func (*PluginIdResponse) Descriptor() ([]byte, []int) {
 	return file_proto_bacotell_plugin_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *IdResponse) GetId() string {
+func (x *PluginIdResponse) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-type ApplicationCommandsRequest struct {
+type PluginApplicationCommandsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *ApplicationCommandsRequest) Reset() {
-	*x = ApplicationCommandsRequest{}
+func (x *PluginApplicationCommandsRequest) Reset() {
+	*x = PluginApplicationCommandsRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_bacotell_plugin_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -120,13 +120,13 @@ func (x *ApplicationCommandsRequest) Reset() {
 	}
 }
 
-func (x *ApplicationCommandsRequest) String() string {
+func (x *PluginApplicationCommandsRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ApplicationCommandsRequest) ProtoMessage() {}
+func (*PluginApplicationCommandsRequest) ProtoMessage() {}
 
-func (x *ApplicationCommandsRequest) ProtoReflect() protoreflect.Message {
+func (x *PluginApplicationCommandsRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_bacotell_plugin_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -138,12 +138,12 @@ func (x *ApplicationCommandsRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ApplicationCommandsRequest.ProtoReflect.Descriptor instead.
-func (*ApplicationCommandsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use PluginApplicationCommandsRequest.ProtoReflect.Descriptor instead.
+func (*PluginApplicationCommandsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_bacotell_plugin_proto_rawDescGZIP(), []int{2}
 }
 
-type ApplicationCommandsResponse struct {
+type PluginApplicationCommandsResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -151,8 +151,8 @@ type ApplicationCommandsResponse struct {
 	CommandIds []uint32 `protobuf:"varint,1,rep,packed,name=command_ids,json=commandIds,proto3" json:"command_ids,omitempty"`
 }
 
-func (x *ApplicationCommandsResponse) Reset() {
-	*x = ApplicationCommandsResponse{}
+func (x *PluginApplicationCommandsResponse) Reset() {
+	*x = PluginApplicationCommandsResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_bacotell_plugin_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -160,13 +160,13 @@ func (x *ApplicationCommandsResponse) Reset() {
 	}
 }
 
-func (x *ApplicationCommandsResponse) String() string {
+func (x *PluginApplicationCommandsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ApplicationCommandsResponse) ProtoMessage() {}
+func (*PluginApplicationCommandsResponse) ProtoMessage() {}
 
-func (x *ApplicationCommandsResponse) ProtoReflect() protoreflect.Message {
+func (x *PluginApplicationCommandsResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_bacotell_plugin_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -178,26 +178,26 @@ func (x *ApplicationCommandsResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ApplicationCommandsResponse.ProtoReflect.Descriptor instead.
-func (*ApplicationCommandsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use PluginApplicationCommandsResponse.ProtoReflect.Descriptor instead.
+func (*PluginApplicationCommandsResponse) Descriptor() ([]byte, []int) {
 	return file_proto_bacotell_plugin_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *ApplicationCommandsResponse) GetCommandIds() []uint32 {
+func (x *PluginApplicationCommandsResponse) GetCommandIds() []uint32 {
 	if x != nil {
 		return x.CommandIds
 	}
 	return nil
 }
 
-type MessageComponentsRequest struct {
+type PluginMessageComponentsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *MessageComponentsRequest) Reset() {
-	*x = MessageComponentsRequest{}
+func (x *PluginMessageComponentsRequest) Reset() {
+	*x = PluginMessageComponentsRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_bacotell_plugin_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -205,13 +205,13 @@ func (x *MessageComponentsRequest) Reset() {
 	}
 }
 
-func (x *MessageComponentsRequest) String() string {
+func (x *PluginMessageComponentsRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MessageComponentsRequest) ProtoMessage() {}
+func (*PluginMessageComponentsRequest) ProtoMessage() {}
 
-func (x *MessageComponentsRequest) ProtoReflect() protoreflect.Message {
+func (x *PluginMessageComponentsRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_bacotell_plugin_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -223,12 +223,12 @@ func (x *MessageComponentsRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use MessageComponentsRequest.ProtoReflect.Descriptor instead.
-func (*MessageComponentsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use PluginMessageComponentsRequest.ProtoReflect.Descriptor instead.
+func (*PluginMessageComponentsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_bacotell_plugin_proto_rawDescGZIP(), []int{4}
 }
 
-type MessageComponentsResponse struct {
+type PluginMessageComponentsResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -236,8 +236,8 @@ type MessageComponentsResponse struct {
 	ComponentIds []uint32 `protobuf:"varint,1,rep,packed,name=component_ids,json=componentIds,proto3" json:"component_ids,omitempty"`
 }
 
-func (x *MessageComponentsResponse) Reset() {
-	*x = MessageComponentsResponse{}
+func (x *PluginMessageComponentsResponse) Reset() {
+	*x = PluginMessageComponentsResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_bacotell_plugin_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -245,13 +245,13 @@ func (x *MessageComponentsResponse) Reset() {
 	}
 }
 
-func (x *MessageComponentsResponse) String() string {
+func (x *PluginMessageComponentsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MessageComponentsResponse) ProtoMessage() {}
+func (*PluginMessageComponentsResponse) ProtoMessage() {}
 
-func (x *MessageComponentsResponse) ProtoReflect() protoreflect.Message {
+func (x *PluginMessageComponentsResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_bacotell_plugin_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -263,14 +263,99 @@ func (x *MessageComponentsResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use MessageComponentsResponse.ProtoReflect.Descriptor instead.
-func (*MessageComponentsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use PluginMessageComponentsResponse.ProtoReflect.Descriptor instead.
+func (*PluginMessageComponentsResponse) Descriptor() ([]byte, []int) {
 	return file_proto_bacotell_plugin_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *MessageComponentsResponse) GetComponentIds() []uint32 {
+func (x *PluginMessageComponentsResponse) GetComponentIds() []uint32 {
 	if x != nil {
 		return x.ComponentIds
+	}
+	return nil
+}
+
+type PluginModalsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *PluginModalsRequest) Reset() {
+	*x = PluginModalsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_bacotell_plugin_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PluginModalsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PluginModalsRequest) ProtoMessage() {}
+
+func (x *PluginModalsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_bacotell_plugin_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PluginModalsRequest.ProtoReflect.Descriptor instead.
+func (*PluginModalsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_bacotell_plugin_proto_rawDescGZIP(), []int{6}
+}
+
+type PluginModalsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ModalIds []uint32 `protobuf:"varint,1,rep,packed,name=modal_ids,json=modalIds,proto3" json:"modal_ids,omitempty"`
+}
+
+func (x *PluginModalsResponse) Reset() {
+	*x = PluginModalsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_bacotell_plugin_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PluginModalsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PluginModalsResponse) ProtoMessage() {}
+
+func (x *PluginModalsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_bacotell_plugin_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PluginModalsResponse.ProtoReflect.Descriptor instead.
+func (*PluginModalsResponse) Descriptor() ([]byte, []int) {
+	return file_proto_bacotell_plugin_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *PluginModalsResponse) GetModalIds() []uint32 {
+	if x != nil {
+		return x.ModalIds
 	}
 	return nil
 }
@@ -280,41 +365,55 @@ var File_proto_bacotell_plugin_proto protoreflect.FileDescriptor
 var file_proto_bacotell_plugin_proto_rawDesc = []byte{
 	0x0a, 0x1b, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x62, 0x61, 0x63, 0x6f, 0x74, 0x65, 0x6c, 0x6c,
 	0x5f, 0x70, 0x6c, 0x75, 0x67, 0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x08, 0x62,
-	0x61, 0x63, 0x6f, 0x74, 0x65, 0x6c, 0x6c, 0x22, 0x0b, 0x0a, 0x09, 0x49, 0x64, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x22, 0x1c, 0x0a, 0x0a, 0x49, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02,
-	0x69, 0x64, 0x22, 0x1c, 0x0a, 0x1a, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x43, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x22, 0x3e, 0x0a, 0x1b, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43,
-	0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
-	0x1f, 0x0a, 0x0b, 0x63, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x01,
-	0x20, 0x03, 0x28, 0x0d, 0x52, 0x0a, 0x63, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x49, 0x64, 0x73,
-	0x22, 0x1a, 0x0a, 0x18, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x43, 0x6f, 0x6d, 0x70, 0x6f,
-	0x6e, 0x65, 0x6e, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x40, 0x0a, 0x19,
-	0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x6e, 0x65, 0x6e, 0x74,
-	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x63, 0x6f, 0x6d,
-	0x70, 0x6f, 0x6e, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0d,
-	0x52, 0x0c, 0x63, 0x6f, 0x6d, 0x70, 0x6f, 0x6e, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x73, 0x32, 0xfb,
-	0x01, 0x0a, 0x06, 0x50, 0x6c, 0x75, 0x67, 0x69, 0x6e, 0x12, 0x2f, 0x0a, 0x02, 0x49, 0x64, 0x12,
-	0x13, 0x2e, 0x62, 0x61, 0x63, 0x6f, 0x74, 0x65, 0x6c, 0x6c, 0x2e, 0x49, 0x64, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x14, 0x2e, 0x62, 0x61, 0x63, 0x6f, 0x74, 0x65, 0x6c, 0x6c, 0x2e,
-	0x49, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x62, 0x0a, 0x13, 0x41, 0x70,
-	0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64,
-	0x73, 0x12, 0x24, 0x2e, 0x62, 0x61, 0x63, 0x6f, 0x74, 0x65, 0x6c, 0x6c, 0x2e, 0x41, 0x70, 0x70,
-	0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x73,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x25, 0x2e, 0x62, 0x61, 0x63, 0x6f, 0x74, 0x65,
-	0x6c, 0x6c, 0x2e, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f,
-	0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5c,
-	0x0a, 0x11, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x6e, 0x65,
-	0x6e, 0x74, 0x73, 0x12, 0x22, 0x2e, 0x62, 0x61, 0x63, 0x6f, 0x74, 0x65, 0x6c, 0x6c, 0x2e, 0x4d,
-	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x6e, 0x65, 0x6e, 0x74, 0x73,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x23, 0x2e, 0x62, 0x61, 0x63, 0x6f, 0x74, 0x65,
-	0x6c, 0x6c, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x6e,
-	0x65, 0x6e, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x39, 0x5a, 0x37,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x45, 0x6c, 0x69, 0x61, 0x73,
-	0x53, 0x74, 0x61, 0x72, 0x2f, 0x42, 0x61, 0x63, 0x6f, 0x54, 0x65, 0x6c, 0x6c, 0x2f, 0x69, 0x6e,
-	0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x62, 0x61, 0x63,
-	0x6f, 0x74, 0x65, 0x6c, 0x6c, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x61, 0x63, 0x6f, 0x74, 0x65, 0x6c, 0x6c, 0x22, 0x11, 0x0a, 0x0f, 0x50, 0x6c, 0x75, 0x67, 0x69,
+	0x6e, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x22, 0x0a, 0x10, 0x50, 0x6c,
+	0x75, 0x67, 0x69, 0x6e, 0x49, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e,
+	0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x22,
+	0x0a, 0x20, 0x50, 0x6c, 0x75, 0x67, 0x69, 0x6e, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x22, 0x44, 0x0a, 0x21, 0x50, 0x6c, 0x75, 0x67, 0x69, 0x6e, 0x41, 0x70, 0x70, 0x6c,
+	0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x73, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x63, 0x6f, 0x6d, 0x6d, 0x61,
+	0x6e, 0x64, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0d, 0x52, 0x0a, 0x63, 0x6f,
+	0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x49, 0x64, 0x73, 0x22, 0x20, 0x0a, 0x1e, 0x50, 0x6c, 0x75, 0x67,
+	0x69, 0x6e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x6e, 0x65,
+	0x6e, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x46, 0x0a, 0x1f, 0x50, 0x6c,
+	0x75, 0x67, 0x69, 0x6e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x43, 0x6f, 0x6d, 0x70, 0x6f,
+	0x6e, 0x65, 0x6e, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x23, 0x0a,
+	0x0d, 0x63, 0x6f, 0x6d, 0x70, 0x6f, 0x6e, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x01,
+	0x20, 0x03, 0x28, 0x0d, 0x52, 0x0c, 0x63, 0x6f, 0x6d, 0x70, 0x6f, 0x6e, 0x65, 0x6e, 0x74, 0x49,
+	0x64, 0x73, 0x22, 0x15, 0x0a, 0x13, 0x50, 0x6c, 0x75, 0x67, 0x69, 0x6e, 0x4d, 0x6f, 0x64, 0x61,
+	0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x33, 0x0a, 0x14, 0x50, 0x6c, 0x75,
+	0x67, 0x69, 0x6e, 0x4d, 0x6f, 0x64, 0x61, 0x6c, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x1b, 0x0a, 0x09, 0x6d, 0x6f, 0x64, 0x61, 0x6c, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x01,
+	0x20, 0x03, 0x28, 0x0d, 0x52, 0x08, 0x6d, 0x6f, 0x64, 0x61, 0x6c, 0x49, 0x64, 0x73, 0x32, 0xe8,
+	0x02, 0x0a, 0x06, 0x50, 0x6c, 0x75, 0x67, 0x69, 0x6e, 0x12, 0x3b, 0x0a, 0x02, 0x49, 0x64, 0x12,
+	0x19, 0x2e, 0x62, 0x61, 0x63, 0x6f, 0x74, 0x65, 0x6c, 0x6c, 0x2e, 0x50, 0x6c, 0x75, 0x67, 0x69,
+	0x6e, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x62, 0x61, 0x63,
+	0x6f, 0x74, 0x65, 0x6c, 0x6c, 0x2e, 0x50, 0x6c, 0x75, 0x67, 0x69, 0x6e, 0x49, 0x64, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6e, 0x0a, 0x13, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x73, 0x12, 0x2a, 0x2e,
+	0x62, 0x61, 0x63, 0x6f, 0x74, 0x65, 0x6c, 0x6c, 0x2e, 0x50, 0x6c, 0x75, 0x67, 0x69, 0x6e, 0x41,
+	0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x6d, 0x6d, 0x61, 0x6e,
+	0x64, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2b, 0x2e, 0x62, 0x61, 0x63, 0x6f,
+	0x74, 0x65, 0x6c, 0x6c, 0x2e, 0x50, 0x6c, 0x75, 0x67, 0x69, 0x6e, 0x41, 0x70, 0x70, 0x6c, 0x69,
+	0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x6d, 0x6d, 0x61, 0x6e, 0x64, 0x73, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x68, 0x0a, 0x11, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67,
+	0x65, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x6e, 0x65, 0x6e, 0x74, 0x73, 0x12, 0x28, 0x2e, 0x62, 0x61,
+	0x63, 0x6f, 0x74, 0x65, 0x6c, 0x6c, 0x2e, 0x50, 0x6c, 0x75, 0x67, 0x69, 0x6e, 0x4d, 0x65, 0x73,
+	0x73, 0x61, 0x67, 0x65, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x6e, 0x65, 0x6e, 0x74, 0x73, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x29, 0x2e, 0x62, 0x61, 0x63, 0x6f, 0x74, 0x65, 0x6c, 0x6c,
+	0x2e, 0x50, 0x6c, 0x75, 0x67, 0x69, 0x6e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x43, 0x6f,
+	0x6d, 0x70, 0x6f, 0x6e, 0x65, 0x6e, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x47, 0x0a, 0x06, 0x4d, 0x6f, 0x64, 0x61, 0x6c, 0x73, 0x12, 0x1d, 0x2e, 0x62, 0x61, 0x63,
+	0x6f, 0x74, 0x65, 0x6c, 0x6c, 0x2e, 0x50, 0x6c, 0x75, 0x67, 0x69, 0x6e, 0x4d, 0x6f, 0x64, 0x61,
+	0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x62, 0x61, 0x63, 0x6f,
+	0x74, 0x65, 0x6c, 0x6c, 0x2e, 0x50, 0x6c, 0x75, 0x67, 0x69, 0x6e, 0x4d, 0x6f, 0x64, 0x61, 0x6c,
+	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x39, 0x5a, 0x37, 0x67, 0x69, 0x74,
+	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x45, 0x6c, 0x69, 0x61, 0x73, 0x53, 0x74, 0x61,
+	0x72, 0x2f, 0x42, 0x61, 0x63, 0x6f, 0x54, 0x65, 0x6c, 0x6c, 0x2f, 0x69, 0x6e, 0x74, 0x65, 0x72,
+	0x6e, 0x61, 0x6c, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x62, 0x61, 0x63, 0x6f, 0x74, 0x65,
+	0x6c, 0x6c, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -329,24 +428,28 @@ func file_proto_bacotell_plugin_proto_rawDescGZIP() []byte {
 	return file_proto_bacotell_plugin_proto_rawDescData
 }
 
-var file_proto_bacotell_plugin_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_proto_bacotell_plugin_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_proto_bacotell_plugin_proto_goTypes = []interface{}{
-	(*IdRequest)(nil),                   // 0: bacotell.IdRequest
-	(*IdResponse)(nil),                  // 1: bacotell.IdResponse
-	(*ApplicationCommandsRequest)(nil),  // 2: bacotell.ApplicationCommandsRequest
-	(*ApplicationCommandsResponse)(nil), // 3: bacotell.ApplicationCommandsResponse
-	(*MessageComponentsRequest)(nil),    // 4: bacotell.MessageComponentsRequest
-	(*MessageComponentsResponse)(nil),   // 5: bacotell.MessageComponentsResponse
+	(*PluginIdRequest)(nil),                   // 0: bacotell.PluginIdRequest
+	(*PluginIdResponse)(nil),                  // 1: bacotell.PluginIdResponse
+	(*PluginApplicationCommandsRequest)(nil),  // 2: bacotell.PluginApplicationCommandsRequest
+	(*PluginApplicationCommandsResponse)(nil), // 3: bacotell.PluginApplicationCommandsResponse
+	(*PluginMessageComponentsRequest)(nil),    // 4: bacotell.PluginMessageComponentsRequest
+	(*PluginMessageComponentsResponse)(nil),   // 5: bacotell.PluginMessageComponentsResponse
+	(*PluginModalsRequest)(nil),               // 6: bacotell.PluginModalsRequest
+	(*PluginModalsResponse)(nil),              // 7: bacotell.PluginModalsResponse
 }
 var file_proto_bacotell_plugin_proto_depIdxs = []int32{
-	0, // 0: bacotell.Plugin.Id:input_type -> bacotell.IdRequest
-	2, // 1: bacotell.Plugin.ApplicationCommands:input_type -> bacotell.ApplicationCommandsRequest
-	4, // 2: bacotell.Plugin.MessageComponents:input_type -> bacotell.MessageComponentsRequest
-	1, // 3: bacotell.Plugin.Id:output_type -> bacotell.IdResponse
-	3, // 4: bacotell.Plugin.ApplicationCommands:output_type -> bacotell.ApplicationCommandsResponse
-	5, // 5: bacotell.Plugin.MessageComponents:output_type -> bacotell.MessageComponentsResponse
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
+	0, // 0: bacotell.Plugin.Id:input_type -> bacotell.PluginIdRequest
+	2, // 1: bacotell.Plugin.ApplicationCommands:input_type -> bacotell.PluginApplicationCommandsRequest
+	4, // 2: bacotell.Plugin.MessageComponents:input_type -> bacotell.PluginMessageComponentsRequest
+	6, // 3: bacotell.Plugin.Modals:input_type -> bacotell.PluginModalsRequest
+	1, // 4: bacotell.Plugin.Id:output_type -> bacotell.PluginIdResponse
+	3, // 5: bacotell.Plugin.ApplicationCommands:output_type -> bacotell.PluginApplicationCommandsResponse
+	5, // 6: bacotell.Plugin.MessageComponents:output_type -> bacotell.PluginMessageComponentsResponse
+	7, // 7: bacotell.Plugin.Modals:output_type -> bacotell.PluginModalsResponse
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -359,7 +462,7 @@ func file_proto_bacotell_plugin_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_proto_bacotell_plugin_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*IdRequest); i {
+			switch v := v.(*PluginIdRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -371,7 +474,7 @@ func file_proto_bacotell_plugin_proto_init() {
 			}
 		}
 		file_proto_bacotell_plugin_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*IdResponse); i {
+			switch v := v.(*PluginIdResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -383,7 +486,7 @@ func file_proto_bacotell_plugin_proto_init() {
 			}
 		}
 		file_proto_bacotell_plugin_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ApplicationCommandsRequest); i {
+			switch v := v.(*PluginApplicationCommandsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -395,7 +498,7 @@ func file_proto_bacotell_plugin_proto_init() {
 			}
 		}
 		file_proto_bacotell_plugin_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ApplicationCommandsResponse); i {
+			switch v := v.(*PluginApplicationCommandsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -407,7 +510,7 @@ func file_proto_bacotell_plugin_proto_init() {
 			}
 		}
 		file_proto_bacotell_plugin_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MessageComponentsRequest); i {
+			switch v := v.(*PluginMessageComponentsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -419,7 +522,31 @@ func file_proto_bacotell_plugin_proto_init() {
 			}
 		}
 		file_proto_bacotell_plugin_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MessageComponentsResponse); i {
+			switch v := v.(*PluginMessageComponentsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_bacotell_plugin_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*PluginModalsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_bacotell_plugin_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*PluginModalsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -437,7 +564,7 @@ func file_proto_bacotell_plugin_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_bacotell_plugin_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

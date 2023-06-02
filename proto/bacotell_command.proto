@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package bacotell;
 
+import "google/protobuf/struct.proto";
 import "proto/discordgo_channel.proto";
 import "proto/discordgo_command.proto";
 import "proto/discordgo_message.proto";
@@ -10,9 +11,9 @@ import "proto/discordgo_user.proto";
 option go_package = "github.com/EliasStar/BacoTell/internal/proto/bacotellpb";
 
 service Command {
-    rpc CommandData(CommandDataRequest) returns (CommandDataResponse);
-    rpc Execute(ExecuteRequest) returns (ExecuteResponse);
-    // rpc Autocomplete(AutocompleteRequest) returns (AutocompleteResponse);
+    rpc Data(CommandDataRequest) returns (CommandDataResponse);
+    rpc Execute(CommandExecuteRequest) returns (CommandExecuteResponse);
+    rpc Autocomplete(CommandAutocompleteRequest) returns (CommandAutocompleteResponse);
 }
 
 message CommandDataRequest {}
@@ -21,91 +22,109 @@ message CommandDataResponse {
     discordgo.ApplicationCommand data = 1;
 }
 
-message ExecuteRequest {
+message CommandExecuteRequest {
     uint32 execute_proxy_id = 1;
 }
 
-message ExecuteResponse {}
+message CommandExecuteResponse {}
 
-// message AutocompleteRequest {
-//     uint32 autocomplete_proxy_id = 1;
-// }
-
-// message AutocompleteResponse {}
-
-service ExecuteProxy {
-	rpc StringOption(StringOptionRequest) returns (StringOptionResponse);
-	rpc IntegerOption(IntegerOptionRequest) returns (IntegerOptionResponse);
-	rpc NumberOption(NumberOptionRequest) returns (NumberOptionResponse);
-	rpc BooleanOption(BooleanOptionRequest) returns (BooleanOptionResponse);
-	rpc UserOption(UserOptionRequest) returns (UserOptionResponse);
-    rpc RoleOption(RoleOptionRequest) returns (RoleOptionResponse);
-	rpc ChannelOption(ChannelOptionRequest) returns (ChannelOptionResponse);
-	rpc AttachmentOption(AttachmentOptionRequest) returns (AttachmentOptionResponse);
+message CommandAutocompleteRequest {
+    uint32 autocomplete_proxy_id = 1;
 }
 
-message StringOptionRequest {
+message CommandAutocompleteResponse {}
+
+service ExecuteProxy {
+	rpc StringOption(ExecuteProxyStringOptionRequest) returns (ExecuteProxyStringOptionResponse);
+	rpc IntegerOption(ExecuteProxyIntegerOptionRequest) returns (ExecuteProxyIntegerOptionResponse);
+	rpc NumberOption(ExecuteProxyNumberOptionRequest) returns (ExecuteProxyNumberOptionResponse);
+	rpc BooleanOption(ExecuteProxyBooleanOptionRequest) returns (ExecuteProxyBooleanOptionResponse);
+
+	rpc UserOption(ExecuteProxyUserOptionRequest) returns (ExecuteProxyUserOptionResponse);
+    rpc RoleOption(ExecuteProxyRoleOptionRequest) returns (ExecuteProxyRoleOptionResponse);
+	rpc ChannelOption(ExecuteProxyChannelOptionRequest) returns (ExecuteProxyChannelOptionResponse);
+
+	rpc AttachmentOption(ExecuteProxyAttachmentOptionRequest) returns (ExecuteProxyAttachmentOptionResponse);
+}
+
+message ExecuteProxyStringOptionRequest {
     string name = 1;
 }
 
-message StringOptionResponse {
+message ExecuteProxyStringOptionResponse {
     string value = 1;
 }
 
-message IntegerOptionRequest {
+message ExecuteProxyIntegerOptionRequest {
     string name = 1;
 }
 
-message IntegerOptionResponse {
+message ExecuteProxyIntegerOptionResponse {
     int64 value = 1;
 }
 
-message NumberOptionRequest {
+message ExecuteProxyNumberOptionRequest {
     string name = 1;
 }
 
-message NumberOptionResponse {
+message ExecuteProxyNumberOptionResponse {
     double value = 1;
 }
 
-message BooleanOptionRequest {
+message ExecuteProxyBooleanOptionRequest {
     string name = 1;
 }
 
-message BooleanOptionResponse {
+message ExecuteProxyBooleanOptionResponse {
     bool value = 1;
 }
 
-message UserOptionRequest {
+message ExecuteProxyUserOptionRequest {
     string name = 1;
 }
 
-message UserOptionResponse {
+message ExecuteProxyUserOptionResponse {
     discordgo.User value = 1;
 }
 
-message RoleOptionRequest {
+message ExecuteProxyRoleOptionRequest {
     string name = 1;
 }
 
-message RoleOptionResponse {
+message ExecuteProxyRoleOptionResponse {
     discordgo.Role value = 1;
 }
 
-message ChannelOptionRequest {
+message ExecuteProxyChannelOptionRequest {
     string name = 1;
 }
 
-message ChannelOptionResponse {
+message ExecuteProxyChannelOptionResponse {
     discordgo.Channel value = 1;
 }
 
-message AttachmentOptionRequest {
+message ExecuteProxyAttachmentOptionRequest {
     string name = 1;
 }
 
-message AttachmentOptionResponse {
+message ExecuteProxyAttachmentOptionResponse {
     discordgo.MessageAttachment value = 1;
 }
 
-// service ExecuteProxy {}
+service AutocompleteProxy {
+    rpc Respond(AutocompleteProxyRespondRequest) returns (AutocompleteProxyRespondResponse);
+    rpc FocusedOption(AutocompleteProxyFocusedOptionRequest) returns (AutocompleteProxyFocusedOptionResponse);
+}
+
+message AutocompleteProxyRespondRequest {
+    repeated discordgo.ApplicationCommandOptionChoice choices = 1;
+}
+
+message AutocompleteProxyRespondResponse {}
+
+message AutocompleteProxyFocusedOptionRequest {}
+
+message AutocompleteProxyFocusedOptionResponse {
+    string name = 1;
+    google.protobuf.Value value = 2;
+}

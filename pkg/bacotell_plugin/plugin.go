@@ -14,30 +14,39 @@ type defaultPlugin struct {
 	id         string
 	commands   []common.Command
 	components []common.Component
+	modals     []common.Modal
 }
 
 var _ common.Plugin = defaultPlugin{}
 
-func (i defaultPlugin) ID() (string, error) {
-	return i.id, nil
+func (p defaultPlugin) ID() (string, error) {
+	return p.id, nil
 }
 
-func (i defaultPlugin) ApplicationCommands() ([]common.Command, error) {
-	return i.commands, nil
+func (p defaultPlugin) ApplicationCommands() ([]common.Command, error) {
+	return p.commands, nil
 }
 
-func (i defaultPlugin) MessageComponents() ([]common.Component, error) {
-	return i.components, nil
+func (p defaultPlugin) MessageComponents() ([]common.Component, error) {
+	return p.components, nil
+}
+
+func (p defaultPlugin) Modals() ([]common.Modal, error) {
+	return p.modals, nil
 }
 
 var internalPlugin defaultPlugin
 
-func SetApplicationCommands(commands []common.Command) {
+func SetApplicationCommands(commands ...common.Command) {
 	internalPlugin.commands = commands
 }
 
-func SetMessageComponents(components []common.Component) {
+func SetMessageComponents(components ...common.Component) {
 	internalPlugin.components = components
+}
+
+func SetModals(modals ...common.Modal) {
+	internalPlugin.modals = modals
 }
 
 func Run(id string) (hclog.Logger, <-chan struct{}, error) {

@@ -17,7 +17,6 @@ var (
 
 		Use:   "bacotell [-n bot_name] [-t bot_token] [-p plugin_dir] [-c config_path]",
 		Short: "BacoTell - Pluggable bot client for Discord",
-		// Long:  `TODO`,
 	}
 )
 

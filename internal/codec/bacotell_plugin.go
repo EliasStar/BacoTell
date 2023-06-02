@@ -19,17 +19,17 @@ type pluginServer struct {
 var _ bacotellpb.PluginServer = pluginServer{}
 
 // Id implements bacotellpb.PluginServer
-func (s pluginServer) Id(context.Context, *bacotellpb.IdRequest) (*bacotellpb.IdResponse, error) {
+func (s pluginServer) Id(context.Context, *bacotellpb.PluginIdRequest) (*bacotellpb.PluginIdResponse, error) {
 	id, err := s.impl.ID()
 	if err != nil {
 		return nil, err
 	}
 
-	return &bacotellpb.IdResponse{Id: id}, nil
+	return &bacotellpb.PluginIdResponse{Id: id}, nil
 }
 
 // ApplicationCommands implements bacotellpb.PluginServer
-func (s pluginServer) ApplicationCommands(context.Context, *bacotellpb.ApplicationCommandsRequest) (*bacotellpb.ApplicationCommandsResponse, error) {
+func (s pluginServer) ApplicationCommands(context.Context, *bacotellpb.PluginApplicationCommandsRequest) (*bacotellpb.PluginApplicationCommandsResponse, error) {
 	commands, err := s.impl.ApplicationCommands()
 	if err != nil {
 		return nil, err
@@ -45,11 +45,11 @@ func (s pluginServer) ApplicationCommands(context.Context, *bacotellpb.Applicati
 		})
 	}
 
-	return &bacotellpb.ApplicationCommandsResponse{CommandIds: ids}, nil
+	return &bacotellpb.PluginApplicationCommandsResponse{CommandIds: ids}, nil
 }
 
 // MessageComponents implements bacotellpb.PluginServer
-func (s pluginServer) MessageComponents(context.Context, *bacotellpb.MessageComponentsRequest) (*bacotellpb.MessageComponentsResponse, error) {
+func (s pluginServer) MessageComponents(context.Context, *bacotellpb.PluginMessageComponentsRequest) (*bacotellpb.PluginMessageComponentsResponse, error) {
 	components, err := s.impl.MessageComponents()
 	if err != nil {
 		return nil, err
@@ -65,7 +65,27 @@ func (s pluginServer) MessageComponents(context.Context, *bacotellpb.MessageComp
 		})
 	}
 
-	return &bacotellpb.MessageComponentsResponse{ComponentIds: ids}, nil
+	return &bacotellpb.PluginMessageComponentsResponse{ComponentIds: ids}, nil
+}
+
+// Modals implements bacotellpb.PluginServer.
+func (s pluginServer) Modals(context.Context, *bacotellpb.PluginModalsRequest) (*bacotellpb.PluginModalsResponse, error) {
+	modals, err := s.impl.Modals()
+	if err != nil {
+		return nil, err
+	}
+
+	ids := make([]uint32, len(modals))
+	for i, modal := range modals {
+		ids[i] = s.broker.NextId()
+		go s.broker.AcceptAndServe(ids[i], func(opts []grpc.ServerOption) *grpc.Server {
+			server := grpc.NewServer(opts...)
+			bacotellpb.RegisterModalServer(server, modalServer{impl: modal, broker: s.broker})
+			return server
+		})
+	}
+
+	return &bacotellpb.PluginModalsResponse{ModalIds: ids}, nil
 }
 
 type pluginClient struct {
@@ -77,7 +97,7 @@ var _ common.Plugin = pluginClient{}
 
 // ID implements bacotell_common.Plugin
 func (c pluginClient) ID() (string, error) {
-	res, err := c.client.Id(context.Background(), &bacotellpb.IdRequest{})
+	res, err := c.client.Id(context.Background(), &bacotellpb.PluginIdRequest{})
 	if err != nil {
 		return "", err
 	}
@@ -87,7 +107,7 @@ func (c pluginClient) ID() (string, error) {
 
 // ApplicationCommands implements bacotell_common.Plugin
 func (c pluginClient) ApplicationCommands() ([]common.Command, error) {
-	res, err := c.client.ApplicationCommands(context.Background(), &bacotellpb.ApplicationCommandsRequest{})
+	res, err := c.client.ApplicationCommands(context.Background(), &bacotellpb.PluginApplicationCommandsRequest{})
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +127,7 @@ func (c pluginClient) ApplicationCommands() ([]common.Command, error) {
 
 // MessageComponents implements bacotell_common.Plugin
 func (c pluginClient) MessageComponents() ([]common.Component, error) {
-	res, err := c.client.MessageComponents(context.Background(), &bacotellpb.MessageComponentsRequest{})
+	res, err := c.client.MessageComponents(context.Background(), &bacotellpb.PluginMessageComponentsRequest{})
 	if err != nil {
 		return nil, err
 	}
@@ -123,4 +143,24 @@ func (c pluginClient) MessageComponents() ([]common.Component, error) {
 	}
 
 	return components, nil
+}
+
+// Modals implements bacotell_common.Plugin.
+func (c pluginClient) Modals() ([]common.Modal, error) {
+	res, err := c.client.Modals(context.Background(), &bacotellpb.PluginModalsRequest{})
+	if err != nil {
+		return nil, err
+	}
+
+	modals := make([]common.Modal, len(res.ModalIds))
+	for i, id := range res.ModalIds {
+		conn, err := c.broker.Dial(id)
+		if err != nil {
+			return nil, err
+		}
+
+		modals[i] = &modalClient{client: bacotellpb.NewModalClient(conn), broker: c.broker}
+	}
+
+	return modals, nil
 }

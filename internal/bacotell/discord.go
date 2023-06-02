@@ -67,10 +67,10 @@ func _onGuildCreate(session *discordgo.Session, guild *discordgo.GuildCreate) {
 		deployedCommandData = nil
 	}
 
-	for name, command := range applicationCommands {
+	for name, command := range commands {
 		commandLogger := guildLogger.With("command", name)
 
-		localData, err := command.CommandData()
+		localData, err := command.Data()
 		if err != nil {
 			commandLogger.Warn("failed to get command data", "err", err)
 			continue
@@ -135,7 +135,7 @@ func _onInteractionCreate(session *discordgo.Session, evt *discordgo.Interaction
 		name := evt.ApplicationCommandData().Name
 		commandLogger := interactionLogger.With("command", name)
 
-		cmd, ok := applicationCommands[name]
+		cmd, ok := commands[name]
 		if !ok {
 			commandLogger.Warn("requested command not loaded")
 			proxy.Respond(common.Response{Content: "Command not found: " + name}, true)
@@ -156,7 +156,7 @@ func _onInteractionCreate(session *discordgo.Session, evt *discordgo.Interaction
 		id := evt.MessageComponentData().CustomID
 		componentLogger := interactionLogger.With("component", id)
 
-		cpt, ok := messageComponents[id]
+		cpt, ok := components[id]
 		if !ok {
 			componentLogger.Warn("requested component not loaded")
 			proxy.Respond(common.Response{Content: "Component not found: " + id}, true)
@@ -169,12 +169,49 @@ func _onInteractionCreate(session *discordgo.Session, evt *discordgo.Interaction
 			return
 		}
 
-		componentLogger.Debug("executed")
+		componentLogger.Debug("handled")
 
 	case discordgo.InteractionApplicationCommandAutocomplete:
-		// TODO
+		proxy := proxy.NewAutocompleteProxy(session, evt.Interaction)
+
+		name := evt.ApplicationCommandData().Name
+		commandLogger := interactionLogger.With("command", name)
+
+		cmd, ok := commands[name]
+		if !ok {
+			commandLogger.Warn("requested command not loaded")
+			proxy.Respond()
+			return
+		}
+
+		err := cmd.Autocomplete(proxy)
+		if err != nil {
+			commandLogger.Warn("command autocompletion failed", "err", err)
+			return
+		}
+
+		commandLogger.Debug("autocompleted")
+
 	case discordgo.InteractionModalSubmit:
-		// TODO
+		proxy := proxy.NewSubmitProxy(session, evt.Interaction)
+
+		id := evt.ModalSubmitData().CustomID
+		modalLogger := interactionLogger.With("modal", id)
+
+		mod, ok := modals[id]
+		if !ok {
+			modalLogger.Warn("requested modal not loaded")
+			proxy.Respond(common.Response{Content: "Modal not found: " + id}, true)
+			return
+		}
+
+		err := mod.Submit(proxy)
+		if err != nil {
+			modalLogger.Warn("modal submission failed", "err", err)
+			return
+		}
+
+		modalLogger.Debug("submitted")
 	}
 }
 

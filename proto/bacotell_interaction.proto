@@ -2,53 +2,127 @@ syntax = "proto3";
 
 package bacotell;
 
+import "proto/discordgo_channel.proto";
 import "proto/discordgo_component.proto";
 import "proto/discordgo_message.proto";
+import "proto/discordgo_user.proto";
 
 option go_package = "github.com/EliasStar/BacoTell/internal/proto/bacotellpb";
 
 service InteractionProxy {
-    rpc Defer(DeferRequest) returns (DeferResponse);
-    rpc Respond(RespondRequest) returns (RespondResponse);
-    rpc Followup(FollowupRequest) returns (FollowupResponse);
-    rpc Edit(EditRequest) returns (EditResponse);
-    rpc Delete(DeleteRequest) returns (DeleteResponse);
+    rpc Defer(InteractionProxyDeferRequest) returns (InteractionProxyDeferResponse);
+    rpc Respond(InteractionProxyRespondRequest) returns (InteractionProxyRespondResponse);
+    rpc Modal(InteractionProxyModalRequest) returns (InteractionProxyModalResponse);
+
+    rpc Followup(InteractionProxyFollowupRequest) returns (InteractionProxyFollowupResponse);
+
+    rpc Edit(InteractionProxyEditRequest) returns (InteractionProxyEditResponse);
+    rpc Delete(InteractionProxyDeleteRequest) returns (InteractionProxyDeleteResponse);
+
+    rpc GuildId(InteractionProxyGuildIdRequest) returns (InteractionProxyGuildIdResponse);
+    rpc ChannelId(InteractionProxyChannelIdRequest) returns (InteractionProxyChannelIdResponse);
+
+    rpc UserLocale(InteractionProxyUserLocaleRequest) returns (InteractionProxyUserLocaleResponse);
+    rpc GuildLocale(InteractionProxyGuildLocaleRequest) returns (InteractionProxyGuildLocaleResponse);
+
+    rpc User(InteractionProxyUserRequest) returns (InteractionProxyUserResponse);
+    rpc Member(InteractionProxyMemberRequest) returns (InteractionProxyMemberResponse);
+
+    rpc Message(InteractionProxyMessageRequest) returns (InteractionProxyMessageResponse);
+
+    rpc Permissions(InteractionProxyPermissionsRequest) returns (InteractionProxyPermissionsResponse);
 }
 
-message DeferRequest {
+message InteractionProxyDeferRequest {
     bool ephemeral = 1;
 }
 
-message DeferResponse {}
+message InteractionProxyDeferResponse {}
 
-message RespondRequest {
+message InteractionProxyRespondRequest {
     Response message = 1;
     bool ephemeral = 2;
 }
 
-message RespondResponse {}
+message InteractionProxyRespondResponse {}
 
-message FollowupRequest {
+message InteractionProxyModalRequest {
+    string custom_id = 1;
+    string title = 2;
+    repeated discordgo.MessageComponent components = 3;
+}
+
+message InteractionProxyModalResponse {}
+
+message InteractionProxyFollowupRequest {
     Response message = 1;
     bool ephemeral = 2;
 }
 
-message FollowupResponse {
+message InteractionProxyFollowupResponse {
     string id = 1;
 }
 
-message EditRequest {
+message InteractionProxyEditRequest {
     string id = 1;
     Response message = 2;
 }
 
-message EditResponse {}
+message InteractionProxyEditResponse {}
 
-message DeleteRequest {
+message InteractionProxyDeleteRequest {
     string id = 1;
 }
 
-message DeleteResponse {}
+message InteractionProxyDeleteResponse {}
+
+message InteractionProxyGuildIdRequest {}
+
+message InteractionProxyGuildIdResponse {
+    string id = 1;
+}
+
+message InteractionProxyChannelIdRequest {}
+
+message InteractionProxyChannelIdResponse {
+    string id = 1;
+}
+
+message InteractionProxyUserLocaleRequest {}
+
+message InteractionProxyUserLocaleResponse {
+    string locale = 1;
+}
+
+message InteractionProxyGuildLocaleRequest {}
+
+message InteractionProxyGuildLocaleResponse {
+    string locale = 1;
+}
+
+message InteractionProxyUserRequest {}
+
+message InteractionProxyUserResponse {
+    discordgo.User user = 1;
+}
+
+message InteractionProxyMemberRequest {}
+
+message InteractionProxyMemberResponse {
+    discordgo.Member member = 1;
+}
+
+message InteractionProxyMessageRequest {}
+
+message InteractionProxyMessageResponse {
+    discordgo.Message message = 1;
+}
+
+message InteractionProxyPermissionsRequest {}
+
+message InteractionProxyPermissionsResponse {
+    int64 permissions = 1;
+}
 
 message Response {
 	string content = 1;

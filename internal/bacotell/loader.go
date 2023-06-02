@@ -16,8 +16,9 @@ const bacotellPlugin = "bacotell_plugin"
 var (
 	clients []*plugin.Client
 
-	applicationCommands = make(map[string]common.Command)
-	messageComponents   = make(map[string]common.Component)
+	commands   = make(map[string]common.Command)
+	components = make(map[string]common.Component)
+	modals     = make(map[string]common.Modal)
 )
 
 func HandshakeConfig() plugin.HandshakeConfig {
@@ -123,38 +124,56 @@ func _load(client *plugin.Client) {
 	pluginLogger := loaderLogger.With("plugin", id)
 
 	pluginLogger.Info("loading commands")
-	commands, err := pluginImpl.ApplicationCommands()
+	cmds, err := pluginImpl.ApplicationCommands()
 	if err != nil {
 		pluginLogger.Warn("could not get commands", "err", err)
-	} else if len(commands) == 0 {
+	} else if len(cmds) == 0 {
 		pluginLogger.Info("plugin has no commands")
 	} else {
-		for i, cmd := range commands {
-			data, err := cmd.CommandData()
+		for i, cmd := range cmds {
+			data, err := cmd.Data()
 			if err != nil {
 				pluginLogger.Warn("cannot get command data", "command", i, "err", err)
 				continue
 			}
 
-			applicationCommands[id+"-"+data.Name] = cmd
+			commands[id+"-"+data.Name] = cmd
 		}
 	}
 
 	pluginLogger.Info("loading components")
-	components, err := pluginImpl.MessageComponents()
+	cpts, err := pluginImpl.MessageComponents()
 	if err != nil {
 		pluginLogger.Warn("could not get components", "err", err)
-	} else if len(components) == 0 {
+	} else if len(cpts) == 0 {
 		pluginLogger.Info("plugin has no components")
 	} else {
-		for i, cpt := range components {
+		for i, cpt := range cpts {
 			cid, err := cpt.CustomID()
 			if err != nil {
 				pluginLogger.Warn("cannot get custom id", "component", i, "err", err)
 				continue
 			}
 
-			messageComponents[id+"-"+cid] = cpt
+			components[id+"-"+cid] = cpt
+		}
+	}
+
+	pluginLogger.Info("loading modals")
+	mods, err := pluginImpl.Modals()
+	if err != nil {
+		pluginLogger.Warn("could not get modals", "err", err)
+	} else if len(mods) == 0 {
+		pluginLogger.Info("plugin has no modals")
+	} else {
+		for i, mod := range mods {
+			cid, err := mod.CustomID()
+			if err != nil {
+				pluginLogger.Warn("cannot get custom id", "modal", i, "err", err)
+				continue
+			}
+
+			modals[id+"-"+cid] = mod
 		}
 	}
 }

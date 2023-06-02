@@ -3,3 +3,22 @@ syntax = "proto3";
 package bacotell;
 
 option go_package = "github.com/EliasStar/BacoTell/internal/proto/bacotellpb";
+
+service Modal {
+    rpc CustomId(ModalCustomIdRequest) returns (ModalCustomIdResponse);
+    rpc Submit(ModalSubmitRequest) returns (ModalSubmitResponse);
+}
+
+message ModalCustomIdRequest {}
+
+message ModalCustomIdResponse {
+    string custom_id = 1;
+}
+
+message ModalSubmitRequest {
+    uint32 submit_proxy_id = 1;
+}
+
+message ModalSubmitResponse {}
+
+service SubmitProxy {}

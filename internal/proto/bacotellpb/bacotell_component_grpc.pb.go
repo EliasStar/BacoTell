@@ -27,8 +27,8 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ComponentClient interface {
-	CustomId(ctx context.Context, in *CustomIdRequest, opts ...grpc.CallOption) (*CustomIdResponse, error)
-	Handle(ctx context.Context, in *HandleRequest, opts ...grpc.CallOption) (*HandleResponse, error)
+	CustomId(ctx context.Context, in *ComponentCustomIdRequest, opts ...grpc.CallOption) (*ComponentCustomIdResponse, error)
+	Handle(ctx context.Context, in *ComponentHandleRequest, opts ...grpc.CallOption) (*ComponentHandleResponse, error)
 }
 
 type componentClient struct {
@@ -39,8 +39,8 @@ func NewComponentClient(cc grpc.ClientConnInterface) ComponentClient {
 	return &componentClient{cc}
 }
 
-func (c *componentClient) CustomId(ctx context.Context, in *CustomIdRequest, opts ...grpc.CallOption) (*CustomIdResponse, error) {
-	out := new(CustomIdResponse)
+func (c *componentClient) CustomId(ctx context.Context, in *ComponentCustomIdRequest, opts ...grpc.CallOption) (*ComponentCustomIdResponse, error) {
+	out := new(ComponentCustomIdResponse)
 	err := c.cc.Invoke(ctx, Component_CustomId_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -48,8 +48,8 @@ func (c *componentClient) CustomId(ctx context.Context, in *CustomIdRequest, opt
 	return out, nil
 }
 
-func (c *componentClient) Handle(ctx context.Context, in *HandleRequest, opts ...grpc.CallOption) (*HandleResponse, error) {
-	out := new(HandleResponse)
+func (c *componentClient) Handle(ctx context.Context, in *ComponentHandleRequest, opts ...grpc.CallOption) (*ComponentHandleResponse, error) {
+	out := new(ComponentHandleResponse)
 	err := c.cc.Invoke(ctx, Component_Handle_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -61,8 +61,8 @@ func (c *componentClient) Handle(ctx context.Context, in *HandleRequest, opts ..
 // All implementations must embed UnimplementedComponentServer
 // for forward compatibility
 type ComponentServer interface {
-	CustomId(context.Context, *CustomIdRequest) (*CustomIdResponse, error)
-	Handle(context.Context, *HandleRequest) (*HandleResponse, error)
+	CustomId(context.Context, *ComponentCustomIdRequest) (*ComponentCustomIdResponse, error)
+	Handle(context.Context, *ComponentHandleRequest) (*ComponentHandleResponse, error)
 	mustEmbedUnimplementedComponentServer()
 }
 
@@ -70,10 +70,10 @@ type ComponentServer interface {
 type UnimplementedComponentServer struct {
 }
 
-func (UnimplementedComponentServer) CustomId(context.Context, *CustomIdRequest) (*CustomIdResponse, error) {
+func (UnimplementedComponentServer) CustomId(context.Context, *ComponentCustomIdRequest) (*ComponentCustomIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CustomId not implemented")
 }
-func (UnimplementedComponentServer) Handle(context.Context, *HandleRequest) (*HandleResponse, error) {
+func (UnimplementedComponentServer) Handle(context.Context, *ComponentHandleRequest) (*ComponentHandleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Handle not implemented")
 }
 func (UnimplementedComponentServer) mustEmbedUnimplementedComponentServer() {}
@@ -90,7 +90,7 @@ func RegisterComponentServer(s grpc.ServiceRegistrar, srv ComponentServer) {
 }
 
 func _Component_CustomId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CustomIdRequest)
+	in := new(ComponentCustomIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -102,13 +102,13 @@ func _Component_CustomId_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: Component_CustomId_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ComponentServer).CustomId(ctx, req.(*CustomIdRequest))
+		return srv.(ComponentServer).CustomId(ctx, req.(*ComponentCustomIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Component_Handle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HandleRequest)
+	in := new(ComponentHandleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -120,7 +120,7 @@ func _Component_Handle_Handler(srv interface{}, ctx context.Context, dec func(in
 		FullMethod: Component_Handle_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ComponentServer).Handle(ctx, req.(*HandleRequest))
+		return srv.(ComponentServer).Handle(ctx, req.(*ComponentHandleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

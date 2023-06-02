@@ -19,16 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Command_CommandData_FullMethodName = "/bacotell.Command/CommandData"
-	Command_Execute_FullMethodName     = "/bacotell.Command/Execute"
+	Command_Data_FullMethodName         = "/bacotell.Command/Data"
+	Command_Execute_FullMethodName      = "/bacotell.Command/Execute"
+	Command_Autocomplete_FullMethodName = "/bacotell.Command/Autocomplete"
 )
 
 // CommandClient is the client API for Command service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CommandClient interface {
-	CommandData(ctx context.Context, in *CommandDataRequest, opts ...grpc.CallOption) (*CommandDataResponse, error)
-	Execute(ctx context.Context, in *ExecuteRequest, opts ...grpc.CallOption) (*ExecuteResponse, error)
+	Data(ctx context.Context, in *CommandDataRequest, opts ...grpc.CallOption) (*CommandDataResponse, error)
+	Execute(ctx context.Context, in *CommandExecuteRequest, opts ...grpc.CallOption) (*CommandExecuteResponse, error)
+	Autocomplete(ctx context.Context, in *CommandAutocompleteRequest, opts ...grpc.CallOption) (*CommandAutocompleteResponse, error)
 }
 
 type commandClient struct {
@@ -39,18 +41,27 @@ func NewCommandClient(cc grpc.ClientConnInterface) CommandClient {
 	return &commandClient{cc}
 }
 
-func (c *commandClient) CommandData(ctx context.Context, in *CommandDataRequest, opts ...grpc.CallOption) (*CommandDataResponse, error) {
+func (c *commandClient) Data(ctx context.Context, in *CommandDataRequest, opts ...grpc.CallOption) (*CommandDataResponse, error) {
 	out := new(CommandDataResponse)
-	err := c.cc.Invoke(ctx, Command_CommandData_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, Command_Data_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *commandClient) Execute(ctx context.Context, in *ExecuteRequest, opts ...grpc.CallOption) (*ExecuteResponse, error) {
-	out := new(ExecuteResponse)
+func (c *commandClient) Execute(ctx context.Context, in *CommandExecuteRequest, opts ...grpc.CallOption) (*CommandExecuteResponse, error) {
+	out := new(CommandExecuteResponse)
 	err := c.cc.Invoke(ctx, Command_Execute_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *commandClient) Autocomplete(ctx context.Context, in *CommandAutocompleteRequest, opts ...grpc.CallOption) (*CommandAutocompleteResponse, error) {
+	out := new(CommandAutocompleteResponse)
+	err := c.cc.Invoke(ctx, Command_Autocomplete_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,8 +72,9 @@ func (c *commandClient) Execute(ctx context.Context, in *ExecuteRequest, opts ..
 // All implementations must embed UnimplementedCommandServer
 // for forward compatibility
 type CommandServer interface {
-	CommandData(context.Context, *CommandDataRequest) (*CommandDataResponse, error)
-	Execute(context.Context, *ExecuteRequest) (*ExecuteResponse, error)
+	Data(context.Context, *CommandDataRequest) (*CommandDataResponse, error)
+	Execute(context.Context, *CommandExecuteRequest) (*CommandExecuteResponse, error)
+	Autocomplete(context.Context, *CommandAutocompleteRequest) (*CommandAutocompleteResponse, error)
 	mustEmbedUnimplementedCommandServer()
 }
 
@@ -70,11 +82,14 @@ type CommandServer interface {
 type UnimplementedCommandServer struct {
 }
 
-func (UnimplementedCommandServer) CommandData(context.Context, *CommandDataRequest) (*CommandDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CommandData not implemented")
+func (UnimplementedCommandServer) Data(context.Context, *CommandDataRequest) (*CommandDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Data not implemented")
 }
-func (UnimplementedCommandServer) Execute(context.Context, *ExecuteRequest) (*ExecuteResponse, error) {
+func (UnimplementedCommandServer) Execute(context.Context, *CommandExecuteRequest) (*CommandExecuteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Execute not implemented")
+}
+func (UnimplementedCommandServer) Autocomplete(context.Context, *CommandAutocompleteRequest) (*CommandAutocompleteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Autocomplete not implemented")
 }
 func (UnimplementedCommandServer) mustEmbedUnimplementedCommandServer() {}
 
@@ -89,26 +104,26 @@ func RegisterCommandServer(s grpc.ServiceRegistrar, srv CommandServer) {
 	s.RegisterService(&Command_ServiceDesc, srv)
 }
 
-func _Command_CommandData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Command_Data_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CommandDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CommandServer).CommandData(ctx, in)
+		return srv.(CommandServer).Data(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Command_CommandData_FullMethodName,
+		FullMethod: Command_Data_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CommandServer).CommandData(ctx, req.(*CommandDataRequest))
+		return srv.(CommandServer).Data(ctx, req.(*CommandDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Command_Execute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ExecuteRequest)
+	in := new(CommandExecuteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -120,7 +135,25 @@ func _Command_Execute_Handler(srv interface{}, ctx context.Context, dec func(int
 		FullMethod: Command_Execute_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CommandServer).Execute(ctx, req.(*ExecuteRequest))
+		return srv.(CommandServer).Execute(ctx, req.(*CommandExecuteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Command_Autocomplete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CommandAutocompleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommandServer).Autocomplete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Command_Autocomplete_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommandServer).Autocomplete(ctx, req.(*CommandAutocompleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -133,12 +166,16 @@ var Command_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*CommandServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CommandData",
-			Handler:    _Command_CommandData_Handler,
+			MethodName: "Data",
+			Handler:    _Command_Data_Handler,
 		},
 		{
 			MethodName: "Execute",
 			Handler:    _Command_Execute_Handler,
+		},
+		{
+			MethodName: "Autocomplete",
+			Handler:    _Command_Autocomplete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -160,14 +197,14 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ExecuteProxyClient interface {
-	StringOption(ctx context.Context, in *StringOptionRequest, opts ...grpc.CallOption) (*StringOptionResponse, error)
-	IntegerOption(ctx context.Context, in *IntegerOptionRequest, opts ...grpc.CallOption) (*IntegerOptionResponse, error)
-	NumberOption(ctx context.Context, in *NumberOptionRequest, opts ...grpc.CallOption) (*NumberOptionResponse, error)
-	BooleanOption(ctx context.Context, in *BooleanOptionRequest, opts ...grpc.CallOption) (*BooleanOptionResponse, error)
-	UserOption(ctx context.Context, in *UserOptionRequest, opts ...grpc.CallOption) (*UserOptionResponse, error)
-	RoleOption(ctx context.Context, in *RoleOptionRequest, opts ...grpc.CallOption) (*RoleOptionResponse, error)
-	ChannelOption(ctx context.Context, in *ChannelOptionRequest, opts ...grpc.CallOption) (*ChannelOptionResponse, error)
-	AttachmentOption(ctx context.Context, in *AttachmentOptionRequest, opts ...grpc.CallOption) (*AttachmentOptionResponse, error)
+	StringOption(ctx context.Context, in *ExecuteProxyStringOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyStringOptionResponse, error)
+	IntegerOption(ctx context.Context, in *ExecuteProxyIntegerOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyIntegerOptionResponse, error)
+	NumberOption(ctx context.Context, in *ExecuteProxyNumberOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyNumberOptionResponse, error)
+	BooleanOption(ctx context.Context, in *ExecuteProxyBooleanOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyBooleanOptionResponse, error)
+	UserOption(ctx context.Context, in *ExecuteProxyUserOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyUserOptionResponse, error)
+	RoleOption(ctx context.Context, in *ExecuteProxyRoleOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyRoleOptionResponse, error)
+	ChannelOption(ctx context.Context, in *ExecuteProxyChannelOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyChannelOptionResponse, error)
+	AttachmentOption(ctx context.Context, in *ExecuteProxyAttachmentOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyAttachmentOptionResponse, error)
 }
 
 type executeProxyClient struct {
@@ -178,8 +215,8 @@ func NewExecuteProxyClient(cc grpc.ClientConnInterface) ExecuteProxyClient {
 	return &executeProxyClient{cc}
 }
 
-func (c *executeProxyClient) StringOption(ctx context.Context, in *StringOptionRequest, opts ...grpc.CallOption) (*StringOptionResponse, error) {
-	out := new(StringOptionResponse)
+func (c *executeProxyClient) StringOption(ctx context.Context, in *ExecuteProxyStringOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyStringOptionResponse, error) {
+	out := new(ExecuteProxyStringOptionResponse)
 	err := c.cc.Invoke(ctx, ExecuteProxy_StringOption_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -187,8 +224,8 @@ func (c *executeProxyClient) StringOption(ctx context.Context, in *StringOptionR
 	return out, nil
 }
 
-func (c *executeProxyClient) IntegerOption(ctx context.Context, in *IntegerOptionRequest, opts ...grpc.CallOption) (*IntegerOptionResponse, error) {
-	out := new(IntegerOptionResponse)
+func (c *executeProxyClient) IntegerOption(ctx context.Context, in *ExecuteProxyIntegerOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyIntegerOptionResponse, error) {
+	out := new(ExecuteProxyIntegerOptionResponse)
 	err := c.cc.Invoke(ctx, ExecuteProxy_IntegerOption_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -196,8 +233,8 @@ func (c *executeProxyClient) IntegerOption(ctx context.Context, in *IntegerOptio
 	return out, nil
 }
 
-func (c *executeProxyClient) NumberOption(ctx context.Context, in *NumberOptionRequest, opts ...grpc.CallOption) (*NumberOptionResponse, error) {
-	out := new(NumberOptionResponse)
+func (c *executeProxyClient) NumberOption(ctx context.Context, in *ExecuteProxyNumberOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyNumberOptionResponse, error) {
+	out := new(ExecuteProxyNumberOptionResponse)
 	err := c.cc.Invoke(ctx, ExecuteProxy_NumberOption_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -205,8 +242,8 @@ func (c *executeProxyClient) NumberOption(ctx context.Context, in *NumberOptionR
 	return out, nil
 }
 
-func (c *executeProxyClient) BooleanOption(ctx context.Context, in *BooleanOptionRequest, opts ...grpc.CallOption) (*BooleanOptionResponse, error) {
-	out := new(BooleanOptionResponse)
+func (c *executeProxyClient) BooleanOption(ctx context.Context, in *ExecuteProxyBooleanOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyBooleanOptionResponse, error) {
+	out := new(ExecuteProxyBooleanOptionResponse)
 	err := c.cc.Invoke(ctx, ExecuteProxy_BooleanOption_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -214,8 +251,8 @@ func (c *executeProxyClient) BooleanOption(ctx context.Context, in *BooleanOptio
 	return out, nil
 }
 
-func (c *executeProxyClient) UserOption(ctx context.Context, in *UserOptionRequest, opts ...grpc.CallOption) (*UserOptionResponse, error) {
-	out := new(UserOptionResponse)
+func (c *executeProxyClient) UserOption(ctx context.Context, in *ExecuteProxyUserOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyUserOptionResponse, error) {
+	out := new(ExecuteProxyUserOptionResponse)
 	err := c.cc.Invoke(ctx, ExecuteProxy_UserOption_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -223,8 +260,8 @@ func (c *executeProxyClient) UserOption(ctx context.Context, in *UserOptionReque
 	return out, nil
 }
 
-func (c *executeProxyClient) RoleOption(ctx context.Context, in *RoleOptionRequest, opts ...grpc.CallOption) (*RoleOptionResponse, error) {
-	out := new(RoleOptionResponse)
+func (c *executeProxyClient) RoleOption(ctx context.Context, in *ExecuteProxyRoleOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyRoleOptionResponse, error) {
+	out := new(ExecuteProxyRoleOptionResponse)
 	err := c.cc.Invoke(ctx, ExecuteProxy_RoleOption_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -232,8 +269,8 @@ func (c *executeProxyClient) RoleOption(ctx context.Context, in *RoleOptionReque
 	return out, nil
 }
 
-func (c *executeProxyClient) ChannelOption(ctx context.Context, in *ChannelOptionRequest, opts ...grpc.CallOption) (*ChannelOptionResponse, error) {
-	out := new(ChannelOptionResponse)
+func (c *executeProxyClient) ChannelOption(ctx context.Context, in *ExecuteProxyChannelOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyChannelOptionResponse, error) {
+	out := new(ExecuteProxyChannelOptionResponse)
 	err := c.cc.Invoke(ctx, ExecuteProxy_ChannelOption_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -241,8 +278,8 @@ func (c *executeProxyClient) ChannelOption(ctx context.Context, in *ChannelOptio
 	return out, nil
 }
 
-func (c *executeProxyClient) AttachmentOption(ctx context.Context, in *AttachmentOptionRequest, opts ...grpc.CallOption) (*AttachmentOptionResponse, error) {
-	out := new(AttachmentOptionResponse)
+func (c *executeProxyClient) AttachmentOption(ctx context.Context, in *ExecuteProxyAttachmentOptionRequest, opts ...grpc.CallOption) (*ExecuteProxyAttachmentOptionResponse, error) {
+	out := new(ExecuteProxyAttachmentOptionResponse)
 	err := c.cc.Invoke(ctx, ExecuteProxy_AttachmentOption_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -254,14 +291,14 @@ func (c *executeProxyClient) AttachmentOption(ctx context.Context, in *Attachmen
 // All implementations must embed UnimplementedExecuteProxyServer
 // for forward compatibility
 type ExecuteProxyServer interface {
-	StringOption(context.Context, *StringOptionRequest) (*StringOptionResponse, error)
-	IntegerOption(context.Context, *IntegerOptionRequest) (*IntegerOptionResponse, error)
-	NumberOption(context.Context, *NumberOptionRequest) (*NumberOptionResponse, error)
-	BooleanOption(context.Context, *BooleanOptionRequest) (*BooleanOptionResponse, error)
-	UserOption(context.Context, *UserOptionRequest) (*UserOptionResponse, error)
-	RoleOption(context.Context, *RoleOptionRequest) (*RoleOptionResponse, error)
-	ChannelOption(context.Context, *ChannelOptionRequest) (*ChannelOptionResponse, error)
-	AttachmentOption(context.Context, *AttachmentOptionRequest) (*AttachmentOptionResponse, error)
+	StringOption(context.Context, *ExecuteProxyStringOptionRequest) (*ExecuteProxyStringOptionResponse, error)
+	IntegerOption(context.Context, *ExecuteProxyIntegerOptionRequest) (*ExecuteProxyIntegerOptionResponse, error)
+	NumberOption(context.Context, *ExecuteProxyNumberOptionRequest) (*ExecuteProxyNumberOptionResponse, error)
+	BooleanOption(context.Context, *ExecuteProxyBooleanOptionRequest) (*ExecuteProxyBooleanOptionResponse, error)
+	UserOption(context.Context, *ExecuteProxyUserOptionRequest) (*ExecuteProxyUserOptionResponse, error)
+	RoleOption(context.Context, *ExecuteProxyRoleOptionRequest) (*ExecuteProxyRoleOptionResponse, error)
+	ChannelOption(context.Context, *ExecuteProxyChannelOptionRequest) (*ExecuteProxyChannelOptionResponse, error)
+	AttachmentOption(context.Context, *ExecuteProxyAttachmentOptionRequest) (*ExecuteProxyAttachmentOptionResponse, error)
 	mustEmbedUnimplementedExecuteProxyServer()
 }
 
@@ -269,28 +306,28 @@ type ExecuteProxyServer interface {
 type UnimplementedExecuteProxyServer struct {
 }
 
-func (UnimplementedExecuteProxyServer) StringOption(context.Context, *StringOptionRequest) (*StringOptionResponse, error) {
+func (UnimplementedExecuteProxyServer) StringOption(context.Context, *ExecuteProxyStringOptionRequest) (*ExecuteProxyStringOptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StringOption not implemented")
 }
-func (UnimplementedExecuteProxyServer) IntegerOption(context.Context, *IntegerOptionRequest) (*IntegerOptionResponse, error) {
+func (UnimplementedExecuteProxyServer) IntegerOption(context.Context, *ExecuteProxyIntegerOptionRequest) (*ExecuteProxyIntegerOptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IntegerOption not implemented")
 }
-func (UnimplementedExecuteProxyServer) NumberOption(context.Context, *NumberOptionRequest) (*NumberOptionResponse, error) {
+func (UnimplementedExecuteProxyServer) NumberOption(context.Context, *ExecuteProxyNumberOptionRequest) (*ExecuteProxyNumberOptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NumberOption not implemented")
 }
-func (UnimplementedExecuteProxyServer) BooleanOption(context.Context, *BooleanOptionRequest) (*BooleanOptionResponse, error) {
+func (UnimplementedExecuteProxyServer) BooleanOption(context.Context, *ExecuteProxyBooleanOptionRequest) (*ExecuteProxyBooleanOptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BooleanOption not implemented")
 }
-func (UnimplementedExecuteProxyServer) UserOption(context.Context, *UserOptionRequest) (*UserOptionResponse, error) {
+func (UnimplementedExecuteProxyServer) UserOption(context.Context, *ExecuteProxyUserOptionRequest) (*ExecuteProxyUserOptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserOption not implemented")
 }
-func (UnimplementedExecuteProxyServer) RoleOption(context.Context, *RoleOptionRequest) (*RoleOptionResponse, error) {
+func (UnimplementedExecuteProxyServer) RoleOption(context.Context, *ExecuteProxyRoleOptionRequest) (*ExecuteProxyRoleOptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RoleOption not implemented")
 }
-func (UnimplementedExecuteProxyServer) ChannelOption(context.Context, *ChannelOptionRequest) (*ChannelOptionResponse, error) {
+func (UnimplementedExecuteProxyServer) ChannelOption(context.Context, *ExecuteProxyChannelOptionRequest) (*ExecuteProxyChannelOptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ChannelOption not implemented")
 }
-func (UnimplementedExecuteProxyServer) AttachmentOption(context.Context, *AttachmentOptionRequest) (*AttachmentOptionResponse, error) {
+func (UnimplementedExecuteProxyServer) AttachmentOption(context.Context, *ExecuteProxyAttachmentOptionRequest) (*ExecuteProxyAttachmentOptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AttachmentOption not implemented")
 }
 func (UnimplementedExecuteProxyServer) mustEmbedUnimplementedExecuteProxyServer() {}
@@ -307,7 +344,7 @@ func RegisterExecuteProxyServer(s grpc.ServiceRegistrar, srv ExecuteProxyServer)
 }
 
 func _ExecuteProxy_StringOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StringOptionRequest)
+	in := new(ExecuteProxyStringOptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -319,13 +356,13 @@ func _ExecuteProxy_StringOption_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: ExecuteProxy_StringOption_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExecuteProxyServer).StringOption(ctx, req.(*StringOptionRequest))
+		return srv.(ExecuteProxyServer).StringOption(ctx, req.(*ExecuteProxyStringOptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _ExecuteProxy_IntegerOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IntegerOptionRequest)
+	in := new(ExecuteProxyIntegerOptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -337,13 +374,13 @@ func _ExecuteProxy_IntegerOption_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: ExecuteProxy_IntegerOption_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExecuteProxyServer).IntegerOption(ctx, req.(*IntegerOptionRequest))
+		return srv.(ExecuteProxyServer).IntegerOption(ctx, req.(*ExecuteProxyIntegerOptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _ExecuteProxy_NumberOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(NumberOptionRequest)
+	in := new(ExecuteProxyNumberOptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -355,13 +392,13 @@ func _ExecuteProxy_NumberOption_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: ExecuteProxy_NumberOption_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExecuteProxyServer).NumberOption(ctx, req.(*NumberOptionRequest))
+		return srv.(ExecuteProxyServer).NumberOption(ctx, req.(*ExecuteProxyNumberOptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _ExecuteProxy_BooleanOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BooleanOptionRequest)
+	in := new(ExecuteProxyBooleanOptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -373,13 +410,13 @@ func _ExecuteProxy_BooleanOption_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: ExecuteProxy_BooleanOption_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExecuteProxyServer).BooleanOption(ctx, req.(*BooleanOptionRequest))
+		return srv.(ExecuteProxyServer).BooleanOption(ctx, req.(*ExecuteProxyBooleanOptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _ExecuteProxy_UserOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserOptionRequest)
+	in := new(ExecuteProxyUserOptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -391,13 +428,13 @@ func _ExecuteProxy_UserOption_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: ExecuteProxy_UserOption_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExecuteProxyServer).UserOption(ctx, req.(*UserOptionRequest))
+		return srv.(ExecuteProxyServer).UserOption(ctx, req.(*ExecuteProxyUserOptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _ExecuteProxy_RoleOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RoleOptionRequest)
+	in := new(ExecuteProxyRoleOptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -409,13 +446,13 @@ func _ExecuteProxy_RoleOption_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: ExecuteProxy_RoleOption_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExecuteProxyServer).RoleOption(ctx, req.(*RoleOptionRequest))
+		return srv.(ExecuteProxyServer).RoleOption(ctx, req.(*ExecuteProxyRoleOptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _ExecuteProxy_ChannelOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ChannelOptionRequest)
+	in := new(ExecuteProxyChannelOptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -427,13 +464,13 @@ func _ExecuteProxy_ChannelOption_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: ExecuteProxy_ChannelOption_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExecuteProxyServer).ChannelOption(ctx, req.(*ChannelOptionRequest))
+		return srv.(ExecuteProxyServer).ChannelOption(ctx, req.(*ExecuteProxyChannelOptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _ExecuteProxy_AttachmentOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AttachmentOptionRequest)
+	in := new(ExecuteProxyAttachmentOptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -445,7 +482,7 @@ func _ExecuteProxy_AttachmentOption_Handler(srv interface{}, ctx context.Context
 		FullMethod: ExecuteProxy_AttachmentOption_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExecuteProxyServer).AttachmentOption(ctx, req.(*AttachmentOptionRequest))
+		return srv.(ExecuteProxyServer).AttachmentOption(ctx, req.(*ExecuteProxyAttachmentOptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -488,6 +525,133 @@ var ExecuteProxy_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AttachmentOption",
 			Handler:    _ExecuteProxy_AttachmentOption_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/bacotell_command.proto",
+}
+
+const (
+	AutocompleteProxy_Respond_FullMethodName       = "/bacotell.AutocompleteProxy/Respond"
+	AutocompleteProxy_FocusedOption_FullMethodName = "/bacotell.AutocompleteProxy/FocusedOption"
+)
+
+// AutocompleteProxyClient is the client API for AutocompleteProxy service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type AutocompleteProxyClient interface {
+	Respond(ctx context.Context, in *AutocompleteProxyRespondRequest, opts ...grpc.CallOption) (*AutocompleteProxyRespondResponse, error)
+	FocusedOption(ctx context.Context, in *AutocompleteProxyFocusedOptionRequest, opts ...grpc.CallOption) (*AutocompleteProxyFocusedOptionResponse, error)
+}
+
+type autocompleteProxyClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewAutocompleteProxyClient(cc grpc.ClientConnInterface) AutocompleteProxyClient {
+	return &autocompleteProxyClient{cc}
+}
+
+func (c *autocompleteProxyClient) Respond(ctx context.Context, in *AutocompleteProxyRespondRequest, opts ...grpc.CallOption) (*AutocompleteProxyRespondResponse, error) {
+	out := new(AutocompleteProxyRespondResponse)
+	err := c.cc.Invoke(ctx, AutocompleteProxy_Respond_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autocompleteProxyClient) FocusedOption(ctx context.Context, in *AutocompleteProxyFocusedOptionRequest, opts ...grpc.CallOption) (*AutocompleteProxyFocusedOptionResponse, error) {
+	out := new(AutocompleteProxyFocusedOptionResponse)
+	err := c.cc.Invoke(ctx, AutocompleteProxy_FocusedOption_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// AutocompleteProxyServer is the server API for AutocompleteProxy service.
+// All implementations must embed UnimplementedAutocompleteProxyServer
+// for forward compatibility
+type AutocompleteProxyServer interface {
+	Respond(context.Context, *AutocompleteProxyRespondRequest) (*AutocompleteProxyRespondResponse, error)
+	FocusedOption(context.Context, *AutocompleteProxyFocusedOptionRequest) (*AutocompleteProxyFocusedOptionResponse, error)
+	mustEmbedUnimplementedAutocompleteProxyServer()
+}
+
+// UnimplementedAutocompleteProxyServer must be embedded to have forward compatible implementations.
+type UnimplementedAutocompleteProxyServer struct {
+}
+
+func (UnimplementedAutocompleteProxyServer) Respond(context.Context, *AutocompleteProxyRespondRequest) (*AutocompleteProxyRespondResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Respond not implemented")
+}
+func (UnimplementedAutocompleteProxyServer) FocusedOption(context.Context, *AutocompleteProxyFocusedOptionRequest) (*AutocompleteProxyFocusedOptionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FocusedOption not implemented")
+}
+func (UnimplementedAutocompleteProxyServer) mustEmbedUnimplementedAutocompleteProxyServer() {}
+
+// UnsafeAutocompleteProxyServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to AutocompleteProxyServer will
+// result in compilation errors.
+type UnsafeAutocompleteProxyServer interface {
+	mustEmbedUnimplementedAutocompleteProxyServer()
+}
+
+func RegisterAutocompleteProxyServer(s grpc.ServiceRegistrar, srv AutocompleteProxyServer) {
+	s.RegisterService(&AutocompleteProxy_ServiceDesc, srv)
+}
+
+func _AutocompleteProxy_Respond_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AutocompleteProxyRespondRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutocompleteProxyServer).Respond(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AutocompleteProxy_Respond_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutocompleteProxyServer).Respond(ctx, req.(*AutocompleteProxyRespondRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AutocompleteProxy_FocusedOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AutocompleteProxyFocusedOptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutocompleteProxyServer).FocusedOption(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AutocompleteProxy_FocusedOption_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutocompleteProxyServer).FocusedOption(ctx, req.(*AutocompleteProxyFocusedOptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// AutocompleteProxy_ServiceDesc is the grpc.ServiceDesc for AutocompleteProxy service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var AutocompleteProxy_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "bacotell.AutocompleteProxy",
+	HandlerType: (*AutocompleteProxyServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Respond",
+			Handler:    _AutocompleteProxy_Respond_Handler,
+		},
+		{
+			MethodName: "FocusedOption",
+			Handler:    _AutocompleteProxy_FocusedOption_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
