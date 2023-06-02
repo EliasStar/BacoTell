@@ -21,4 +21,19 @@ message ComponentHandleRequest {
 
 message ComponentHandleResponse {}
 
-service HandleProxy {}
+service HandleProxy {
+    rpc ComponentType(HandleProxyComponentTypeRequest) returns (HandleProxyComponentTypeResponse);
+    rpc SelectedValues(HandleProxySelectedValuesRequest) returns (HandleProxySelectedValuesResponse);
+}
+
+message HandleProxyComponentTypeRequest {}
+
+message HandleProxyComponentTypeResponse {
+    uint32 type = 1;
+}
+
+message HandleProxySelectedValuesRequest {}
+
+message HandleProxySelectedValuesResponse {
+    repeated string values = 1;
+}

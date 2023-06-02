@@ -1,5 +1,7 @@
 package bacotell_common
 
+import "github.com/bwmarrin/discordgo"
+
 type Component interface {
 	CustomID() (string, error)
 	Handle(HandleProxy) error
@@ -7,4 +9,7 @@ type Component interface {
 
 type HandleProxy interface {
 	InteractionProxy
+
+	ComponentType() (discordgo.ComponentType, error)
+	SelectedValues() ([]string, error)
 }

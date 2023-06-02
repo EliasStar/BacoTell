@@ -5,6 +5,7 @@ import (
 
 	"github.com/EliasStar/BacoTell/internal/proto/bacotellpb"
 	common "github.com/EliasStar/BacoTell/pkg/bacotell_common"
+	"github.com/bwmarrin/discordgo"
 	"github.com/hashicorp/go-plugin"
 	"google.golang.org/grpc"
 )
@@ -102,6 +103,26 @@ var (
 	_ bacotellpb.HandleProxyServer      = handleProxyServer{}
 )
 
+// ComponentType implements bacotellpb.HandleProxyServer
+func (s handleProxyServer) ComponentType(context.Context, *bacotellpb.HandleProxyComponentTypeRequest) (*bacotellpb.HandleProxyComponentTypeResponse, error) {
+	typ, err := s.impl.ComponentType()
+	if err != nil {
+		return nil, err
+	}
+
+	return &bacotellpb.HandleProxyComponentTypeResponse{Type: uint32(typ)}, nil
+}
+
+// SelectedValues implements bacotellpb.HandleProxyServer
+func (s handleProxyServer) SelectedValues(context.Context, *bacotellpb.HandleProxySelectedValuesRequest) (*bacotellpb.HandleProxySelectedValuesResponse, error) {
+	values, err := s.impl.SelectedValues()
+	if err != nil {
+		return nil, err
+	}
+
+	return &bacotellpb.HandleProxySelectedValuesResponse{Values: values}, nil
+}
+
 type handleProxyClient struct {
 	interactionProxyClient
 
@@ -112,3 +133,23 @@ var (
 	_ common.InteractionProxy = handleProxyClient{}
 	_ common.HandleProxy      = handleProxyClient{}
 )
+
+// ComponentType implements bacotell_common.HandleProxy
+func (c handleProxyClient) ComponentType() (discordgo.ComponentType, error) {
+	res, err := c.client.ComponentType(context.Background(), &bacotellpb.HandleProxyComponentTypeRequest{})
+	if err != nil {
+		return 0, err
+	}
+
+	return discordgo.ComponentType(res.Type), nil
+}
+
+// SelectedValues implements bacotell_common.HandleProxy
+func (c handleProxyClient) SelectedValues() ([]string, error) {
+	res, err := c.client.SelectedValues(context.Background(), &bacotellpb.HandleProxySelectedValuesRequest{})
+	if err != nil {
+		return nil, err
+	}
+
+	return res.Values, nil
+}

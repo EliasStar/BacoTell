@@ -14,7 +14,7 @@ import (
 const bacotellPlugin = "bacotell_plugin"
 
 var (
-	clients []*plugin.Client
+	clients = make(map[string]*plugin.Client)
 
 	commands   = make(map[string]common.Command)
 	components = make(map[string]common.Component)
@@ -120,7 +120,7 @@ func _load(client *plugin.Client) {
 		return
 	}
 
-	clients = append(clients, client)
+	clients[id] = client
 	pluginLogger := loaderLogger.With("plugin", id)
 
 	pluginLogger.Info("loading commands")
@@ -137,7 +137,7 @@ func _load(client *plugin.Client) {
 				continue
 			}
 
-			commands[id+"-"+data.Name] = cmd
+			commands[data.Name] = cmd
 		}
 	}
 
@@ -155,7 +155,7 @@ func _load(client *plugin.Client) {
 				continue
 			}
 
-			components[id+"-"+cid] = cpt
+			components[cid] = cpt
 		}
 	}
 
@@ -173,7 +173,7 @@ func _load(client *plugin.Client) {
 				continue
 			}
 
-			modals[id+"-"+cid] = mod
+			modals[cid] = mod
 		}
 	}
 }

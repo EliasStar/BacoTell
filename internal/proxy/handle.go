@@ -61,3 +61,13 @@ func (p handleProxy) Respond(message common.Response, ephemeral bool) error {
 		},
 	})
 }
+
+// ComponentType implements bacotell_common.HandleProxy
+func (p handleProxy) ComponentType() (discordgo.ComponentType, error) {
+	return p.interaction.MessageComponentData().ComponentType, nil
+}
+
+// SelectedValues implements bacotell_common.HandleProxy
+func (p handleProxy) SelectedValues() ([]string, error) {
+	return p.interaction.MessageComponentData().Values, nil
+}

@@ -145,12 +145,17 @@ var Component_ServiceDesc = grpc.ServiceDesc{
 	Metadata: "proto/bacotell_component.proto",
 }
 
-const ()
+const (
+	HandleProxy_ComponentType_FullMethodName  = "/bacotell.HandleProxy/ComponentType"
+	HandleProxy_SelectedValues_FullMethodName = "/bacotell.HandleProxy/SelectedValues"
+)
 
 // HandleProxyClient is the client API for HandleProxy service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type HandleProxyClient interface {
+	ComponentType(ctx context.Context, in *HandleProxyComponentTypeRequest, opts ...grpc.CallOption) (*HandleProxyComponentTypeResponse, error)
+	SelectedValues(ctx context.Context, in *HandleProxySelectedValuesRequest, opts ...grpc.CallOption) (*HandleProxySelectedValuesResponse, error)
 }
 
 type handleProxyClient struct {
@@ -161,10 +166,30 @@ func NewHandleProxyClient(cc grpc.ClientConnInterface) HandleProxyClient {
 	return &handleProxyClient{cc}
 }
 
+func (c *handleProxyClient) ComponentType(ctx context.Context, in *HandleProxyComponentTypeRequest, opts ...grpc.CallOption) (*HandleProxyComponentTypeResponse, error) {
+	out := new(HandleProxyComponentTypeResponse)
+	err := c.cc.Invoke(ctx, HandleProxy_ComponentType_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *handleProxyClient) SelectedValues(ctx context.Context, in *HandleProxySelectedValuesRequest, opts ...grpc.CallOption) (*HandleProxySelectedValuesResponse, error) {
+	out := new(HandleProxySelectedValuesResponse)
+	err := c.cc.Invoke(ctx, HandleProxy_SelectedValues_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // HandleProxyServer is the server API for HandleProxy service.
 // All implementations must embed UnimplementedHandleProxyServer
 // for forward compatibility
 type HandleProxyServer interface {
+	ComponentType(context.Context, *HandleProxyComponentTypeRequest) (*HandleProxyComponentTypeResponse, error)
+	SelectedValues(context.Context, *HandleProxySelectedValuesRequest) (*HandleProxySelectedValuesResponse, error)
 	mustEmbedUnimplementedHandleProxyServer()
 }
 
@@ -172,6 +197,12 @@ type HandleProxyServer interface {
 type UnimplementedHandleProxyServer struct {
 }
 
+func (UnimplementedHandleProxyServer) ComponentType(context.Context, *HandleProxyComponentTypeRequest) (*HandleProxyComponentTypeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ComponentType not implemented")
+}
+func (UnimplementedHandleProxyServer) SelectedValues(context.Context, *HandleProxySelectedValuesRequest) (*HandleProxySelectedValuesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SelectedValues not implemented")
+}
 func (UnimplementedHandleProxyServer) mustEmbedUnimplementedHandleProxyServer() {}
 
 // UnsafeHandleProxyServer may be embedded to opt out of forward compatibility for this service.
@@ -185,13 +216,58 @@ func RegisterHandleProxyServer(s grpc.ServiceRegistrar, srv HandleProxyServer) {
 	s.RegisterService(&HandleProxy_ServiceDesc, srv)
 }
 
+func _HandleProxy_ComponentType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HandleProxyComponentTypeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HandleProxyServer).ComponentType(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: HandleProxy_ComponentType_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HandleProxyServer).ComponentType(ctx, req.(*HandleProxyComponentTypeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _HandleProxy_SelectedValues_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HandleProxySelectedValuesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HandleProxyServer).SelectedValues(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: HandleProxy_SelectedValues_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HandleProxyServer).SelectedValues(ctx, req.(*HandleProxySelectedValuesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // HandleProxy_ServiceDesc is the grpc.ServiceDesc for HandleProxy service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var HandleProxy_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "bacotell.HandleProxy",
 	HandlerType: (*HandleProxyServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "proto/bacotell_component.proto",
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "ComponentType",
+			Handler:    _HandleProxy_ComponentType_Handler,
+		},
+		{
+			MethodName: "SelectedValues",
+			Handler:    _HandleProxy_SelectedValues_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/bacotell_component.proto",
 }

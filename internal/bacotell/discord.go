@@ -76,11 +76,9 @@ func _onGuildCreate(session *discordgo.Session, guild *discordgo.GuildCreate) {
 			continue
 		}
 
-		localData.Name = name
-
 		index := -1
 		for i, deployedData := range deployedCommandData {
-			if deployedData.Name == name {
+			if deployedData.Name == localData.Name {
 				index = i
 				break
 			}
