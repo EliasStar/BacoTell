@@ -12,6 +12,7 @@ var (
 	discordLogger hclog.Logger
 )
 
+// initLoggers initializes all (sub)loggers for the major subsystems
 func initLoggers(level hclog.Level) {
 	logger = hclog.New(&hclog.LoggerOptions{
 		Name:   "bacotell",

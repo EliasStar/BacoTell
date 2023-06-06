@@ -6,6 +6,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+// encodeMessageComponent encodes a discordgo.MessageComponent into a discordgopb.MessageComponent.
 func encodeMessageComponent(component discordgo.MessageComponent) *discordgopb.MessageComponent {
 	switch cpt := component.(type) {
 	case discordgo.ActionsRow:
@@ -21,6 +22,7 @@ func encodeMessageComponent(component discordgo.MessageComponent) *discordgopb.M
 	}
 }
 
+// encodeMessageComponents encodes multiple discordgo.MessageComponent into multiple discordgopb.MessageComponent.
 func encodeMessageComponents(components []discordgo.MessageComponent) []*discordgopb.MessageComponent {
 	if components == nil {
 		return nil
@@ -35,6 +37,7 @@ func encodeMessageComponents(components []discordgo.MessageComponent) []*discord
 	return result
 }
 
+// decodeMessageComponent decodes a discordgopb.MessageComponent into a discordgo.MessageComponent.
 func decodeMessageComponent(component *discordgopb.MessageComponent) (result discordgo.MessageComponent) {
 	switch cpt := component.Component.(type) {
 	case *discordgopb.MessageComponent_ActionsRow:
@@ -50,6 +53,7 @@ func decodeMessageComponent(component *discordgopb.MessageComponent) (result dis
 	}
 }
 
+// decodeMessageComponents decodes multiple discordgopb.MessageComponent into multiple discordgo.MessageComponent.
 func decodeMessageComponents(components []*discordgopb.MessageComponent) []discordgo.MessageComponent {
 	if components == nil {
 		return nil
@@ -64,6 +68,7 @@ func decodeMessageComponents(components []*discordgopb.MessageComponent) []disco
 	return result
 }
 
+// encodeActionsRow encodes a discordgo.ActionsRow into a discordgopb.ActionsRow.
 func encodeActionsRow(row *discordgo.ActionsRow) *discordgopb.ActionsRow {
 	if row == nil {
 		return nil
@@ -72,6 +77,7 @@ func encodeActionsRow(row *discordgo.ActionsRow) *discordgopb.ActionsRow {
 	return &discordgopb.ActionsRow{Components: encodeMessageComponents(row.Components)}
 }
 
+// decodeActionsRow decodes a discordgopb.ActionsRow into a discordgo.ActionsRow.
 func decodeActionsRow(row *discordgopb.ActionsRow) *discordgo.ActionsRow {
 	if row == nil {
 		return nil
@@ -80,6 +86,7 @@ func decodeActionsRow(row *discordgopb.ActionsRow) *discordgo.ActionsRow {
 	return &discordgo.ActionsRow{Components: decodeMessageComponents(row.Components)}
 }
 
+// encodeButton encodes a discordgo.Button into a discordgopb.Button.
 func encodeButton(button *discordgo.Button) *discordgopb.Button {
 	if button == nil {
 		return nil
@@ -95,6 +102,7 @@ func encodeButton(button *discordgo.Button) *discordgopb.Button {
 	}
 }
 
+// decodeButton decodes a discordgopb.Button into a discordgo.Button.
 func decodeButton(button *discordgopb.Button) *discordgo.Button {
 	if button == nil {
 		return nil
@@ -110,6 +118,7 @@ func decodeButton(button *discordgopb.Button) *discordgo.Button {
 	}
 }
 
+// encodeSelectMenu encodes a discordgo.SelectMenu into a discordgopb.SelectMenu.
 func encodeSelectMenu(menu *discordgo.SelectMenu) *discordgopb.SelectMenu {
 	if menu == nil {
 		return nil
@@ -127,6 +136,7 @@ func encodeSelectMenu(menu *discordgo.SelectMenu) *discordgopb.SelectMenu {
 	}
 }
 
+// decodeSelectMenu decodes a discordgopb.SelectMenu into a discordgo.SelectMenu.
 func decodeSelectMenu(menu *discordgopb.SelectMenu) *discordgo.SelectMenu {
 	if menu == nil {
 		return nil
@@ -144,6 +154,7 @@ func decodeSelectMenu(menu *discordgopb.SelectMenu) *discordgo.SelectMenu {
 	}
 }
 
+// encodeSelectMenuOption encodes a discordgo.SelectMenuOption into a discordgopb.SelectMenuOption.
 func encodeSelectMenuOption(option *discordgo.SelectMenuOption) *discordgopb.SelectMenuOption {
 	if option == nil {
 		return nil
@@ -158,6 +169,7 @@ func encodeSelectMenuOption(option *discordgo.SelectMenuOption) *discordgopb.Sel
 	}
 }
 
+// encodeSelectMenuOptions encodes multiple discordgo.SelectMenuOption into multiple discordgopb.SelectMenuOption.
 func encodeSelectMenuOptions(options []discordgo.SelectMenuOption) []*discordgopb.SelectMenuOption {
 	if options == nil {
 		return nil
@@ -172,6 +184,7 @@ func encodeSelectMenuOptions(options []discordgo.SelectMenuOption) []*discordgop
 	return result
 }
 
+// decodeSelectMenuOption decodes a discordgopb.SelectMenuOption into a discordgo.SelectMenuOption.
 func decodeSelectMenuOption(option *discordgopb.SelectMenuOption) *discordgo.SelectMenuOption {
 	if option == nil {
 		return nil
@@ -186,6 +199,7 @@ func decodeSelectMenuOption(option *discordgopb.SelectMenuOption) *discordgo.Sel
 	}
 }
 
+// decodeSelectMenuOptions decodes multiple discordgopb.SelectMenuOption into multiple discordgo.SelectMenuOption.
 func decodeSelectMenuOptions(options []*discordgopb.SelectMenuOption) []discordgo.SelectMenuOption {
 	if options == nil {
 		return nil
@@ -200,6 +214,7 @@ func decodeSelectMenuOptions(options []*discordgopb.SelectMenuOption) []discordg
 	return result
 }
 
+// encodeTextInput encodes a discordgo.TextInput into a discordgopb.TextInput.
 func encodeTextInput(input *discordgo.TextInput) *discordgopb.TextInput {
 	if input == nil {
 		return nil
@@ -217,6 +232,7 @@ func encodeTextInput(input *discordgo.TextInput) *discordgopb.TextInput {
 	}
 }
 
+// decodeTextInput decodes a discordgopb.TextInput into a discordgo.TextInput.
 func decodeTextInput(input *discordgopb.TextInput) *discordgo.TextInput {
 	if input == nil {
 		return nil
@@ -234,6 +250,7 @@ func decodeTextInput(input *discordgopb.TextInput) *discordgo.TextInput {
 	}
 }
 
+// encodeComponentEmoji encodes a discordgo.ComponentEmoji into a discordgopb.ComponentEmoji.
 func encodeComponentEmoji(emoji *discordgo.ComponentEmoji) *discordgopb.ComponentEmoji {
 	if emoji == nil {
 		return nil
@@ -246,6 +263,7 @@ func encodeComponentEmoji(emoji *discordgo.ComponentEmoji) *discordgopb.Componen
 	}
 }
 
+// decodeComponentEmoji decodes a discordgopb.ComponentEmoji into a discordgo.ComponentEmoji.
 func decodeComponentEmoji(emoji *discordgopb.ComponentEmoji) *discordgo.ComponentEmoji {
 	if emoji == nil {
 		return nil

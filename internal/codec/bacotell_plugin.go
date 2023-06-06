@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc"
 )
 
+// The server implementation of bacotell_common.Plugin.
 type pluginServer struct {
 	bacotellpb.UnimplementedPluginServer
 
@@ -16,9 +17,10 @@ type pluginServer struct {
 	broker *plugin.GRPCBroker
 }
 
+// pluginServer implements bacotellpb.PluginServer.
 var _ bacotellpb.PluginServer = pluginServer{}
 
-// Id implements bacotellpb.PluginServer
+// Id implements bacotellpb.PluginServer.
 func (s pluginServer) Id(context.Context, *bacotellpb.PluginIdRequest) (*bacotellpb.PluginIdResponse, error) {
 	id, err := s.impl.ID()
 	if err != nil {
@@ -28,7 +30,7 @@ func (s pluginServer) Id(context.Context, *bacotellpb.PluginIdRequest) (*bacotel
 	return &bacotellpb.PluginIdResponse{Id: id}, nil
 }
 
-// ApplicationCommands implements bacotellpb.PluginServer
+// ApplicationCommands implements bacotellpb.PluginServer.
 func (s pluginServer) ApplicationCommands(context.Context, *bacotellpb.PluginApplicationCommandsRequest) (*bacotellpb.PluginApplicationCommandsResponse, error) {
 	commands, err := s.impl.ApplicationCommands()
 	if err != nil {
@@ -50,7 +52,7 @@ func (s pluginServer) ApplicationCommands(context.Context, *bacotellpb.PluginApp
 	return &bacotellpb.PluginApplicationCommandsResponse{CommandIds: ids}, nil
 }
 
-// MessageComponents implements bacotellpb.PluginServer
+// MessageComponents implements bacotellpb.PluginServer.
 func (s pluginServer) MessageComponents(context.Context, *bacotellpb.PluginMessageComponentsRequest) (*bacotellpb.PluginMessageComponentsResponse, error) {
 	components, err := s.impl.MessageComponents()
 	if err != nil {
@@ -94,14 +96,16 @@ func (s pluginServer) Modals(context.Context, *bacotellpb.PluginModalsRequest) (
 	return &bacotellpb.PluginModalsResponse{ModalIds: ids}, nil
 }
 
+// The client implementation of bacotell_common.Plugin.
 type pluginClient struct {
 	client bacotellpb.PluginClient
 	broker *plugin.GRPCBroker
 }
 
+// pluginClient implements bacotell_common.Plugin.
 var _ common.Plugin = pluginClient{}
 
-// ID implements bacotell_common.Plugin
+// ID implements bacotell_common.Plugin.
 func (c pluginClient) ID() (string, error) {
 	res, err := c.client.Id(context.Background(), &bacotellpb.PluginIdRequest{})
 	if err != nil {
@@ -111,7 +115,7 @@ func (c pluginClient) ID() (string, error) {
 	return res.Id, nil
 }
 
-// ApplicationCommands implements bacotell_common.Plugin
+// ApplicationCommands implements bacotell_common.Plugin.
 func (c pluginClient) ApplicationCommands() ([]common.Command, error) {
 	res, err := c.client.ApplicationCommands(context.Background(), &bacotellpb.PluginApplicationCommandsRequest{})
 	if err != nil {
@@ -131,7 +135,7 @@ func (c pluginClient) ApplicationCommands() ([]common.Command, error) {
 	return commands, nil
 }
 
-// MessageComponents implements bacotell_common.Plugin
+// MessageComponents implements bacotell_common.Plugin.
 func (c pluginClient) MessageComponents() ([]common.Component, error) {
 	res, err := c.client.MessageComponents(context.Background(), &bacotellpb.PluginMessageComponentsRequest{})
 	if err != nil {

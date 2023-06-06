@@ -1,3 +1,4 @@
+// Package bacotell provides the BacoTell entrypoint and the core subsystems of the framework.
 package bacotell
 
 import (
@@ -7,19 +8,21 @@ import (
 )
 
 const (
-	Version = "v0.1.0"
+	Version = "v0.2.0"
 
 	ConfigBotName   = "bot_name"
 	ConfigBotToken  = "bot_token"
 	ConfigPluginDir = "plugin_dir"
 )
 
+// InitConfig sets default values for viper config entries.
 func InitConfig() {
 	viper.SetDefault(ConfigBotName, "BacoTell")
 	viper.SetDefault(ConfigBotToken, "")
 	viper.SetDefault(ConfigPluginDir, "plugins")
 }
 
+// Run starts BacoTell.
 func Run() {
 	initLoggers(hclog.Info)
 
@@ -33,6 +36,7 @@ func Run() {
 	unloadAll()
 }
 
+// Debug starts BacoTell in debug mode.
 func Debug(token string, reattachConfig *plugin.ReattachConfig) {
 	initLoggers(hclog.Debug)
 

@@ -1,3 +1,4 @@
+// Package proxy provides default implementations for the different proxies in bacotell_common.
 package proxy
 
 import (
@@ -5,13 +6,16 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+// The default implementation for bacotell_common.InteractionProxy.
 type interactionProxy struct {
 	session     *discordgo.Session
 	interaction *discordgo.Interaction
 }
 
+// interactionProxy implements bacotell_common.InteractionProxy.
 var _ common.InteractionProxy = interactionProxy{}
 
+// NewInteractionProxy returns a new InteractionProxy implementation.
 func NewInteractionProxy(session *discordgo.Session, interaction *discordgo.Interaction) common.InteractionProxy {
 	return interactionProxy{
 		session:     session,
@@ -19,7 +23,7 @@ func NewInteractionProxy(session *discordgo.Session, interaction *discordgo.Inte
 	}
 }
 
-// Defer implements bacotell_common.InteractionProxy
+// Defer implements bacotell_common.InteractionProxy.
 func (p interactionProxy) Defer(ephemeral bool) error {
 	var flags discordgo.MessageFlags
 
@@ -35,7 +39,7 @@ func (p interactionProxy) Defer(ephemeral bool) error {
 	})
 }
 
-// Respond implements bacotell_common.InteractionProxy
+// Respond implements bacotell_common.InteractionProxy.
 func (p interactionProxy) Respond(message common.Response, ephemeral bool) error {
 	var flags discordgo.MessageFlags
 
@@ -61,7 +65,7 @@ func (p interactionProxy) Respond(message common.Response, ephemeral bool) error
 	})
 }
 
-// Modal implements bacotell_common.InteractionProxy
+// Modal implements bacotell_common.InteractionProxy.
 func (p interactionProxy) Modal(customId string, title string, components ...discordgo.MessageComponent) error {
 	return p.session.InteractionRespond(p.interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseModal,
@@ -73,7 +77,7 @@ func (p interactionProxy) Modal(customId string, title string, components ...dis
 	})
 }
 
-// Followup implements bacotell_common.InteractionProxy
+// Followup implements bacotell_common.InteractionProxy.
 func (p interactionProxy) Followup(message common.Response, ephemeral bool) (string, error) {
 	var flags discordgo.MessageFlags
 
@@ -102,7 +106,7 @@ func (p interactionProxy) Followup(message common.Response, ephemeral bool) (str
 	return msg.ID, nil
 }
 
-// Edit implements bacotell_common.InteractionProxy
+// Edit implements bacotell_common.InteractionProxy.
 func (p interactionProxy) Edit(id string, message common.Response) (err error) {
 	msg := &discordgo.WebhookEdit{
 		Content:         &message.Content,
@@ -121,7 +125,7 @@ func (p interactionProxy) Edit(id string, message common.Response) (err error) {
 	return
 }
 
-// Delete implements bacotell_common.InteractionProxy
+// Delete implements bacotell_common.InteractionProxy.
 func (p interactionProxy) Delete(id string) error {
 	if id == "" {
 		return p.session.InteractionResponseDelete(p.interaction)
@@ -130,22 +134,22 @@ func (p interactionProxy) Delete(id string) error {
 	return p.session.FollowupMessageDelete(p.interaction, id)
 }
 
-// GuildID implements bacotell_common.InteractionProxy
+// GuildID implements bacotell_common.InteractionProxy.
 func (p interactionProxy) GuildID() (string, error) {
 	return p.interaction.GuildID, nil
 }
 
-// ChannelID implements bacotell_common.InteractionProxy
+// ChannelID implements bacotell_common.InteractionProxy.
 func (p interactionProxy) ChannelID() (string, error) {
 	return p.interaction.ChannelID, nil
 }
 
-// UserLocale implements bacotell_common.InteractionProxy
+// UserLocale implements bacotell_common.InteractionProxy.
 func (p interactionProxy) UserLocale() (discordgo.Locale, error) {
 	return p.interaction.Locale, nil
 }
 
-// GuildLocale implements bacotell_common.InteractionProxy
+// GuildLocale implements bacotell_common.InteractionProxy.
 func (p interactionProxy) GuildLocale() (discordgo.Locale, error) {
 	if p.interaction.GuildLocale != nil {
 		return *p.interaction.GuildLocale, nil
@@ -154,22 +158,22 @@ func (p interactionProxy) GuildLocale() (discordgo.Locale, error) {
 	return p.interaction.Locale, nil
 }
 
-// User implements bacotell_common.InteractionProxy
+// User implements bacotell_common.InteractionProxy.
 func (p interactionProxy) User() (*discordgo.User, error) {
 	return p.interaction.User, nil
 }
 
-// Member implements bacotell_common.InteractionProxy
+// Member implements bacotell_common.InteractionProxy.
 func (p interactionProxy) Member() (*discordgo.Member, error) {
 	return p.interaction.Member, nil
 }
 
-// Message implements bacotell_common.InteractionProxy
+// Message implements bacotell_common.InteractionProxy.
 func (p interactionProxy) Message() (*discordgo.Message, error) {
 	return p.interaction.Message, nil
 }
 
-// Permissions implements bacotell_common.InteractionProxy
+// Permissions implements bacotell_common.InteractionProxy.
 func (p interactionProxy) Permissions() (int64, error) {
 	return p.interaction.AppPermissions, nil
 }

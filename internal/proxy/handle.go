@@ -5,12 +5,15 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+// The default implementation for bacotell_common.HandleProxy.
 type handleProxy struct {
 	interactionProxy
 }
 
+// handleProxy implements bacotell_common.HandleProxy.
 var _ common.HandleProxy = handleProxy{}
 
+// NewHandleProxy returns a new HandleProxy implementation.
 func NewHandleProxy(session *discordgo.Session, interaction *discordgo.Interaction) common.HandleProxy {
 	return handleProxy{
 		interactionProxy: interactionProxy{
@@ -20,7 +23,7 @@ func NewHandleProxy(session *discordgo.Session, interaction *discordgo.Interacti
 	}
 }
 
-// Defer implements bacotell_common.HandleProxy
+// Defer implements bacotell_common.InteractionProxy, bacotell_common.HandleProxy.
 func (p handleProxy) Defer(ephemeral bool) error {
 	var flags discordgo.MessageFlags
 
@@ -36,7 +39,7 @@ func (p handleProxy) Defer(ephemeral bool) error {
 	})
 }
 
-// Respond implements bacotell_common.HandleProxy
+// Respond implements bacotell_common.InteractionProxy, bacotell_common.HandleProxy.
 func (p handleProxy) Respond(message common.Response, ephemeral bool) error {
 	var flags discordgo.MessageFlags
 
@@ -62,12 +65,12 @@ func (p handleProxy) Respond(message common.Response, ephemeral bool) error {
 	})
 }
 
-// ComponentType implements bacotell_common.HandleProxy
+// ComponentType implements bacotell_common.HandleProxy.
 func (p handleProxy) ComponentType() (discordgo.ComponentType, error) {
 	return p.interaction.MessageComponentData().ComponentType, nil
 }
 
-// SelectedValues implements bacotell_common.HandleProxy
+// SelectedValues implements bacotell_common.HandleProxy.
 func (p handleProxy) SelectedValues() ([]string, error) {
 	return p.interaction.MessageComponentData().Values, nil
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+// encodeMessageAllowedMention encodes a discordgo.MessageAllowedMentions into a discordgopb.MessageAllowedMentions.
 func encodeMessageAllowedMention(mention *discordgo.MessageAllowedMentions) *discordgopb.MessageAllowedMentions {
 	if mention == nil {
 		return nil
@@ -21,6 +22,7 @@ func encodeMessageAllowedMention(mention *discordgo.MessageAllowedMentions) *dis
 	}
 }
 
+// decodeMessageAllowedMention decodes a discordgopb.MessageAllowedMentions into a discordgo.MessageAllowedMentions.
 func decodeMessageAllowedMention(mention *discordgopb.MessageAllowedMentions) *discordgo.MessageAllowedMentions {
 	if mention == nil {
 		return nil
@@ -34,6 +36,7 @@ func decodeMessageAllowedMention(mention *discordgopb.MessageAllowedMentions) *d
 	}
 }
 
+// encodeMessageAttachment encodes a discordgo.MessageAttachment into a discordgopb.MessageAttachment.
 func encodeMessageAttachment(attachment *discordgo.MessageAttachment) *discordgopb.MessageAttachment {
 	if attachment == nil {
 		return nil
@@ -54,6 +57,7 @@ func encodeMessageAttachment(attachment *discordgo.MessageAttachment) *discordgo
 	}
 }
 
+// encodeMessageAttachments encodes multiple discordgo.MessageAttachment into multiple discordgopb.MessageAttachment.
 func encodeMessageAttachments(attachments []*discordgo.MessageAttachment) []*discordgopb.MessageAttachment {
 	if attachments == nil {
 		return nil
@@ -68,6 +72,7 @@ func encodeMessageAttachments(attachments []*discordgo.MessageAttachment) []*dis
 	return result
 }
 
+// decodeMessageAttachment decodes a discordgopb.MessageAttachment into a discordgo.MessageAttachment.
 func decodeMessageAttachment(attachment *discordgopb.MessageAttachment) *discordgo.MessageAttachment {
 	if attachment == nil {
 		return nil
@@ -88,6 +93,7 @@ func decodeMessageAttachment(attachment *discordgopb.MessageAttachment) *discord
 	}
 }
 
+// decodeMessageAttachments decodes multiple discordgopb.MessageAttachment into multiple discordgo.MessageAttachment.
 func decodeMessageAttachments(attachments []*discordgopb.MessageAttachment) []*discordgo.MessageAttachment {
 	if attachments == nil {
 		return nil
@@ -102,6 +108,7 @@ func decodeMessageAttachments(attachments []*discordgopb.MessageAttachment) []*d
 	return result
 }
 
+// encodeMessageEmbed encodes a discordgo.MessageEmbed into a discordgopb.MessageEmbed.
 func encodeMessageEmbed(embed *discordgo.MessageEmbed) *discordgopb.MessageEmbed {
 	if embed == nil {
 		return nil
@@ -125,6 +132,7 @@ func encodeMessageEmbed(embed *discordgo.MessageEmbed) *discordgopb.MessageEmbed
 	}
 }
 
+// encodeMessageEmbeds encodes multiple discordgo.MessageEmbed into multiple discordgopb.MessageEmbed.
 func encodeMessageEmbeds(embeds []*discordgo.MessageEmbed) []*discordgopb.MessageEmbed {
 	if embeds == nil {
 		return nil
@@ -139,6 +147,7 @@ func encodeMessageEmbeds(embeds []*discordgo.MessageEmbed) []*discordgopb.Messag
 	return result
 }
 
+// decodeMessageEmbed decodes a discordgopb.MessageEmbed into a discordgo.MessageEmbed.
 func decodeMessageEmbed(embed *discordgopb.MessageEmbed) *discordgo.MessageEmbed {
 	if embed == nil {
 		return nil
@@ -162,6 +171,7 @@ func decodeMessageEmbed(embed *discordgopb.MessageEmbed) *discordgo.MessageEmbed
 	}
 }
 
+// decodeMessageEmbeds decodes multiple discordgopb.MessageEmbed into multiple discordgo.MessageEmbed.
 func decodeMessageEmbeds(embeds []*discordgopb.MessageEmbed) []*discordgo.MessageEmbed {
 	if embeds == nil {
 		return nil
@@ -176,6 +186,7 @@ func decodeMessageEmbeds(embeds []*discordgopb.MessageEmbed) []*discordgo.Messag
 	return result
 }
 
+// encodeMessageEmbedFooter encodes a discordgo.MessageEmbedFooter into a discordgopb.MessageEmbedFooter.
 func encodeMessageEmbedFooter(footer *discordgo.MessageEmbedFooter) *discordgopb.MessageEmbedFooter {
 	if footer == nil {
 		return nil
@@ -188,6 +199,7 @@ func encodeMessageEmbedFooter(footer *discordgo.MessageEmbedFooter) *discordgopb
 	}
 }
 
+// decodeMessageEmbedFooter decodes a discordgopb.MessageEmbedFooter into a discordgo.MessageEmbedFooter.
 func decodeMessageEmbedFooter(footer *discordgopb.MessageEmbedFooter) *discordgo.MessageEmbedFooter {
 	if footer == nil {
 		return nil
@@ -200,6 +212,7 @@ func decodeMessageEmbedFooter(footer *discordgopb.MessageEmbedFooter) *discordgo
 	}
 }
 
+// encodeMessageEmbedImage encodes a discordgo.MessageEmbedImage into a discordgopb.MessageEmbedImage.
 func encodeMessageEmbedImage(image *discordgo.MessageEmbedImage) *discordgopb.MessageEmbedImage {
 	if image == nil {
 		return nil
@@ -213,6 +226,7 @@ func encodeMessageEmbedImage(image *discordgo.MessageEmbedImage) *discordgopb.Me
 	}
 }
 
+// decodeMessageEmbedImage decodes a discordgopb.MessageEmbedImage into a discordgo.MessageEmbedImage.
 func decodeMessageEmbedImage(image *discordgopb.MessageEmbedImage) *discordgo.MessageEmbedImage {
 	if image == nil {
 		return nil
@@ -226,6 +240,7 @@ func decodeMessageEmbedImage(image *discordgopb.MessageEmbedImage) *discordgo.Me
 	}
 }
 
+// encodeMessageEmbedThumbnail encodes a discordgo.MessageEmbedThumbnail into a discordgopb.MessageEmbedThumbnail.
 func encodeMessageEmbedThumbnail(thumbnail *discordgo.MessageEmbedThumbnail) *discordgopb.MessageEmbedThumbnail {
 	if thumbnail == nil {
 		return nil
@@ -239,6 +254,7 @@ func encodeMessageEmbedThumbnail(thumbnail *discordgo.MessageEmbedThumbnail) *di
 	}
 }
 
+// decodeMessageEmbedThumbnail decodes a discordgopb.MessageEmbedThumbnail into a discordgo.MessageEmbedThumbnail.
 func decodeMessageEmbedThumbnail(thumbnail *discordgopb.MessageEmbedThumbnail) *discordgo.MessageEmbedThumbnail {
 	if thumbnail == nil {
 		return nil
@@ -252,6 +268,7 @@ func decodeMessageEmbedThumbnail(thumbnail *discordgopb.MessageEmbedThumbnail) *
 	}
 }
 
+// encodeMessageEmbedVideo encodes a discordgo.MessageEmbedVideo into a discordgopb.MessageEmbedVideo.
 func encodeMessageEmbedVideo(video *discordgo.MessageEmbedVideo) *discordgopb.MessageEmbedVideo {
 	if video == nil {
 		return nil
@@ -264,6 +281,7 @@ func encodeMessageEmbedVideo(video *discordgo.MessageEmbedVideo) *discordgopb.Me
 	}
 }
 
+// decodeMessageEmbedVideo decodes a discordgopb.MessageEmbedVideo into a discordgo.MessageEmbedVideo.
 func decodeMessageEmbedVideo(video *discordgopb.MessageEmbedVideo) *discordgo.MessageEmbedVideo {
 	if video == nil {
 		return nil
@@ -276,6 +294,7 @@ func decodeMessageEmbedVideo(video *discordgopb.MessageEmbedVideo) *discordgo.Me
 	}
 }
 
+// encodeMessageEmbedProvider encodes a discordgo.MessageEmbedProvider into a discordgopb.MessageEmbedProvider.
 func encodeMessageEmbedProvider(provider *discordgo.MessageEmbedProvider) *discordgopb.MessageEmbedProvider {
 	if provider == nil {
 		return nil
@@ -287,6 +306,7 @@ func encodeMessageEmbedProvider(provider *discordgo.MessageEmbedProvider) *disco
 	}
 }
 
+// decodeMessageEmbedProvider decodes a discordgopb.MessageEmbedProvider into a discordgo.MessageEmbedProvider.
 func decodeMessageEmbedProvider(provider *discordgopb.MessageEmbedProvider) *discordgo.MessageEmbedProvider {
 	if provider == nil {
 		return nil
@@ -298,6 +318,7 @@ func decodeMessageEmbedProvider(provider *discordgopb.MessageEmbedProvider) *dis
 	}
 }
 
+// encodeMessageEmbedAuthor encodes a discordgo.MessageEmbedAuthor into a discordgopb.MessageEmbedAuthor.
 func encodeMessageEmbedAuthor(author *discordgo.MessageEmbedAuthor) *discordgopb.MessageEmbedAuthor {
 	if author == nil {
 		return nil
@@ -311,6 +332,7 @@ func encodeMessageEmbedAuthor(author *discordgo.MessageEmbedAuthor) *discordgopb
 	}
 }
 
+// decodeMessageEmbedAuthor decodes a discordgopb.MessageEmbedAuthor into a discordgo.MessageEmbedAuthor.
 func decodeMessageEmbedAuthor(author *discordgopb.MessageEmbedAuthor) *discordgo.MessageEmbedAuthor {
 	if author == nil {
 		return nil
@@ -324,6 +346,7 @@ func decodeMessageEmbedAuthor(author *discordgopb.MessageEmbedAuthor) *discordgo
 	}
 }
 
+// encodeMessageEmbedField encodes a discordgo.MessageEmbedField into a discordgopb.MessageEmbedField.
 func encodeMessageEmbedField(field *discordgo.MessageEmbedField) *discordgopb.MessageEmbedField {
 	if field == nil {
 		return nil
@@ -336,6 +359,7 @@ func encodeMessageEmbedField(field *discordgo.MessageEmbedField) *discordgopb.Me
 	}
 }
 
+// encodeMessageEmbedFields encodes multiple discordgo.MessageEmbedField into multiple discordgopb.MessageEmbedField.
 func encodeMessageEmbedFields(fields []*discordgo.MessageEmbedField) []*discordgopb.MessageEmbedField {
 	if fields == nil {
 		return nil
@@ -350,6 +374,7 @@ func encodeMessageEmbedFields(fields []*discordgo.MessageEmbedField) []*discordg
 	return result
 }
 
+// decodeMessageEmbedField decodes a discordgopb.MessageEmbedField into a discordgo.MessageEmbedField.
 func decodeMessageEmbedField(field *discordgopb.MessageEmbedField) *discordgo.MessageEmbedField {
 	if field == nil {
 		return nil
@@ -362,6 +387,7 @@ func decodeMessageEmbedField(field *discordgopb.MessageEmbedField) *discordgo.Me
 	}
 }
 
+// decodeMessageEmbedFields decodes multiple discordgopb.MessageEmbedField into multiple discordgo.MessageEmbedField.
 func decodeMessageEmbedFields(fields []*discordgopb.MessageEmbedField) []*discordgo.MessageEmbedField {
 	if fields == nil {
 		return nil
@@ -376,6 +402,7 @@ func decodeMessageEmbedFields(fields []*discordgopb.MessageEmbedField) []*discor
 	return result
 }
 
+// encodeMessageReaction encodes a discordgo.MessageReactions into a discordgopb.MessageReactions.
 func encodeMessageReaction(reaction *discordgo.MessageReactions) *discordgopb.MessageReactions {
 	if reaction == nil {
 		return nil
@@ -388,6 +415,7 @@ func encodeMessageReaction(reaction *discordgo.MessageReactions) *discordgopb.Me
 	}
 }
 
+// encodeMessageReactions encodes multiple discordgo.MessageReactions into multiple discordgopb.MessageReactions.
 func encodeMessageReactions(reactions []*discordgo.MessageReactions) []*discordgopb.MessageReactions {
 	if reactions == nil {
 		return nil
@@ -402,6 +430,7 @@ func encodeMessageReactions(reactions []*discordgo.MessageReactions) []*discordg
 	return result
 }
 
+// decodeMessageReaction decodes a discordgopb.MessageReactions into a discordgo.MessageReactions.
 func decodeMessageReaction(reaction *discordgopb.MessageReactions) *discordgo.MessageReactions {
 	if reaction == nil {
 		return nil
@@ -414,6 +443,7 @@ func decodeMessageReaction(reaction *discordgopb.MessageReactions) *discordgo.Me
 	}
 }
 
+// decodeMessageReactions decodes multiple discordgopb.MessageReactions into multiple discordgo.MessageReactions.
 func decodeMessageReactions(reactions []*discordgopb.MessageReactions) []*discordgo.MessageReactions {
 	if reactions == nil {
 		return nil
@@ -428,6 +458,7 @@ func decodeMessageReactions(reactions []*discordgopb.MessageReactions) []*discor
 	return result
 }
 
+// encodeEmoji encodes a discordgo.Emoji into a discordgopb.Emoji.
 func encodeEmoji(emoji *discordgo.Emoji) *discordgopb.Emoji {
 	if emoji == nil {
 		return nil
@@ -447,6 +478,7 @@ func encodeEmoji(emoji *discordgo.Emoji) *discordgopb.Emoji {
 	}
 }
 
+// decodeEmoji decodes a discordgopb.Emoji into a discordgo.Emoji.
 func decodeEmoji(emoji *discordgopb.Emoji) *discordgo.Emoji {
 	if emoji == nil {
 		return nil
@@ -466,6 +498,7 @@ func decodeEmoji(emoji *discordgopb.Emoji) *discordgo.Emoji {
 	}
 }
 
+// encodeMessageActivity encodes a discordgo.MessageActivity into a discordgopb.MessageActivity.
 func encodeMessageActivity(activity *discordgo.MessageActivity) *discordgopb.MessageActivity {
 	if activity == nil {
 		return nil
@@ -477,6 +510,7 @@ func encodeMessageActivity(activity *discordgo.MessageActivity) *discordgopb.Mes
 	}
 }
 
+// decodeMessageActivity decodes a discordgopb.MessageActivity into a discordgo.MessageActivity.
 func decodeMessageActivity(activity *discordgopb.MessageActivity) *discordgo.MessageActivity {
 	if activity == nil {
 		return nil
@@ -488,6 +522,7 @@ func decodeMessageActivity(activity *discordgopb.MessageActivity) *discordgo.Mes
 	}
 }
 
+// encodeMessageApplication encodes a discordgo.MessageApplication into a discordgopb.MessageApplication.
 func encodeMessageApplication(application *discordgo.MessageApplication) *discordgopb.MessageApplication {
 	if application == nil {
 		return nil
@@ -502,6 +537,7 @@ func encodeMessageApplication(application *discordgo.MessageApplication) *discor
 	}
 }
 
+// decodeMessageApplication decodes a discordgopb.MessageApplication into a discordgo.MessageApplication.
 func decodeMessageApplication(application *discordgopb.MessageApplication) *discordgo.MessageApplication {
 	if application == nil {
 		return nil
@@ -516,6 +552,7 @@ func decodeMessageApplication(application *discordgopb.MessageApplication) *disc
 	}
 }
 
+// encodeMessageReference encodes a discordgo.MessageReference into a discordgopb.MessageReference.
 func encodeMessageReference(reference *discordgo.MessageReference) *discordgopb.MessageReference {
 	if reference == nil {
 		return nil
@@ -528,6 +565,7 @@ func encodeMessageReference(reference *discordgo.MessageReference) *discordgopb.
 	}
 }
 
+// decodeMessageReference decodes a discordgopb.MessageReference into a discordgo.MessageReference.
 func decodeMessageReference(reference *discordgopb.MessageReference) *discordgo.MessageReference {
 	if reference == nil {
 		return nil
@@ -540,6 +578,7 @@ func decodeMessageReference(reference *discordgopb.MessageReference) *discordgo.
 	}
 }
 
+// encodeMessageInteraction encodes a discordgo.MessageInteraction into a discordgopb.MessageInteraction.
 func encodeMessageInteraction(interaction *discordgo.MessageInteraction) *discordgopb.MessageInteraction {
 	if interaction == nil {
 		return nil
@@ -555,6 +594,7 @@ func encodeMessageInteraction(interaction *discordgo.MessageInteraction) *discor
 	}
 }
 
+// decodeMessageInteraction decodes a discordgopb.MessageInteraction into a discordgo.MessageInteraction.
 func decodeMessageInteraction(interaction *discordgopb.MessageInteraction) *discordgo.MessageInteraction {
 	if interaction == nil {
 		return nil
@@ -570,6 +610,7 @@ func decodeMessageInteraction(interaction *discordgopb.MessageInteraction) *disc
 	}
 }
 
+// encodeSticker encodes a discordgo.Sticker into a discordgopb.Sticker.
 func encodeSticker(sticker *discordgo.Sticker) *discordgopb.Sticker {
 	if sticker == nil {
 		return nil
@@ -592,6 +633,7 @@ func encodeSticker(sticker *discordgo.Sticker) *discordgopb.Sticker {
 	}
 }
 
+// encodeStickers encodes multiple discordgo.Sticker into multiple discordgopb.Sticker.
 func encodeStickers(stickers []*discordgo.Sticker) []*discordgopb.Sticker {
 	if stickers == nil {
 		return nil
@@ -606,6 +648,7 @@ func encodeStickers(stickers []*discordgo.Sticker) []*discordgopb.Sticker {
 	return result
 }
 
+// decodeSticker decodes a discordgopb.Sticker into a discordgo.Sticker.
 func decodeSticker(sticker *discordgopb.Sticker) *discordgo.Sticker {
 	if sticker == nil {
 		return nil
@@ -628,6 +671,7 @@ func decodeSticker(sticker *discordgopb.Sticker) *discordgo.Sticker {
 	}
 }
 
+// decodeStickers decodes multiple discordgopb.Sticker into multiple discordgo.Sticker.
 func decodeStickers(stickers []*discordgopb.Sticker) []*discordgo.Sticker {
 	if stickers == nil {
 		return nil
@@ -642,6 +686,7 @@ func decodeStickers(stickers []*discordgopb.Sticker) []*discordgo.Sticker {
 	return result
 }
 
+// encodeFile encodes a discordgo.File into a discordgopb.File.
 func encodeFile(file *discordgo.File) *discordgopb.File {
 	if file == nil {
 		return nil
@@ -656,6 +701,7 @@ func encodeFile(file *discordgo.File) *discordgopb.File {
 	}
 }
 
+// encodeFiles encodes multiple discordgo.File into multiple discordgopb.File.
 func encodeFiles(files []*discordgo.File) []*discordgopb.File {
 	if files == nil {
 		return nil
@@ -670,6 +716,7 @@ func encodeFiles(files []*discordgo.File) []*discordgopb.File {
 	return result
 }
 
+// decodeFile decodes a discordgopb.File into a discordgo.File.
 func decodeFile(file *discordgopb.File) *discordgo.File {
 	if file == nil {
 		return nil
@@ -682,6 +729,7 @@ func decodeFile(file *discordgopb.File) *discordgo.File {
 	}
 }
 
+// decodeFiles decodes multiple discordgopb.File into multiple discordgo.File.
 func decodeFiles(files []*discordgopb.File) []*discordgo.File {
 	if files == nil {
 		return nil
@@ -691,34 +739,6 @@ func decodeFiles(files []*discordgopb.File) []*discordgo.File {
 
 	for i, file := range files {
 		result[i] = decodeFile(file)
-	}
-
-	return result
-}
-
-func _encodeParse(allowedMentions []discordgo.AllowedMentionType) []string {
-	if allowedMentions == nil {
-		return nil
-	}
-
-	result := make([]string, len(allowedMentions))
-
-	for i, allowedMention := range allowedMentions {
-		result[i] = string(allowedMention)
-	}
-
-	return result
-}
-
-func _decodeParse(allowedMentions []string) []discordgo.AllowedMentionType {
-	if allowedMentions == nil {
-		return nil
-	}
-
-	result := make([]discordgo.AllowedMentionType, len(allowedMentions))
-
-	for i, allowedMention := range allowedMentions {
-		result[i] = discordgo.AllowedMentionType(allowedMention)
 	}
 
 	return result

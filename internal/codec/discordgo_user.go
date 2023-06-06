@@ -9,6 +9,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
+// encodeUser encodes a discordgo.User into a discordgopb.User.
 func encodeUser(user *discordgo.User) *discordgopb.User {
 	if user == nil {
 		return nil
@@ -38,6 +39,7 @@ func encodeUser(user *discordgo.User) *discordgopb.User {
 	}
 }
 
+// encodeUsers encodes multiple discordgo.User into multiple discordgopb.User.
 func encodeUsers(users []*discordgo.User) []*discordgopb.User {
 	if users == nil {
 		return nil
@@ -52,6 +54,7 @@ func encodeUsers(users []*discordgo.User) []*discordgopb.User {
 	return result
 }
 
+// decodeUser decodes a discordgopb.User into a discordgo.User.
 func decodeUser(user *discordgopb.User) *discordgo.User {
 	if user == nil {
 		return nil
@@ -81,6 +84,7 @@ func decodeUser(user *discordgopb.User) *discordgo.User {
 	}
 }
 
+// decodeUsers decodes multiple discordgopb.User into multiple discordgo.User.
 func decodeUsers(users []*discordgopb.User) []*discordgo.User {
 	if users == nil {
 		return nil
@@ -95,6 +99,7 @@ func decodeUsers(users []*discordgopb.User) []*discordgo.User {
 	return result
 }
 
+// encodeMember encodes a discordgo.Member into a discordgopb.Member.
 func encodeMember(member *discordgo.Member) *discordgopb.Member {
 	if member == nil {
 		return nil
@@ -129,6 +134,7 @@ func encodeMember(member *discordgo.Member) *discordgopb.Member {
 	}
 }
 
+// decodeMember decodes a discordgopb.Member into a discordgo.Member.
 func decodeMember(member *discordgopb.Member) *discordgo.Member {
 	if member == nil {
 		return nil
@@ -163,6 +169,7 @@ func decodeMember(member *discordgopb.Member) *discordgo.Member {
 	}
 }
 
+// encodeRole encodes a discordgo.Role into a discordgopb.Role.
 func encodeRole(role *discordgo.Role) *discordgopb.Role {
 	if role == nil {
 		return nil
@@ -183,6 +190,7 @@ func encodeRole(role *discordgo.Role) *discordgopb.Role {
 	}
 }
 
+// decodeRole decodes a discordgopb.Role into a discordgo.Role.
 func decodeRole(role *discordgopb.Role) *discordgo.Role {
 	if role == nil {
 		return nil

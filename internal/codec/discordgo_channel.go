@@ -9,6 +9,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
+// encodeChannel encodes a discordgo.Channel into a discordgopb.Channel.
 func encodeChannel(channel *discordgo.Channel) *discordgopb.Channel {
 	if channel == nil {
 		return nil
@@ -63,6 +64,7 @@ func encodeChannel(channel *discordgo.Channel) *discordgopb.Channel {
 	}
 }
 
+// encodeChannels encodes multiple discordgo.Channel into multiple discordgopb.Channel.
 func encodeChannels(channels []*discordgo.Channel) []*discordgopb.Channel {
 	if channels == nil {
 		return nil
@@ -77,6 +79,7 @@ func encodeChannels(channels []*discordgo.Channel) []*discordgopb.Channel {
 	return result
 }
 
+// decodeChannel decodes a discordgopb.Channel into a discordgo.Channel.
 func decodeChannel(channel *discordgopb.Channel) *discordgo.Channel {
 	if channel == nil {
 		return nil
@@ -131,6 +134,7 @@ func decodeChannel(channel *discordgopb.Channel) *discordgo.Channel {
 	}
 }
 
+// decodeChannels decodes multiple discordgopb.Channel into multiple discordgo.Channel.
 func decodeChannels(channels []*discordgopb.Channel) []*discordgo.Channel {
 	if channels == nil {
 		return nil
@@ -145,6 +149,7 @@ func decodeChannels(channels []*discordgopb.Channel) []*discordgo.Channel {
 	return result
 }
 
+// encodeMessage encodes a discordgo.Message into a discordgopb.Message.
 func encodeMessage(message *discordgo.Message) *discordgopb.Message {
 	if message == nil {
 		return nil
@@ -192,6 +197,7 @@ func encodeMessage(message *discordgo.Message) *discordgopb.Message {
 	}
 }
 
+// encodeMessages encodes multiple discordgo.Message into multiple discordgopb.Message.
 func encodeMessages(messages []*discordgo.Message) []*discordgopb.Message {
 	if messages == nil {
 		return nil
@@ -206,6 +212,7 @@ func encodeMessages(messages []*discordgo.Message) []*discordgopb.Message {
 	return result
 }
 
+// decodeMessage decodes a discordgopb.Message into a discordgo.Message.
 func decodeMessage(message *discordgopb.Message) *discordgo.Message {
 	if message == nil {
 		return nil
@@ -253,6 +260,7 @@ func decodeMessage(message *discordgopb.Message) *discordgo.Message {
 	}
 }
 
+// decodeMessages decodes multiple discordgopb.Message into multiple discordgo.Message.
 func decodeMessages(messages []*discordgopb.Message) []*discordgo.Message {
 	if messages == nil {
 		return nil
@@ -267,6 +275,7 @@ func decodeMessages(messages []*discordgopb.Message) []*discordgo.Message {
 	return result
 }
 
+// encodePermissionOverwrite encodes a discordgo.PermissionOverwrite into a discordgopb.PermissionOverwrite.
 func encodePermissionOverwrite(overwrite *discordgo.PermissionOverwrite) *discordgopb.PermissionOverwrite {
 	if overwrite == nil {
 		return nil
@@ -280,6 +289,7 @@ func encodePermissionOverwrite(overwrite *discordgo.PermissionOverwrite) *discor
 	}
 }
 
+// encodePermissionOverwrites encodes multiple discordgo.PermissionOverwrite into multiple discordgopb.PermissionOverwrite.
 func encodePermissionOverwrites(overwrites []*discordgo.PermissionOverwrite) []*discordgopb.PermissionOverwrite {
 	if overwrites == nil {
 		return nil
@@ -294,6 +304,7 @@ func encodePermissionOverwrites(overwrites []*discordgo.PermissionOverwrite) []*
 	return result
 }
 
+// decodePermissionOverwrite decodes a discordgopb.PermissionOverwrite into a discordgo.PermissionOverwrite.
 func decodePermissionOverwrite(overwrite *discordgopb.PermissionOverwrite) *discordgo.PermissionOverwrite {
 	if overwrite == nil {
 		return nil
@@ -307,6 +318,7 @@ func decodePermissionOverwrite(overwrite *discordgopb.PermissionOverwrite) *disc
 	}
 }
 
+// decodePermissionOverwrites decodes multiple discordgopb.PermissionOverwrite into multiple discordgo.PermissionOverwrite.
 func decodePermissionOverwrites(overwrites []*discordgopb.PermissionOverwrite) []*discordgo.PermissionOverwrite {
 	if overwrites == nil {
 		return nil
@@ -321,6 +333,7 @@ func decodePermissionOverwrites(overwrites []*discordgopb.PermissionOverwrite) [
 	return result
 }
 
+// encodeThreadMetadata encodes a discordgo.ThreadMetadata into a discordgopb.ThreadMetadata.
 func encodeThreadMetadata(metadata *discordgo.ThreadMetadata) *discordgopb.ThreadMetadata {
 	if metadata == nil {
 		return nil
@@ -335,6 +348,7 @@ func encodeThreadMetadata(metadata *discordgo.ThreadMetadata) *discordgopb.Threa
 	}
 }
 
+// decodeThreadMetadata decodes a discordgopb.ThreadMetadata into a discordgo.ThreadMetadata.
 func decodeThreadMetadata(metadata *discordgopb.ThreadMetadata) *discordgo.ThreadMetadata {
 	if metadata == nil {
 		return nil
@@ -349,6 +363,7 @@ func decodeThreadMetadata(metadata *discordgopb.ThreadMetadata) *discordgo.Threa
 	}
 }
 
+// encodeThreadMember encodes a discordgo.ThreadMember into a discordgopb.ThreadMember.
 func encodeThreadMember(member *discordgo.ThreadMember) *discordgopb.ThreadMember {
 	if member == nil {
 		return nil
@@ -362,6 +377,7 @@ func encodeThreadMember(member *discordgo.ThreadMember) *discordgopb.ThreadMembe
 	}
 }
 
+// encodeThreadMembers encodes multiple discordgo.ThreadMember into multiple discordgopb.ThreadMember.
 func encodeThreadMembers(members []*discordgo.ThreadMember) []*discordgopb.ThreadMember {
 	if members == nil {
 		return nil
@@ -376,6 +392,7 @@ func encodeThreadMembers(members []*discordgo.ThreadMember) []*discordgopb.Threa
 	return result
 }
 
+// decodeThreadMember decodes a discordgopb.ThreadMember into a discordgo.ThreadMember.
 func decodeThreadMember(member *discordgopb.ThreadMember) *discordgo.ThreadMember {
 	if member == nil {
 		return nil
@@ -389,6 +406,7 @@ func decodeThreadMember(member *discordgopb.ThreadMember) *discordgo.ThreadMembe
 	}
 }
 
+// decodeThreadMembers decodes multiple discordgopb.ThreadMember into multiple discordgo.ThreadMember.
 func decodeThreadMembers(members []*discordgopb.ThreadMember) []*discordgo.ThreadMember {
 	if members == nil {
 		return nil
@@ -403,6 +421,7 @@ func decodeThreadMembers(members []*discordgopb.ThreadMember) []*discordgo.Threa
 	return result
 }
 
+// encodeForumTag encodes a discordgo.ForumTag into a discordgopb.ForumTag.
 func encodeForumTag(tag discordgo.ForumTag) *discordgopb.ForumTag {
 	return &discordgopb.ForumTag{
 		Id:        tag.ID,
@@ -413,6 +432,7 @@ func encodeForumTag(tag discordgo.ForumTag) *discordgopb.ForumTag {
 	}
 }
 
+// encodeForumTags encodes multiple discordgo.ForumTag into multiple discordgopb.ForumTag.
 func encodeForumTags(tags []discordgo.ForumTag) []*discordgopb.ForumTag {
 	if tags == nil {
 		return nil
@@ -427,6 +447,7 @@ func encodeForumTags(tags []discordgo.ForumTag) []*discordgopb.ForumTag {
 	return result
 }
 
+// decodeForumTag decodes a discordgopb.ForumTag into a discordgo.ForumTag.
 func decodeForumTag(tag *discordgopb.ForumTag) discordgo.ForumTag {
 	return discordgo.ForumTag{
 		ID:        tag.Id,
@@ -437,6 +458,7 @@ func decodeForumTag(tag *discordgopb.ForumTag) discordgo.ForumTag {
 	}
 }
 
+// decodeForumTags decodes multiple discordgopb.ForumTag into multiple discordgo.ForumTag.
 func decodeForumTags(tags []*discordgopb.ForumTag) []discordgo.ForumTag {
 	if tags == nil {
 		return nil
@@ -451,6 +473,7 @@ func decodeForumTags(tags []*discordgopb.ForumTag) []discordgo.ForumTag {
 	return result
 }
 
+// encodeForumDefaultReaction encodes a discordgo.ForumDefaultReaction into a discordgopb.ForumDefaultReaction.
 func encodeForumDefaultReaction(reaction *discordgo.ForumDefaultReaction) *discordgopb.ForumDefaultReaction {
 	if reaction == nil {
 		return nil
@@ -462,6 +485,7 @@ func encodeForumDefaultReaction(reaction *discordgo.ForumDefaultReaction) *disco
 	}
 }
 
+// decodeForumDefaultReaction decodes a discordgopb.ForumDefaultReaction into a discordgo.ForumDefaultReaction.
 func decodeForumDefaultReaction(reaction *discordgopb.ForumDefaultReaction) *discordgo.ForumDefaultReaction {
 	if reaction == nil {
 		return nil

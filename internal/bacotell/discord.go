@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// connect starts the Discord bot client and connects to the Discord API.
 func connect() {
 	session, err := discordgo.New("Bot " + viper.GetString(ConfigBotToken))
 	if err != nil {
@@ -44,18 +45,25 @@ func connect() {
 	}
 }
 
+// _onConnect gets called when successfully connected to Discord.
 func _onConnect(*discordgo.Session, *discordgo.Connect) {
 	discordLogger.Info("connected to discord gateway")
 }
 
+// _onDisconnect gets called when connection to Discord is lost.
 func _onDisconnect(*discordgo.Session, *discordgo.Disconnect) {
 	discordLogger.Info("disconnected from discord gateway")
 }
 
+// _onReady gets called when the ready event is received from Discord.
 func _onReady(_ *discordgo.Session, evt *discordgo.Ready) {
 	discordLogger.Info("logged in", "username", evt.User.Username, "tag", evt.User.Discriminator)
 }
 
+// _onGuildCreate gets called for every guild the bot is a member of.
+//
+// It registers all loaded commands to the guild which aren't already registered and updates the ones that are.
+// It also deletes commands which are not loaded.
 func _onGuildCreate(session *discordgo.Session, guild *discordgo.GuildCreate) {
 	guildLogger := discordLogger.With("guild", guild.ID)
 	guildLogger.Info("deploying commands")
@@ -115,6 +123,9 @@ func _onGuildCreate(session *discordgo.Session, guild *discordgo.GuildCreate) {
 	}
 }
 
+// _onInteractionCreate gets called when a user uses a command, component or modal.
+//
+// It looks up the requested command, component or modal and calls the respective handler function.
 func _onInteractionCreate(session *discordgo.Session, evt *discordgo.InteractionCreate) {
 	interactionLogger := discordLogger.With("interaction", evt.ID)
 	interactionLogger.Info("handling interaction", "guild", evt.GuildID, "type", evt.Type)

@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc"
 )
 
+// The server implementation of bacotell_common.Modal.
 type modalServer struct {
 	bacotellpb.UnimplementedModalServer
 
@@ -16,6 +17,7 @@ type modalServer struct {
 	broker *plugin.GRPCBroker
 }
 
+// modalServer implements bacotellpb.ModalServer.
 var _ bacotellpb.ModalServer = modalServer{}
 
 // CustomId implements bacotellpb.ModalServer.
@@ -46,11 +48,13 @@ func (s modalServer) Submit(_ context.Context, req *bacotellpb.ModalSubmitReques
 	return &bacotellpb.ModalSubmitResponse{}, err
 }
 
+// The client implementation of bacotell_common.Modal.
 type modalClient struct {
 	client bacotellpb.ModalClient
 	broker *plugin.GRPCBroker
 }
 
+// modalClient implements bacotell_common.Modal.
 var _ common.Modal = modalClient{}
 
 // CustomID implements bacotell_common.Modal.
@@ -88,6 +92,7 @@ func (c modalClient) Submit(proxy common.SubmitProxy) error {
 	return err
 }
 
+// The server implementation of bacotell_common.SubmitProxy.
 type submitProxyServer struct {
 	bacotellpb.UnimplementedSubmitProxyServer
 	interactionProxyServer
@@ -95,17 +100,20 @@ type submitProxyServer struct {
 	impl common.SubmitProxy
 }
 
+// submitProxyServer implements bacotellpb.InteractionProxyServer, bacotellpb.SubmitProxyServer.
 var (
 	_ bacotellpb.InteractionProxyServer = submitProxyServer{}
 	_ bacotellpb.SubmitProxyServer      = submitProxyServer{}
 )
 
+// The client implementation of bacotell_common.SubmitProxy.
 type submitProxyClient struct {
 	interactionProxyClient
 
 	client bacotellpb.SubmitProxyClient
 }
 
+// submitProxyClient implements bacotell_common.InteractionProxy, bacotell_common.SubmitProxy.
 var (
 	_ common.InteractionProxy = submitProxyClient{}
 	_ common.SubmitProxy      = submitProxyClient{}

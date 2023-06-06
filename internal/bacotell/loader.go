@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/EliasStar/BacoTell/internal/codec"
 	common "github.com/EliasStar/BacoTell/pkg/bacotell_common"
@@ -21,6 +22,7 @@ var (
 	modals     = make(map[string]common.Modal)
 )
 
+// HandshakeConfig returns the handshake configuration for the plugin.
 func HandshakeConfig() plugin.HandshakeConfig {
 	return plugin.HandshakeConfig{
 		ProtocolVersion:  1,
@@ -29,10 +31,12 @@ func HandshakeConfig() plugin.HandshakeConfig {
 	}
 }
 
+// PluginMap returns the plugin map for the given plugin implementation (may be nil).
 func PluginMap(pluginImpl common.Plugin) plugin.PluginSet {
 	return plugin.PluginSet{bacotellPlugin: codec.NewPlugin(pluginImpl)}
 }
 
+// loadAll loads all the plugins found in the plugin directory.
 func loadAll() {
 	pluginDir := viper.GetString(ConfigPluginDir)
 	absPluginDir, err := filepath.Abs(pluginDir)
@@ -72,6 +76,7 @@ func loadAll() {
 	}
 }
 
+// loadSingle loads a single plugin using the provided reattach configuration.
 func loadSingle(reattachConfig *plugin.ReattachConfig) {
 	loaderLogger.Debug("loading plugin")
 	_load(plugin.NewClient(&plugin.ClientConfig{
@@ -83,6 +88,7 @@ func loadSingle(reattachConfig *plugin.ReattachConfig) {
 	}))
 }
 
+// unloadAll unloads all the loaded plugins.
 func unloadAll() {
 	for _, client := range clients {
 		client.Kill()
@@ -91,6 +97,7 @@ func unloadAll() {
 	clients = nil
 }
 
+// _load loads all commands, components, etc. from the provided plugin client.
 func _load(client *plugin.Client) {
 	protocol, err := client.Client()
 	if err != nil {
@@ -120,6 +127,12 @@ func _load(client *plugin.Client) {
 		return
 	}
 
+	if _, ok := clients[id]; ok {
+		loaderLogger.Warn("plugin with same id is already loaded", "id", id)
+		client.Kill()
+		return
+	}
+
 	clients[id] = client
 	pluginLogger := loaderLogger.With("plugin", id)
 
@@ -134,6 +147,11 @@ func _load(client *plugin.Client) {
 			data, err := cmd.Data()
 			if err != nil {
 				pluginLogger.Warn("cannot get command data", "command", i, "err", err)
+				continue
+			}
+
+			if !strings.HasPrefix(data.Name, id) {
+				pluginLogger.Warn("command name must be prefixed with the plugin id", "command", data.Name)
 				continue
 			}
 
@@ -155,6 +173,11 @@ func _load(client *plugin.Client) {
 				continue
 			}
 
+			if !strings.HasPrefix(cid, id) {
+				pluginLogger.Warn("custom id must be prefixed with the plugin id", "component", cid)
+				continue
+			}
+
 			components[cid] = cpt
 		}
 	}
@@ -170,6 +193,11 @@ func _load(client *plugin.Client) {
 			cid, err := mod.CustomID()
 			if err != nil {
 				pluginLogger.Warn("cannot get custom id", "modal", i, "err", err)
+				continue
+			}
+
+			if !strings.HasPrefix(cid, id) {
+				pluginLogger.Warn("custom id must be prefixed with the plugin id", "modal", cid)
 				continue
 			}
 

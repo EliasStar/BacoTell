@@ -7,12 +7,15 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+// The default implementation for bacotell_common.ExecuteProxy.
 type executeProxy struct {
 	interactionProxy
 }
 
+// executeProxy implements bacotell_common.ExecuteProxy.
 var _ common.ExecuteProxy = executeProxy{}
 
+// NewExecuteProxy returns a new ExecuteProxy implementation.
 func NewExecuteProxy(session *discordgo.Session, interaction *discordgo.Interaction) common.ExecuteProxy {
 	return executeProxy{
 		interactionProxy: interactionProxy{
@@ -22,7 +25,7 @@ func NewExecuteProxy(session *discordgo.Session, interaction *discordgo.Interact
 	}
 }
 
-// StringOption implements bacotell_common.ExecuteProxy
+// StringOption implements bacotell_common.ExecuteProxy.
 func (p executeProxy) StringOption(name string) (string, error) {
 	option := _findOption(p.interaction.ApplicationCommandData().Options, name)
 
@@ -37,7 +40,7 @@ func (p executeProxy) StringOption(name string) (string, error) {
 	return option.StringValue(), nil
 }
 
-// IntegerOption implements bacotell_common.ExecuteProxy
+// IntegerOption implements bacotell_common.ExecuteProxy.
 func (p executeProxy) IntegerOption(name string) (int64, error) {
 	option := _findOption(p.interaction.ApplicationCommandData().Options, name)
 
@@ -52,7 +55,7 @@ func (p executeProxy) IntegerOption(name string) (int64, error) {
 	return option.IntValue(), nil
 }
 
-// NumberOption implements bacotell_common.ExecuteProxy
+// NumberOption implements bacotell_common.ExecuteProxy.
 func (p executeProxy) NumberOption(name string) (float64, error) {
 	option := _findOption(p.interaction.ApplicationCommandData().Options, name)
 
@@ -67,7 +70,7 @@ func (p executeProxy) NumberOption(name string) (float64, error) {
 	return option.FloatValue(), nil
 }
 
-// BooleanOption implements bacotell_common.ExecuteProxy
+// BooleanOption implements bacotell_common.ExecuteProxy.
 func (p executeProxy) BooleanOption(name string) (bool, error) {
 	option := _findOption(p.interaction.ApplicationCommandData().Options, name)
 
@@ -82,7 +85,7 @@ func (p executeProxy) BooleanOption(name string) (bool, error) {
 	return option.BoolValue(), nil
 }
 
-// UserOption implements bacotell_common.ExecuteProxy
+// UserOption implements bacotell_common.ExecuteProxy.
 func (p executeProxy) UserOption(name string) (*discordgo.User, error) {
 	option := _findOption(p.interaction.ApplicationCommandData().Options, name)
 
@@ -97,7 +100,7 @@ func (p executeProxy) UserOption(name string) (*discordgo.User, error) {
 	return option.UserValue(p.session), nil
 }
 
-// RoleOption implements bacotell_common.ExecuteProxy
+// RoleOption implements bacotell_common.ExecuteProxy.
 func (p executeProxy) RoleOption(name string) (*discordgo.Role, error) {
 	option := _findOption(p.interaction.ApplicationCommandData().Options, name)
 
@@ -112,7 +115,7 @@ func (p executeProxy) RoleOption(name string) (*discordgo.Role, error) {
 	return option.RoleValue(p.session, p.interaction.GuildID), nil
 }
 
-// ChannelOption implements bacotell_common.ExecuteProxy
+// ChannelOption implements bacotell_common.ExecuteProxy.
 func (p executeProxy) ChannelOption(name string) (*discordgo.Channel, error) {
 	option := _findOption(p.interaction.ApplicationCommandData().Options, name)
 
@@ -127,7 +130,7 @@ func (p executeProxy) ChannelOption(name string) (*discordgo.Channel, error) {
 	return option.ChannelValue(p.session), nil
 }
 
-// AttachmentOption implements bacotell_common.ExecuteProxy
+// AttachmentOption implements bacotell_common.ExecuteProxy.
 func (p executeProxy) AttachmentOption(name string) (*discordgo.MessageAttachment, error) {
 	data := p.interaction.ApplicationCommandData()
 	option := _findOption(data.Options, name)
@@ -153,6 +156,7 @@ func (p executeProxy) AttachmentOption(name string) (*discordgo.MessageAttachmen
 	return attachment, nil
 }
 
+// _findOption returns the option with the specified name if it exists.
 func _findOption(options []*discordgo.ApplicationCommandInteractionDataOption, name string) *discordgo.ApplicationCommandInteractionDataOption {
 	for _, opt := range options {
 		if opt.Name == name {

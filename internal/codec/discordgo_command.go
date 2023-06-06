@@ -7,6 +7,7 @@ import (
 	"google.golang.org/protobuf/types/known/structpb"
 )
 
+// encodeApplicationCommand encodes a discordgo.ApplicationCommand into a discordgopb.ApplicationCommand.
 func encodeApplicationCommand(command *discordgo.ApplicationCommand) *discordgopb.ApplicationCommand {
 	if command == nil {
 		return nil
@@ -35,6 +36,7 @@ func encodeApplicationCommand(command *discordgo.ApplicationCommand) *discordgop
 	}
 }
 
+// decodeApplicationCommand decodes a discordgopb.ApplicationCommand into a discordgo.ApplicationCommand.
 func decodeApplicationCommand(command *discordgopb.ApplicationCommand) *discordgo.ApplicationCommand {
 	if command == nil {
 		return nil
@@ -63,6 +65,7 @@ func decodeApplicationCommand(command *discordgopb.ApplicationCommand) *discordg
 	}
 }
 
+// encodeApplicationCommandOption encodes a discordgo.ApplicationCommandOption into a discordgopb.ApplicationCommandOption.
 func encodeApplicationCommandOption(option *discordgo.ApplicationCommandOption) *discordgopb.ApplicationCommandOption {
 	if option == nil {
 		return nil
@@ -92,6 +95,7 @@ func encodeApplicationCommandOption(option *discordgo.ApplicationCommandOption) 
 	}
 }
 
+// encodeApplicationCommandOptions encodes multiple discordgo.ApplicationCommandOption into multiple discordgopb.ApplicationCommandOption.
 func encodeApplicationCommandOptions(options []*discordgo.ApplicationCommandOption) []*discordgopb.ApplicationCommandOption {
 	if options == nil {
 		return nil
@@ -106,6 +110,7 @@ func encodeApplicationCommandOptions(options []*discordgo.ApplicationCommandOpti
 	return result
 }
 
+// decodeApplicationCommandOption decodes a discordgopb.ApplicationCommandOption into a discordgo.ApplicationCommandOption.
 func decodeApplicationCommandOption(option *discordgopb.ApplicationCommandOption) *discordgo.ApplicationCommandOption {
 	if option == nil {
 		return nil
@@ -135,6 +140,7 @@ func decodeApplicationCommandOption(option *discordgopb.ApplicationCommandOption
 	}
 }
 
+// decodeApplicationCommandOptions decodes multiple discordgopb.ApplicationCommandOption into multiple discordgo.ApplicationCommandOption.
 func decodeApplicationCommandOptions(options []*discordgopb.ApplicationCommandOption) []*discordgo.ApplicationCommandOption {
 	if options == nil {
 		return nil
@@ -149,6 +155,7 @@ func decodeApplicationCommandOptions(options []*discordgopb.ApplicationCommandOp
 	return result
 }
 
+// encodeApplicationCommandOptionChoice encodes a discordgo.ApplicationCommandOptionChoice into a discordgopb.ApplicationCommandOptionChoice.
 func encodeApplicationCommandOptionChoice(choice *discordgo.ApplicationCommandOptionChoice) *discordgopb.ApplicationCommandOptionChoice {
 	if choice == nil {
 		return nil
@@ -163,6 +170,7 @@ func encodeApplicationCommandOptionChoice(choice *discordgo.ApplicationCommandOp
 	}
 }
 
+// encodeApplicationCommandOptionChoices encodes multiple discordgo.ApplicationCommandOptionChoice into multiple discordgopb.ApplicationCommandOptionChoice.
 func encodeApplicationCommandOptionChoices(choices []*discordgo.ApplicationCommandOptionChoice) []*discordgopb.ApplicationCommandOptionChoice {
 	if choices == nil {
 		return nil
@@ -177,6 +185,7 @@ func encodeApplicationCommandOptionChoices(choices []*discordgo.ApplicationComma
 	return result
 }
 
+// decodeApplicationCommandOptionChoice decodes a discordgopb.ApplicationCommandOptionChoice into a discordgo.ApplicationCommandOptionChoice.
 func decodeApplicationCommandOptionChoice(choice *discordgopb.ApplicationCommandOptionChoice) *discordgo.ApplicationCommandOptionChoice {
 	if choice == nil {
 		return nil
@@ -189,6 +198,7 @@ func decodeApplicationCommandOptionChoice(choice *discordgopb.ApplicationCommand
 	}
 }
 
+// decodeApplicationCommandOptionChoices decodes multiple discordgopb.ApplicationCommandOptionChoice into multiple discordgo.ApplicationCommandOptionChoice.
 func decodeApplicationCommandOptionChoices(choices []*discordgopb.ApplicationCommandOptionChoice) []*discordgo.ApplicationCommandOptionChoice {
 	if choices == nil {
 		return nil

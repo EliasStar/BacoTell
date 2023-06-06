@@ -7,13 +7,16 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+// The default implementation for bacotell_common.AutocompleteProxy.
 type autocompleteProxy struct {
 	session     *discordgo.Session
 	interaction *discordgo.Interaction
 }
 
+// autocompleteProxy implements bacotell_common.AutocompleteProxy.
 var _ common.AutocompleteProxy = autocompleteProxy{}
 
+// NewAutocompleteProxy returns a new AutocompleteProxy implementation.
 func NewAutocompleteProxy(session *discordgo.Session, interaction *discordgo.Interaction) common.AutocompleteProxy {
 	return autocompleteProxy{
 		session:     session,
@@ -39,6 +42,7 @@ func (p autocompleteProxy) FocusedOption() (string, any, error) {
 	return option.Name, option.Value, nil
 }
 
+// _findFocusedOption returns the focused option in an autocomplete interaction if it exists.
 func _findFocusedOption(options []*discordgo.ApplicationCommandInteractionDataOption) *discordgo.ApplicationCommandInteractionDataOption {
 	for _, opt := range options {
 		if opt.Focused {
