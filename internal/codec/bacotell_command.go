@@ -83,19 +83,17 @@ func (c commandClient) Execute(proxy common.ExecuteProxy) error {
 	var server *grpc.Server
 
 	id := c.broker.NextId()
+	srv := executeProxyServer{
+		interactionProxyServer: interactionProxyServer{
+			impl: proxy,
+		},
+		impl: proxy,
+	}
+
 	go c.broker.AcceptAndServe(id, func(opts []grpc.ServerOption) *grpc.Server {
 		server = grpc.NewServer(opts...)
-
-		srv := executeProxyServer{
-			interactionProxyServer: interactionProxyServer{
-				impl: proxy,
-			},
-			impl: proxy,
-		}
-
 		bacotellpb.RegisterExecuteProxyServer(server, srv)
 		bacotellpb.RegisterInteractionProxyServer(server, srv)
-
 		return server
 	})
 
@@ -110,9 +108,11 @@ func (c commandClient) Autocomplete(proxy common.AutocompleteProxy) error {
 	var server *grpc.Server
 
 	id := c.broker.NextId()
+	srv := autocompleteProxyServer{impl: proxy}
+
 	go c.broker.AcceptAndServe(id, func(opts []grpc.ServerOption) *grpc.Server {
 		server = grpc.NewServer(opts...)
-		bacotellpb.RegisterAutocompleteProxyServer(server, autocompleteProxyServer{impl: proxy})
+		bacotellpb.RegisterAutocompleteProxyServer(server, srv)
 		return server
 	})
 

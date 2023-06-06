@@ -64,6 +64,10 @@ func encodeChannel(channel *discordgo.Channel) *discordgopb.Channel {
 }
 
 func encodeChannels(channels []*discordgo.Channel) []*discordgopb.Channel {
+	if channels == nil {
+		return nil
+	}
+
 	result := make([]*discordgopb.Channel, len(channels))
 
 	for i, channel := range channels {
@@ -128,6 +132,10 @@ func decodeChannel(channel *discordgopb.Channel) *discordgo.Channel {
 }
 
 func decodeChannels(channels []*discordgopb.Channel) []*discordgo.Channel {
+	if channels == nil {
+		return nil
+	}
+
 	result := make([]*discordgo.Channel, len(channels))
 
 	for i, channel := range channels {
@@ -185,6 +193,10 @@ func encodeMessage(message *discordgo.Message) *discordgopb.Message {
 }
 
 func encodeMessages(messages []*discordgo.Message) []*discordgopb.Message {
+	if messages == nil {
+		return nil
+	}
+
 	result := make([]*discordgopb.Message, len(messages))
 
 	for i, message := range messages {
@@ -242,6 +254,10 @@ func decodeMessage(message *discordgopb.Message) *discordgo.Message {
 }
 
 func decodeMessages(messages []*discordgopb.Message) []*discordgo.Message {
+	if messages == nil {
+		return nil
+	}
+
 	result := make([]*discordgo.Message, len(messages))
 
 	for i, message := range messages {
@@ -265,6 +281,10 @@ func encodePermissionOverwrite(overwrite *discordgo.PermissionOverwrite) *discor
 }
 
 func encodePermissionOverwrites(overwrites []*discordgo.PermissionOverwrite) []*discordgopb.PermissionOverwrite {
+	if overwrites == nil {
+		return nil
+	}
+
 	result := make([]*discordgopb.PermissionOverwrite, len(overwrites))
 
 	for i, overwrite := range overwrites {
@@ -288,6 +308,10 @@ func decodePermissionOverwrite(overwrite *discordgopb.PermissionOverwrite) *disc
 }
 
 func decodePermissionOverwrites(overwrites []*discordgopb.PermissionOverwrite) []*discordgo.PermissionOverwrite {
+	if overwrites == nil {
+		return nil
+	}
+
 	result := make([]*discordgo.PermissionOverwrite, len(overwrites))
 
 	for i, overwrite := range overwrites {
@@ -339,6 +363,10 @@ func encodeThreadMember(member *discordgo.ThreadMember) *discordgopb.ThreadMembe
 }
 
 func encodeThreadMembers(members []*discordgo.ThreadMember) []*discordgopb.ThreadMember {
+	if members == nil {
+		return nil
+	}
+
 	result := make([]*discordgopb.ThreadMember, len(members))
 
 	for i, member := range members {
@@ -362,6 +390,10 @@ func decodeThreadMember(member *discordgopb.ThreadMember) *discordgo.ThreadMembe
 }
 
 func decodeThreadMembers(members []*discordgopb.ThreadMember) []*discordgo.ThreadMember {
+	if members == nil {
+		return nil
+	}
+
 	result := make([]*discordgo.ThreadMember, len(members))
 
 	for i, member := range members {
@@ -382,6 +414,10 @@ func encodeForumTag(tag discordgo.ForumTag) *discordgopb.ForumTag {
 }
 
 func encodeForumTags(tags []discordgo.ForumTag) []*discordgopb.ForumTag {
+	if tags == nil {
+		return nil
+	}
+
 	result := make([]*discordgopb.ForumTag, len(tags))
 
 	for i, tag := range tags {
@@ -402,6 +438,10 @@ func decodeForumTag(tag *discordgopb.ForumTag) discordgo.ForumTag {
 }
 
 func decodeForumTags(tags []*discordgopb.ForumTag) []discordgo.ForumTag {
+	if tags == nil {
+		return nil
+	}
+
 	result := make([]discordgo.ForumTag, len(tags))
 
 	for i, tag := range tags {

@@ -69,19 +69,17 @@ func (c componentClient) Handle(proxy common.HandleProxy) error {
 	var server *grpc.Server
 
 	id := c.broker.NextId()
+	srv := handleProxyServer{
+		interactionProxyServer: interactionProxyServer{
+			impl: proxy,
+		},
+		impl: proxy,
+	}
+
 	go c.broker.AcceptAndServe(id, func(opts []grpc.ServerOption) *grpc.Server {
 		server = grpc.NewServer(opts...)
-
-		srv := handleProxyServer{
-			interactionProxyServer: interactionProxyServer{
-				impl: proxy,
-			},
-			impl: proxy,
-		}
-
 		bacotellpb.RegisterHandleProxyServer(server, srv)
 		bacotellpb.RegisterInteractionProxyServer(server, srv)
-
 		return server
 	})
 

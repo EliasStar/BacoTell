@@ -3,7 +3,6 @@ package bacotell
 import (
 	"os"
 	"os/signal"
-	"reflect"
 	"syscall"
 
 	"github.com/EliasStar/BacoTell/internal/proxy"
@@ -86,12 +85,6 @@ func _onGuildCreate(session *discordgo.Session, guild *discordgo.GuildCreate) {
 
 		if index != -1 {
 			deployedData := deployedCommandData[index]
-
-			if _areCommandsEqual(&localData, deployedData) {
-				commandLogger.Debug("skipped")
-				continue
-			}
-
 			if _, err := session.ApplicationCommandEdit(session.State.User.ID, guild.ID, deployedData.ID, &localData); err != nil {
 				commandLogger.Warn("failed to update", "err", err)
 				continue
@@ -118,7 +111,7 @@ func _onGuildCreate(session *discordgo.Session, guild *discordgo.GuildCreate) {
 			continue
 		}
 
-		commandLogger.Debug("deployed")
+		commandLogger.Debug("deleted")
 	}
 }
 
@@ -211,24 +204,4 @@ func _onInteractionCreate(session *discordgo.Session, evt *discordgo.Interaction
 
 		modalLogger.Debug("submitted")
 	}
-}
-
-func _areCommandsEqual(cmd1, cmd2 *discordgo.ApplicationCommand) bool {
-	equal := true
-
-	equal = equal && reflect.DeepEqual(cmd1.Type, cmd2.Type)
-	equal = equal && reflect.DeepEqual(cmd1.Name, cmd2.Name)
-	equal = equal && reflect.DeepEqual(cmd1.Description, cmd2.Description)
-
-	equal = equal && reflect.DeepEqual(cmd1.NameLocalizations, cmd2.NameLocalizations)
-	equal = equal && reflect.DeepEqual(cmd1.DescriptionLocalizations, cmd2.DescriptionLocalizations)
-
-	equal = equal && reflect.DeepEqual(cmd1.DefaultPermission, cmd2.DefaultPermission)
-	equal = equal && reflect.DeepEqual(cmd1.DefaultMemberPermissions, cmd2.DefaultMemberPermissions)
-	equal = equal && reflect.DeepEqual(cmd1.DMPermission, cmd2.DMPermission)
-	equal = equal && reflect.DeepEqual(cmd1.NSFW, cmd2.NSFW)
-
-	equal = equal && reflect.DeepEqual(cmd1.Options, cmd2.Options)
-
-	return equal
 }

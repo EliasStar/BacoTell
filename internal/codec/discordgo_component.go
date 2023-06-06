@@ -22,6 +22,10 @@ func encodeMessageComponent(component discordgo.MessageComponent) *discordgopb.M
 }
 
 func encodeMessageComponents(components []discordgo.MessageComponent) []*discordgopb.MessageComponent {
+	if components == nil {
+		return nil
+	}
+
 	result := make([]*discordgopb.MessageComponent, len(components))
 
 	for i, component := range components {
@@ -47,6 +51,10 @@ func decodeMessageComponent(component *discordgopb.MessageComponent) (result dis
 }
 
 func decodeMessageComponents(components []*discordgopb.MessageComponent) []discordgo.MessageComponent {
+	if components == nil {
+		return nil
+	}
+
 	result := make([]discordgo.MessageComponent, len(components))
 
 	for i, component := range components {
@@ -57,14 +65,26 @@ func decodeMessageComponents(components []*discordgopb.MessageComponent) []disco
 }
 
 func encodeActionsRow(row *discordgo.ActionsRow) *discordgopb.ActionsRow {
+	if row == nil {
+		return nil
+	}
+
 	return &discordgopb.ActionsRow{Components: encodeMessageComponents(row.Components)}
 }
 
 func decodeActionsRow(row *discordgopb.ActionsRow) *discordgo.ActionsRow {
+	if row == nil {
+		return nil
+	}
+
 	return &discordgo.ActionsRow{Components: decodeMessageComponents(row.Components)}
 }
 
 func encodeButton(button *discordgo.Button) *discordgopb.Button {
+	if button == nil {
+		return nil
+	}
+
 	return &discordgopb.Button{
 		Label:    button.Label,
 		Style:    uint32(button.Style),
@@ -76,6 +96,10 @@ func encodeButton(button *discordgo.Button) *discordgopb.Button {
 }
 
 func decodeButton(button *discordgopb.Button) *discordgo.Button {
+	if button == nil {
+		return nil
+	}
+
 	return &discordgo.Button{
 		Label:    button.Label,
 		Style:    discordgo.ButtonStyle(button.Style),
@@ -86,73 +110,101 @@ func decodeButton(button *discordgopb.Button) *discordgo.Button {
 	}
 }
 
-func encodeSelectMenu(input *discordgo.SelectMenu) *discordgopb.SelectMenu {
+func encodeSelectMenu(menu *discordgo.SelectMenu) *discordgopb.SelectMenu {
+	if menu == nil {
+		return nil
+	}
+
 	return &discordgopb.SelectMenu{
-		MenuType:     uint32(input.MenuType),
-		CustomId:     input.CustomID,
-		Placeholder:  input.Placeholder,
-		MinValues:    util.PtrConv[int, int32](input.MinValues),
-		MaxValues:    int32(input.MaxValues),
-		Options:      encodeSelectMenuOptions(input.Options),
-		Disabled:     input.Disabled,
-		ChannelTypes: _encodeChannelTypes(input.ChannelTypes),
+		MenuType:     uint32(menu.MenuType),
+		CustomId:     menu.CustomID,
+		Placeholder:  menu.Placeholder,
+		MinValues:    util.PtrConv[int, int32](menu.MinValues),
+		MaxValues:    int32(menu.MaxValues),
+		Options:      encodeSelectMenuOptions(menu.Options),
+		Disabled:     menu.Disabled,
+		ChannelTypes: _encodeChannelTypes(menu.ChannelTypes),
 	}
 }
 
-func decodeSelectMenu(input *discordgopb.SelectMenu) *discordgo.SelectMenu {
+func decodeSelectMenu(menu *discordgopb.SelectMenu) *discordgo.SelectMenu {
+	if menu == nil {
+		return nil
+	}
+
 	return &discordgo.SelectMenu{
-		MenuType:     discordgo.SelectMenuType(input.MenuType),
-		CustomID:     input.CustomId,
-		Placeholder:  input.Placeholder,
-		MinValues:    util.PtrConv[int32, int](input.MinValues),
-		MaxValues:    int(input.MaxValues),
-		Options:      decodeSelectMenuOptions(input.Options),
-		Disabled:     input.Disabled,
-		ChannelTypes: _decodeChannelTypes(input.ChannelTypes),
+		MenuType:     discordgo.SelectMenuType(menu.MenuType),
+		CustomID:     menu.CustomId,
+		Placeholder:  menu.Placeholder,
+		MinValues:    util.PtrConv[int32, int](menu.MinValues),
+		MaxValues:    int(menu.MaxValues),
+		Options:      decodeSelectMenuOptions(menu.Options),
+		Disabled:     menu.Disabled,
+		ChannelTypes: _decodeChannelTypes(menu.ChannelTypes),
 	}
 }
 
-func encodeSelectMenuOption(input *discordgo.SelectMenuOption) *discordgopb.SelectMenuOption {
+func encodeSelectMenuOption(option *discordgo.SelectMenuOption) *discordgopb.SelectMenuOption {
+	if option == nil {
+		return nil
+	}
+
 	return &discordgopb.SelectMenuOption{
-		Label:       input.Label,
-		Value:       input.Value,
-		Description: input.Description,
-		Emoji:       encodeComponentEmoji(&input.Emoji),
-		Default:     input.Default,
+		Label:       option.Label,
+		Value:       option.Value,
+		Description: option.Description,
+		Emoji:       encodeComponentEmoji(&option.Emoji),
+		Default:     option.Default,
 	}
 }
 
-func encodeSelectMenuOptions(inputs []discordgo.SelectMenuOption) []*discordgopb.SelectMenuOption {
-	result := make([]*discordgopb.SelectMenuOption, len(inputs))
+func encodeSelectMenuOptions(options []discordgo.SelectMenuOption) []*discordgopb.SelectMenuOption {
+	if options == nil {
+		return nil
+	}
 
-	for i, input := range inputs {
-		result[i] = encodeSelectMenuOption(&input)
+	result := make([]*discordgopb.SelectMenuOption, len(options))
+
+	for i, option := range options {
+		result[i] = encodeSelectMenuOption(&option)
 	}
 
 	return result
 }
 
-func decodeSelectMenuOption(input *discordgopb.SelectMenuOption) *discordgo.SelectMenuOption {
+func decodeSelectMenuOption(option *discordgopb.SelectMenuOption) *discordgo.SelectMenuOption {
+	if option == nil {
+		return nil
+	}
+
 	return &discordgo.SelectMenuOption{
-		Label:       input.Label,
-		Value:       input.Value,
-		Description: input.Description,
-		Emoji:       *decodeComponentEmoji(input.Emoji),
-		Default:     input.Default,
+		Label:       option.Label,
+		Value:       option.Value,
+		Description: option.Description,
+		Emoji:       *decodeComponentEmoji(option.Emoji),
+		Default:     option.Default,
 	}
 }
 
-func decodeSelectMenuOptions(inputs []*discordgopb.SelectMenuOption) []discordgo.SelectMenuOption {
-	result := make([]discordgo.SelectMenuOption, len(inputs))
+func decodeSelectMenuOptions(options []*discordgopb.SelectMenuOption) []discordgo.SelectMenuOption {
+	if options == nil {
+		return nil
+	}
 
-	for i, input := range inputs {
-		result[i] = *decodeSelectMenuOption(input)
+	result := make([]discordgo.SelectMenuOption, len(options))
+
+	for i, option := range options {
+		result[i] = *decodeSelectMenuOption(option)
 	}
 
 	return result
 }
 
 func encodeTextInput(input *discordgo.TextInput) *discordgopb.TextInput {
+	if input == nil {
+		return nil
+	}
+
 	return &discordgopb.TextInput{
 		CustomId:    input.CustomID,
 		Label:       input.Label,
@@ -166,6 +218,10 @@ func encodeTextInput(input *discordgo.TextInput) *discordgopb.TextInput {
 }
 
 func decodeTextInput(input *discordgopb.TextInput) *discordgo.TextInput {
+	if input == nil {
+		return nil
+	}
+
 	return &discordgo.TextInput{
 		CustomID:    input.CustomId,
 		Label:       input.Label,
@@ -179,6 +235,10 @@ func decodeTextInput(input *discordgopb.TextInput) *discordgo.TextInput {
 }
 
 func encodeComponentEmoji(emoji *discordgo.ComponentEmoji) *discordgopb.ComponentEmoji {
+	if emoji == nil {
+		return nil
+	}
+
 	return &discordgopb.ComponentEmoji{
 		Name:     emoji.Name,
 		Id:       emoji.ID,
@@ -187,6 +247,10 @@ func encodeComponentEmoji(emoji *discordgo.ComponentEmoji) *discordgopb.Componen
 }
 
 func decodeComponentEmoji(emoji *discordgopb.ComponentEmoji) *discordgo.ComponentEmoji {
+	if emoji == nil {
+		return nil
+	}
+
 	return &discordgo.ComponentEmoji{
 		Name:     emoji.Name,
 		ID:       emoji.Id,

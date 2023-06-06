@@ -21,7 +21,7 @@ func encodeApplicationCommand(command *discordgo.ApplicationCommand) *discordgop
 		Type: uint32(command.Type),
 
 		Name:              command.Name,
-		NameLocalizations: *_encodeLocalizations(command.NameLocalizations),
+		NameLocalizations: _encodeLocalizations(util.NilableVal[discordgo.Locale, string](command.NameLocalizations)),
 
 		DefaultPermission:        command.DefaultPermission,
 		DefaultMemberPermissions: command.DefaultMemberPermissions,
@@ -29,7 +29,7 @@ func encodeApplicationCommand(command *discordgo.ApplicationCommand) *discordgop
 		Nsfw:                     command.NSFW,
 
 		Description:              command.Description,
-		DescriptionLocalizations: *_encodeLocalizations(command.DescriptionLocalizations),
+		DescriptionLocalizations: _encodeLocalizations(util.NilableVal[discordgo.Locale, string](command.DescriptionLocalizations)),
 
 		Options: encodeApplicationCommandOptions(command.Options),
 	}
@@ -49,7 +49,7 @@ func decodeApplicationCommand(command *discordgopb.ApplicationCommand) *discordg
 		Type: discordgo.ApplicationCommandType(command.Type),
 
 		Name:              command.Name,
-		NameLocalizations: _decodeLocalizations(&command.NameLocalizations),
+		NameLocalizations: util.NilablePtr[discordgo.Locale, string](_decodeLocalizations(command.NameLocalizations)),
 
 		DefaultPermission:        command.DefaultPermission,
 		DefaultMemberPermissions: command.DefaultMemberPermissions,
@@ -57,7 +57,7 @@ func decodeApplicationCommand(command *discordgopb.ApplicationCommand) *discordg
 		NSFW:                     command.Nsfw,
 
 		Description:              command.Description,
-		DescriptionLocalizations: _decodeLocalizations(&command.DescriptionLocalizations),
+		DescriptionLocalizations: util.NilablePtr[discordgo.Locale, string](_decodeLocalizations(command.DescriptionLocalizations)),
 
 		Options: decodeApplicationCommandOptions(command.Options),
 	}
@@ -72,10 +72,10 @@ func encodeApplicationCommandOption(option *discordgo.ApplicationCommandOption) 
 		Type: uint32(option.Type),
 
 		Name:              option.Name,
-		NameLocalizations: *_encodeLocalizations(&option.NameLocalizations),
+		NameLocalizations: _encodeLocalizations(option.NameLocalizations),
 
 		Description:              option.Description,
-		DescriptionLocalizations: *_encodeLocalizations(&option.DescriptionLocalizations),
+		DescriptionLocalizations: _encodeLocalizations(option.DescriptionLocalizations),
 
 		ChannelTypes: _encodeChannelTypes(option.ChannelTypes),
 		Required:     option.Required,
@@ -93,6 +93,10 @@ func encodeApplicationCommandOption(option *discordgo.ApplicationCommandOption) 
 }
 
 func encodeApplicationCommandOptions(options []*discordgo.ApplicationCommandOption) []*discordgopb.ApplicationCommandOption {
+	if options == nil {
+		return nil
+	}
+
 	result := make([]*discordgopb.ApplicationCommandOption, len(options))
 
 	for i, option := range options {
@@ -111,10 +115,10 @@ func decodeApplicationCommandOption(option *discordgopb.ApplicationCommandOption
 		Type: discordgo.ApplicationCommandOptionType(option.Type),
 
 		Name:              option.Name,
-		NameLocalizations: *_decodeLocalizations(&option.NameLocalizations),
+		NameLocalizations: _decodeLocalizations(option.NameLocalizations),
 
 		Description:              option.Description,
-		DescriptionLocalizations: *_decodeLocalizations(&option.DescriptionLocalizations),
+		DescriptionLocalizations: _decodeLocalizations(option.DescriptionLocalizations),
 
 		ChannelTypes: _decodeChannelTypes(option.ChannelTypes),
 		Required:     option.Required,
@@ -132,6 +136,10 @@ func decodeApplicationCommandOption(option *discordgopb.ApplicationCommandOption
 }
 
 func decodeApplicationCommandOptions(options []*discordgopb.ApplicationCommandOption) []*discordgo.ApplicationCommandOption {
+	if options == nil {
+		return nil
+	}
+
 	result := make([]*discordgo.ApplicationCommandOption, len(options))
 
 	for i, option := range options {
@@ -150,12 +158,16 @@ func encodeApplicationCommandOptionChoice(choice *discordgo.ApplicationCommandOp
 
 	return &discordgopb.ApplicationCommandOptionChoice{
 		Name:              choice.Name,
-		NameLocalizations: *_encodeLocalizations(&choice.NameLocalizations),
+		NameLocalizations: _encodeLocalizations(choice.NameLocalizations),
 		Value:             value,
 	}
 }
 
 func encodeApplicationCommandOptionChoices(choices []*discordgo.ApplicationCommandOptionChoice) []*discordgopb.ApplicationCommandOptionChoice {
+	if choices == nil {
+		return nil
+	}
+
 	result := make([]*discordgopb.ApplicationCommandOptionChoice, len(choices))
 
 	for i, choice := range choices {
@@ -172,12 +184,16 @@ func decodeApplicationCommandOptionChoice(choice *discordgopb.ApplicationCommand
 
 	return &discordgo.ApplicationCommandOptionChoice{
 		Name:              choice.Name,
-		NameLocalizations: *_decodeLocalizations(&choice.NameLocalizations),
+		NameLocalizations: _decodeLocalizations(choice.NameLocalizations),
 		Value:             choice.Value.AsInterface(),
 	}
 }
 
 func decodeApplicationCommandOptionChoices(choices []*discordgopb.ApplicationCommandOptionChoice) []*discordgo.ApplicationCommandOptionChoice {
+	if choices == nil {
+		return nil
+	}
+
 	result := make([]*discordgo.ApplicationCommandOptionChoice, len(choices))
 
 	for i, choice := range choices {

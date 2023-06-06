@@ -38,9 +38,11 @@ func (s pluginServer) ApplicationCommands(context.Context, *bacotellpb.PluginApp
 	ids := make([]uint32, len(commands))
 	for i, command := range commands {
 		ids[i] = s.broker.NextId()
+		srv := commandServer{impl: command, broker: s.broker}
+
 		go s.broker.AcceptAndServe(ids[i], func(opts []grpc.ServerOption) *grpc.Server {
 			server := grpc.NewServer(opts...)
-			bacotellpb.RegisterCommandServer(server, commandServer{impl: command, broker: s.broker})
+			bacotellpb.RegisterCommandServer(server, srv)
 			return server
 		})
 	}
@@ -58,9 +60,11 @@ func (s pluginServer) MessageComponents(context.Context, *bacotellpb.PluginMessa
 	ids := make([]uint32, len(components))
 	for i, component := range components {
 		ids[i] = s.broker.NextId()
+		srv := componentServer{impl: component, broker: s.broker}
+
 		go s.broker.AcceptAndServe(ids[i], func(opts []grpc.ServerOption) *grpc.Server {
 			server := grpc.NewServer(opts...)
-			bacotellpb.RegisterComponentServer(server, componentServer{impl: component, broker: s.broker})
+			bacotellpb.RegisterComponentServer(server, srv)
 			return server
 		})
 	}
@@ -78,9 +82,11 @@ func (s pluginServer) Modals(context.Context, *bacotellpb.PluginModalsRequest) (
 	ids := make([]uint32, len(modals))
 	for i, modal := range modals {
 		ids[i] = s.broker.NextId()
+		srv := modalServer{impl: modal, broker: s.broker}
+
 		go s.broker.AcceptAndServe(ids[i], func(opts []grpc.ServerOption) *grpc.Server {
 			server := grpc.NewServer(opts...)
-			bacotellpb.RegisterModalServer(server, modalServer{impl: modal, broker: s.broker})
+			bacotellpb.RegisterModalServer(server, srv)
 			return server
 		})
 	}

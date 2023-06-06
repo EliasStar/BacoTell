@@ -68,19 +68,17 @@ func (c modalClient) Submit(proxy common.SubmitProxy) error {
 	var server *grpc.Server
 
 	id := c.broker.NextId()
+	srv := submitProxyServer{
+		interactionProxyServer: interactionProxyServer{
+			impl: proxy,
+		},
+		impl: proxy,
+	}
+
 	go c.broker.AcceptAndServe(id, func(opts []grpc.ServerOption) *grpc.Server {
 		server = grpc.NewServer(opts...)
-
-		srv := submitProxyServer{
-			interactionProxyServer: interactionProxyServer{
-				impl: proxy,
-			},
-			impl: proxy,
-		}
-
 		bacotellpb.RegisterSubmitProxyServer(server, srv)
 		bacotellpb.RegisterInteractionProxyServer(server, srv)
-
 		return server
 	})
 

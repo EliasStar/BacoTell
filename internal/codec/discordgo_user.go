@@ -39,6 +39,10 @@ func encodeUser(user *discordgo.User) *discordgopb.User {
 }
 
 func encodeUsers(users []*discordgo.User) []*discordgopb.User {
+	if users == nil {
+		return nil
+	}
+
 	result := make([]*discordgopb.User, len(users))
 
 	for i, user := range users {
@@ -78,6 +82,10 @@ func decodeUser(user *discordgopb.User) *discordgo.User {
 }
 
 func decodeUsers(users []*discordgopb.User) []*discordgo.User {
+	if users == nil {
+		return nil
+	}
+
 	result := make([]*discordgo.User, len(users))
 
 	for i, user := range users {

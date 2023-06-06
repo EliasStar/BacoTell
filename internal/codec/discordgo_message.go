@@ -55,6 +55,10 @@ func encodeMessageAttachment(attachment *discordgo.MessageAttachment) *discordgo
 }
 
 func encodeMessageAttachments(attachments []*discordgo.MessageAttachment) []*discordgopb.MessageAttachment {
+	if attachments == nil {
+		return nil
+	}
+
 	result := make([]*discordgopb.MessageAttachment, len(attachments))
 
 	for i, attachment := range attachments {
@@ -85,6 +89,10 @@ func decodeMessageAttachment(attachment *discordgopb.MessageAttachment) *discord
 }
 
 func decodeMessageAttachments(attachments []*discordgopb.MessageAttachment) []*discordgo.MessageAttachment {
+	if attachments == nil {
+		return nil
+	}
+
 	result := make([]*discordgo.MessageAttachment, len(attachments))
 
 	for i, attachment := range attachments {
@@ -118,6 +126,10 @@ func encodeMessageEmbed(embed *discordgo.MessageEmbed) *discordgopb.MessageEmbed
 }
 
 func encodeMessageEmbeds(embeds []*discordgo.MessageEmbed) []*discordgopb.MessageEmbed {
+	if embeds == nil {
+		return nil
+	}
+
 	result := make([]*discordgopb.MessageEmbed, len(embeds))
 
 	for i, embed := range embeds {
@@ -151,6 +163,10 @@ func decodeMessageEmbed(embed *discordgopb.MessageEmbed) *discordgo.MessageEmbed
 }
 
 func decodeMessageEmbeds(embeds []*discordgopb.MessageEmbed) []*discordgo.MessageEmbed {
+	if embeds == nil {
+		return nil
+	}
+
 	result := make([]*discordgo.MessageEmbed, len(embeds))
 
 	for i, embed := range embeds {
@@ -321,6 +337,10 @@ func encodeMessageEmbedField(field *discordgo.MessageEmbedField) *discordgopb.Me
 }
 
 func encodeMessageEmbedFields(fields []*discordgo.MessageEmbedField) []*discordgopb.MessageEmbedField {
+	if fields == nil {
+		return nil
+	}
+
 	result := make([]*discordgopb.MessageEmbedField, len(fields))
 
 	for i, field := range fields {
@@ -343,6 +363,10 @@ func decodeMessageEmbedField(field *discordgopb.MessageEmbedField) *discordgo.Me
 }
 
 func decodeMessageEmbedFields(fields []*discordgopb.MessageEmbedField) []*discordgo.MessageEmbedField {
+	if fields == nil {
+		return nil
+	}
+
 	result := make([]*discordgo.MessageEmbedField, len(fields))
 
 	for i, field := range fields {
@@ -365,6 +389,10 @@ func encodeMessageReaction(reaction *discordgo.MessageReactions) *discordgopb.Me
 }
 
 func encodeMessageReactions(reactions []*discordgo.MessageReactions) []*discordgopb.MessageReactions {
+	if reactions == nil {
+		return nil
+	}
+
 	result := make([]*discordgopb.MessageReactions, len(reactions))
 
 	for i, reaction := range reactions {
@@ -387,6 +415,10 @@ func decodeMessageReaction(reaction *discordgopb.MessageReactions) *discordgo.Me
 }
 
 func decodeMessageReactions(reactions []*discordgopb.MessageReactions) []*discordgo.MessageReactions {
+	if reactions == nil {
+		return nil
+	}
+
 	result := make([]*discordgo.MessageReactions, len(reactions))
 
 	for i, reaction := range reactions {
@@ -561,6 +593,10 @@ func encodeSticker(sticker *discordgo.Sticker) *discordgopb.Sticker {
 }
 
 func encodeStickers(stickers []*discordgo.Sticker) []*discordgopb.Sticker {
+	if stickers == nil {
+		return nil
+	}
+
 	result := make([]*discordgopb.Sticker, len(stickers))
 
 	for i, sticker := range stickers {
@@ -593,6 +629,10 @@ func decodeSticker(sticker *discordgopb.Sticker) *discordgo.Sticker {
 }
 
 func decodeStickers(stickers []*discordgopb.Sticker) []*discordgo.Sticker {
+	if stickers == nil {
+		return nil
+	}
+
 	result := make([]*discordgo.Sticker, len(stickers))
 
 	for i, sticker := range stickers {
@@ -617,6 +657,10 @@ func encodeFile(file *discordgo.File) *discordgopb.File {
 }
 
 func encodeFiles(files []*discordgo.File) []*discordgopb.File {
+	if files == nil {
+		return nil
+	}
+
 	result := make([]*discordgopb.File, len(files))
 
 	for i, file := range files {
@@ -639,6 +683,10 @@ func decodeFile(file *discordgopb.File) *discordgo.File {
 }
 
 func decodeFiles(files []*discordgopb.File) []*discordgo.File {
+	if files == nil {
+		return nil
+	}
+
 	result := make([]*discordgo.File, len(files))
 
 	for i, file := range files {
@@ -649,6 +697,10 @@ func decodeFiles(files []*discordgopb.File) []*discordgo.File {
 }
 
 func _encodeParse(allowedMentions []discordgo.AllowedMentionType) []string {
+	if allowedMentions == nil {
+		return nil
+	}
+
 	result := make([]string, len(allowedMentions))
 
 	for i, allowedMention := range allowedMentions {
@@ -659,6 +711,10 @@ func _encodeParse(allowedMentions []discordgo.AllowedMentionType) []string {
 }
 
 func _decodeParse(allowedMentions []string) []discordgo.AllowedMentionType {
+	if allowedMentions == nil {
+		return nil
+	}
+
 	result := make([]discordgo.AllowedMentionType, len(allowedMentions))
 
 	for i, allowedMention := range allowedMentions {
