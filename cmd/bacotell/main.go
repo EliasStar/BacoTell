@@ -43,6 +43,9 @@ func init() {
 	flags.StringP("plugins", "p", "", "path to the plugin directory")
 	viper.BindPFlag(bacotell.ConfigPluginDir, flags.Lookup("plugins"))
 
+	flags.BoolP("verbose", "v", false, "set log level to DEBUG")
+	viper.BindPFlag(bacotell.ConfigLogVerbose, flags.Lookup("verbose"))
+
 	flags.StringVarP(&configPath, "config", "c", "bacotell.config.toml", "path to the config file")
 
 	bacotell.InitConfig()

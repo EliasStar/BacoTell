@@ -4,9 +4,13 @@
 *.dll
 *.so
 *.dylib
+*.btp
 
 # Test binary, built with `go test -c`
 *.test
 
 # Output of the go coverage tool
 *.out
+
+# BacoTell config file
+bacotell.config.toml

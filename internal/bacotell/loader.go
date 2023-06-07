@@ -53,8 +53,8 @@ func loadAll() {
 			return err
 		}
 
-		if info.IsDir() || (info.Mode()&0111) == 0 {
-			pathLogger.Debug("skipping non-executable path")
+		if info.IsDir() || !strings.HasSuffix(strings.ToLower(info.Name()), ".btp") {
+			pathLogger.Debug("skipping non-plugin path")
 			return nil
 		}
 
@@ -64,7 +64,6 @@ func loadAll() {
 			Plugins:          PluginMap(nil),
 			AllowedProtocols: []plugin.Protocol{plugin.ProtocolGRPC},
 			Logger:           loaderLogger,
-			AutoMTLS:         true,
 			Cmd:              exec.Command(path),
 		}))
 

@@ -8,11 +8,12 @@ import (
 )
 
 const (
-	Version = "v0.2.0"
+	Version = "v0.3.0"
 
-	ConfigBotName   = "bot_name"
-	ConfigBotToken  = "bot_token"
-	ConfigPluginDir = "plugin_dir"
+	ConfigBotName    = "bot_name"
+	ConfigBotToken   = "bot_token"
+	ConfigPluginDir  = "plugin_dir"
+	ConfigLogVerbose = "log_verbose"
 )
 
 // InitConfig sets default values for viper config entries.
@@ -20,11 +21,16 @@ func InitConfig() {
 	viper.SetDefault(ConfigBotName, "BacoTell")
 	viper.SetDefault(ConfigBotToken, "")
 	viper.SetDefault(ConfigPluginDir, "plugins")
+	viper.SetDefault(ConfigLogVerbose, false)
 }
 
 // Run starts BacoTell.
 func Run() {
-	initLoggers(hclog.Info)
+	if viper.GetBool(ConfigLogVerbose) {
+		initLoggers(hclog.Debug)
+	} else {
+		initLoggers(hclog.Info)
+	}
 
 	if viper.GetString(ConfigBotToken) == "" {
 		logger.Error("no bot token provided, set '" + ConfigBotToken + "' in config")
@@ -38,7 +44,7 @@ func Run() {
 
 // Debug starts BacoTell in debug mode.
 func Debug(token string, reattachConfig *plugin.ReattachConfig) {
-	initLoggers(hclog.Debug)
+	initLoggers(hclog.Trace)
 
 	if token == "" {
 		logger.Error("no bot token provided")
