@@ -17,4 +17,7 @@ type Modal interface {
 // A SubmitProxy provides methods for responding to the interaction as well as accessing interaction and modal data and during modal handling.
 type SubmitProxy interface {
 	InteractionProxy
+
+	// InputValue retrieves the value of a text input by custom id. Returns an error if it was not set or the component is not a text input.
+	InputValue(customID string) (string, error)
 }

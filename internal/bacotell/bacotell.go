@@ -2,18 +2,22 @@
 package bacotell
 
 import (
+	"os"
+
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
 	"github.com/spf13/viper"
 )
 
 const (
-	Version = "v0.3.0"
+	Version         = "v1.0.0"
+	ProtocolVersion = 1 // Must be equal to major version.
 
-	ConfigBotName    = "bot_name"
-	ConfigBotToken   = "bot_token"
-	ConfigPluginDir  = "plugin_dir"
-	ConfigLogVerbose = "log_verbose"
+	ConfigBotName   = "bot_name"
+	ConfigBotToken  = "bot_token"
+	ConfigPluginDir = "plugin_dir"
+	ConfigLogFile   = "log_file"
+	ConfigLogLevel  = "log_level"
 )
 
 // InitConfig sets default values for viper config entries.
@@ -21,16 +25,23 @@ func InitConfig() {
 	viper.SetDefault(ConfigBotName, "BacoTell")
 	viper.SetDefault(ConfigBotToken, "")
 	viper.SetDefault(ConfigPluginDir, "plugins")
-	viper.SetDefault(ConfigLogVerbose, false)
+	viper.SetDefault(ConfigLogFile, "")
+	viper.SetDefault(ConfigLogLevel, "info")
 }
 
 // Run starts BacoTell.
 func Run() {
-	if viper.GetBool(ConfigLogVerbose) {
-		initLoggers(hclog.Debug)
-	} else {
-		initLoggers(hclog.Info)
+	logOutput, err := os.OpenFile(viper.GetString(ConfigLogFile), os.O_WRONLY|os.O_APPEND|os.O_CREATE, os.ModePerm)
+	if err != nil {
+		logOutput = os.Stdout
 	}
+
+	logLevel := hclog.LevelFromString(viper.GetString(ConfigLogLevel))
+	if logLevel == hclog.NoLevel {
+		logLevel = hclog.Info
+	}
+
+	initLoggers(logOutput, logLevel)
 
 	if viper.GetString(ConfigBotToken) == "" {
 		logger.Error("no bot token provided, set '" + ConfigBotToken + "' in config")
@@ -44,7 +55,7 @@ func Run() {
 
 // Debug starts BacoTell in debug mode.
 func Debug(token string, reattachConfig *plugin.ReattachConfig) {
-	initLoggers(hclog.Trace)
+	initLoggers(os.Stdout, hclog.Trace)
 
 	if token == "" {
 		logger.Error("no bot token provided")

@@ -145,12 +145,15 @@ var Modal_ServiceDesc = grpc.ServiceDesc{
 	Metadata: "proto/bacotell_modal.proto",
 }
 
-const ()
+const (
+	SubmitProxy_InputValue_FullMethodName = "/bacotell.SubmitProxy/InputValue"
+)
 
 // SubmitProxyClient is the client API for SubmitProxy service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SubmitProxyClient interface {
+	InputValue(ctx context.Context, in *SubmitProxyInputValueRequest, opts ...grpc.CallOption) (*SubmitProxyInputValueResponse, error)
 }
 
 type submitProxyClient struct {
@@ -161,10 +164,20 @@ func NewSubmitProxyClient(cc grpc.ClientConnInterface) SubmitProxyClient {
 	return &submitProxyClient{cc}
 }
 
+func (c *submitProxyClient) InputValue(ctx context.Context, in *SubmitProxyInputValueRequest, opts ...grpc.CallOption) (*SubmitProxyInputValueResponse, error) {
+	out := new(SubmitProxyInputValueResponse)
+	err := c.cc.Invoke(ctx, SubmitProxy_InputValue_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SubmitProxyServer is the server API for SubmitProxy service.
 // All implementations must embed UnimplementedSubmitProxyServer
 // for forward compatibility
 type SubmitProxyServer interface {
+	InputValue(context.Context, *SubmitProxyInputValueRequest) (*SubmitProxyInputValueResponse, error)
 	mustEmbedUnimplementedSubmitProxyServer()
 }
 
@@ -172,6 +185,9 @@ type SubmitProxyServer interface {
 type UnimplementedSubmitProxyServer struct {
 }
 
+func (UnimplementedSubmitProxyServer) InputValue(context.Context, *SubmitProxyInputValueRequest) (*SubmitProxyInputValueResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method InputValue not implemented")
+}
 func (UnimplementedSubmitProxyServer) mustEmbedUnimplementedSubmitProxyServer() {}
 
 // UnsafeSubmitProxyServer may be embedded to opt out of forward compatibility for this service.
@@ -185,13 +201,36 @@ func RegisterSubmitProxyServer(s grpc.ServiceRegistrar, srv SubmitProxyServer) {
 	s.RegisterService(&SubmitProxy_ServiceDesc, srv)
 }
 
+func _SubmitProxy_InputValue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubmitProxyInputValueRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubmitProxyServer).InputValue(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SubmitProxy_InputValue_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubmitProxyServer).InputValue(ctx, req.(*SubmitProxyInputValueRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SubmitProxy_ServiceDesc is the grpc.ServiceDesc for SubmitProxy service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var SubmitProxy_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "bacotell.SubmitProxy",
 	HandlerType: (*SubmitProxyServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "proto/bacotell_modal.proto",
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "InputValue",
+			Handler:    _SubmitProxy_InputValue_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/bacotell_modal.proto",
 }

@@ -1,7 +1,7 @@
 package bacotell
 
 import (
-	"os"
+	"io"
 
 	"github.com/hashicorp/go-hclog"
 )
@@ -13,10 +13,10 @@ var (
 )
 
 // initLoggers initializes all (sub)loggers for the major subsystems
-func initLoggers(level hclog.Level) {
+func initLoggers(output io.Writer, level hclog.Level) {
 	logger = hclog.New(&hclog.LoggerOptions{
 		Name:   "bacotell",
-		Output: os.Stdout,
+		Output: output,
 		Level:  level,
 	})
 

@@ -3,12 +3,22 @@
 # BacoTell
 > Pluggable bot client and associated framework for Discord
 
-
 ## Usage
-Download the latest release from [GitHub Releases](https://github.com/EliasStar/BacoTell/releases/latest) for your platform. Then run the following command in the directory where you downloaded BacoTell:
+Download the latest release from [GitHub Releases](https://github.com/EliasStar/BacoTell/releases/latest) for your platform. Then rename the executable and run the following command:
 ``` sh
 bacotell -n <bot_name> -t <bot_token> -p <path_to_plugin_dir>
 ```
+
+
+## Developing Plugins
+To use this bot framework, you must take the following steps. An example can be seen in `cmd/example_plugin/`.
+
+1. For each application command, message component and/or modal create a struct and implement the respective interface.
+2. Either register the implementations using the setters in `bacotell_plugin` or create a custom implementation of the `Plugin` interface.
+3. Either call `bacotell_plugin.Run()` or `bacotell_plugin.RunCustom()` depending on your choice in step 2. During development you can use `bacotell_plugin.Debug()` and `bacotell_plugin.DebugCustom()` respectively.
+
+That's it!
+For complete API documentation, see [GoDoc](https://pkg.go.dev/github.com/EliasStar/BacoTell).
 
 
 ## Building

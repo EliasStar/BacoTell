@@ -11,12 +11,24 @@ func encodeMessageComponent(component discordgo.MessageComponent) *discordgopb.M
 	switch cpt := component.(type) {
 	case discordgo.ActionsRow:
 		return &discordgopb.MessageComponent{Component: &discordgopb.MessageComponent_ActionsRow{ActionsRow: encodeActionsRow(&cpt)}}
+	case *discordgo.ActionsRow:
+		return &discordgopb.MessageComponent{Component: &discordgopb.MessageComponent_ActionsRow{ActionsRow: encodeActionsRow(cpt)}}
+
 	case discordgo.Button:
 		return &discordgopb.MessageComponent{Component: &discordgopb.MessageComponent_Button{Button: encodeButton(&cpt)}}
+	case *discordgo.Button:
+		return &discordgopb.MessageComponent{Component: &discordgopb.MessageComponent_Button{Button: encodeButton(cpt)}}
+
 	case discordgo.SelectMenu:
 		return &discordgopb.MessageComponent{Component: &discordgopb.MessageComponent_SelectMenu{SelectMenu: encodeSelectMenu(&cpt)}}
+	case *discordgo.SelectMenu:
+		return &discordgopb.MessageComponent{Component: &discordgopb.MessageComponent_SelectMenu{SelectMenu: encodeSelectMenu(cpt)}}
+
 	case discordgo.TextInput:
 		return &discordgopb.MessageComponent{Component: &discordgopb.MessageComponent_TextInput{TextInput: encodeTextInput(&cpt)}}
+	case *discordgo.TextInput:
+		return &discordgopb.MessageComponent{Component: &discordgopb.MessageComponent_TextInput{TextInput: encodeTextInput(cpt)}}
+
 	default:
 		return nil
 	}

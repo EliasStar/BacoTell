@@ -106,6 +106,16 @@ var (
 	_ bacotellpb.SubmitProxyServer      = submitProxyServer{}
 )
 
+// InputValue implements bacotellpb.SubmitProxyServer.
+func (s submitProxyServer) InputValue(_ context.Context, req *bacotellpb.SubmitProxyInputValueRequest) (*bacotellpb.SubmitProxyInputValueResponse, error) {
+	val, err := s.impl.InputValue(req.CustomId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &bacotellpb.SubmitProxyInputValueResponse{Value: val}, nil
+}
+
 // The client implementation of bacotell_common.SubmitProxy.
 type submitProxyClient struct {
 	interactionProxyClient
@@ -118,3 +128,16 @@ var (
 	_ common.InteractionProxy = submitProxyClient{}
 	_ common.SubmitProxy      = submitProxyClient{}
 )
+
+// InputValue implements bacotell_common.SubmitProxy.
+func (c submitProxyClient) InputValue(customID string) (string, error) {
+	res, err := c.client.InputValue(context.Background(), &bacotellpb.SubmitProxyInputValueRequest{
+		CustomId: customID,
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	return res.Value, nil
+}

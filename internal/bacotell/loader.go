@@ -25,7 +25,7 @@ var (
 // HandshakeConfig returns the handshake configuration for the plugin.
 func HandshakeConfig() plugin.HandshakeConfig {
 	return plugin.HandshakeConfig{
-		ProtocolVersion:  1,
+		ProtocolVersion:  ProtocolVersion,
 		MagicCookieKey:   "BacoTell",
 		MagicCookieValue: "d950af91-326f-4151-bbf0-2484ebd6a4fa",
 	}
@@ -42,6 +42,11 @@ func loadAll() {
 	absPluginDir, err := filepath.Abs(pluginDir)
 	if err != nil {
 		loaderLogger.Error("cannot determine absolute path of plugin directory", ConfigPluginDir, pluginDir, "err", err)
+		return
+	}
+
+	if err := os.MkdirAll(absPluginDir, os.ModePerm); err != nil {
+		loaderLogger.Error("cannot create plugin directory", ConfigPluginDir, pluginDir, "err", err)
 		return
 	}
 

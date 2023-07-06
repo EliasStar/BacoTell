@@ -21,4 +21,14 @@ message ModalSubmitRequest {
 
 message ModalSubmitResponse {}
 
-service SubmitProxy {}
+service SubmitProxy {
+    rpc InputValue(SubmitProxyInputValueRequest) returns (SubmitProxyInputValueResponse);
+}
+
+message SubmitProxyInputValueRequest {
+    string custom_id = 1;
+}
+
+message SubmitProxyInputValueResponse {
+    string value = 1;
+}
