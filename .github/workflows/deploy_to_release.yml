@@ -1,0 +1,31 @@
+name: Deploy to GitHub Releases
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [linux, darwin, windows]
+        include:
+          - target: windows
+            extension: .exe
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: go.mod
+
+      - name: Build BacoTell
+        run: GOOS=${{matrix.target}} go build -o=build/BacoTell-${{github.event.release.tag_name}}-${{matrix.target}}${{matrix.extension}} ./cmd/bacotell
+
+      - name: Deploy to release
+        uses: shogo82148/actions-upload-release-asset@v1
+        with:
+          upload_url: ${{github.event.release.upload_url}}
+          asset_path: build/*
